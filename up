@@ -1,0 +1,21 @@
+#!/bin/bash
+
+echo "🚀 Démarrage de l'environnement Docker pour Parkly..."
+
+# Vérifier Docker
+if ! command -v docker &> /dev/null; then
+  echo "❌ Docker n'est pas installé."
+  exit 1
+fi
+
+# Ajouter parkly.localhost au fichier hosts
+HOSTS_LINE="127.0.0.1 parkly.localhost"
+if ! grep -q "$HOSTS_LINE" /etc/hosts; then
+  echo "🔧 Ajout de 'parkly.localhost' dans /etc/hosts (sudo requis)..."
+  echo "$HOSTS_LINE" | sudo tee -a /etc/hosts > /dev/null
+fi
+
+# Lancer les conteneurs
+docker-compose up --build -d
+
+echo "✅ Parkly est accessible sur : http://parkly.localhost"
