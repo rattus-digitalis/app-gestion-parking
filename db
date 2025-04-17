@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [ ! -f .env ]; then
+  echo "❌ Fichier .env introuvable."
+  echo "👉 Copiez d'abord .env.example vers .env et adaptez les variables."
+  exit 1
+fi
+
+export $(grep -v '^#' .env | xargs)
+
+: "${MYSQL_USER:?Missing MYSQL_USER in .env}"
+: "${MYSQL_PASSWORD:?Missing MYSQL_PASSWORD in .env}"
+: "${MYSQL_DATABASE:?Missing MYSQL_DATABASE in .env}"
+
+docker exec -it parkly-db mysql -u$MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE

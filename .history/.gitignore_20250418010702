@@ -1,9 +1,6 @@
 .vscode/
 .env
 
-/mysql-data/
-
-
 # .gitignore
 /database/*
 !/database/init.sql

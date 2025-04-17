@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "🧹 Arrêt de l'environnement Docker pour Parkly..."
+echo "Arrêt de l'environnement Docker pour Parkly..."
 
 # Vérifier Docker
 if ! command -v docker &> /dev/null; then
@@ -9,7 +9,7 @@ if ! command -v docker &> /dev/null; then
 fi
 
 # Arrêter les conteneurs et supprimer les volumes associés
-echo "📦 Arrêt des conteneurs et suppression des volumes..."
+echo "Arrêt des conteneurs et suppression des volumes..."
 docker-compose down -v
 
 echo "✅ Environnement Parkly arrêté proprement."

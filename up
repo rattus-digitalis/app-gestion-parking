@@ -11,7 +11,6 @@ fi
 # Vérifier docker-compose
 if ! command -v docker-compose &> /dev/null; then
   echo "❌ docker-compose n'est pas installé."
-  echo "👉 Tu peux l'installer avec : sudo apt install docker-compose"
   exit 1
 fi
 
