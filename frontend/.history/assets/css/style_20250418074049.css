@@ -9,7 +9,6 @@
   --white: #ffffff;
   --border: #eaeaea;
   --card-bg: #ffffff;
-  --hero-bg: #fff7e5;
 
   --radius: 10px;
   --transition: all 0.3s ease;
@@ -22,7 +21,6 @@
   --white: #1e1e1e;
   --border: #444;
   --card-bg: #2d2d2d;
-  --hero-bg: #2a2a2a;
 }
 
 /* ========== RESET & BASE ========== */
@@ -65,8 +63,8 @@ img {
 
 /* ========== HEADER ========== */
 header {
-  background-color: var(--primary);
-  color: var(--white);
+  background-color: var(--white);
+  border-bottom: 1px solid var(--border);
   padding: 1.2rem 0;
   position: sticky;
   top: 0;
@@ -85,7 +83,7 @@ header {
 .logo {
   font-size: 1.6rem;
   font-weight: bold;
-  color: var(--white);
+  color: var(--secondary);
 }
 
 /* NAVIGATION */
@@ -98,7 +96,7 @@ header {
 }
 
 .nav-links a {
-  color: var(--white);
+  color: var(--text);
   font-weight: 500;
   position: relative;
   transition: var(--transition);
@@ -111,7 +109,7 @@ header {
   bottom: -4px;
   width: 0%;
   height: 2px;
-  background-color: var(--white);
+  background-color: var(--primary);
   transition: width 0.3s;
 }
 
@@ -124,19 +122,19 @@ header {
   border: none;
   font-size: 1rem;
   font-weight: 500;
-  color: var(--white);
+  color: var(--text);
   cursor: pointer;
   padding: 0.4rem 0.6rem;
   transition: var(--transition);
 }
 
 .nav-links button#toggle-theme:hover {
-  color: var(--secondary);
+  color: var(--primary);
 }
 
 /* ========== HERO ========== */
 .hero {
-  background-color: var(--hero-bg);
+  background-color: var(--bg);
   text-align: center;
   padding: 5rem 1rem 4rem;
 }
@@ -149,7 +147,7 @@ header {
 .hero p {
   font-size: 1.1rem;
   margin-bottom: 2rem;
-  color: var(--text);
+  color: #666;
 }
 
 /* ========== BUTTONS ========== */
@@ -190,9 +188,8 @@ header {
 }
 
 .features-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 2rem;
 }
 
@@ -201,7 +198,6 @@ header {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 2rem;
-  width: 300px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
   transition: var(--transition);
 }
@@ -269,6 +265,15 @@ footer p:last-child {
 }
 
 /* ========== RESPONSIVE DESIGN ========== */
+
+/* Tablettes et petits laptops */
+@media (max-width: 1024px) {
+  .features-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Smartphones */
 @media (max-width: 768px) {
   .container {
     width: 95%;
@@ -307,15 +312,6 @@ footer p:last-child {
     width: 100%;
   }
 
-  .features-container {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .feature-card {
-    width: 90%;
-  }
-
   .login-form,
   .signup-form,
   .contact-form {
@@ -324,6 +320,17 @@ footer p:last-child {
 
   .cta-section h2 {
     font-size: 1.5rem;
+  }
+}
+
+/* Très petits écrans */
+@media (max-width: 600px) {
+  .features-container {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-card {
+    width: 100%;
   }
 }
 

@@ -4,19 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Accueil | Gestion Parking</title>
-  <meta name="description" content="Application de gestion de parking : réservez, gérez et payez votre place de parking en ligne." />
-  <link rel="stylesheet" href="./assets/css/style.css" />
+  <meta name="description" content="Application de gestion de parking : réservez, gérez et payez votre place de parking en ligne, avec sécurité 24h/24." />
+  <link rel="stylesheet" href="/assets/css/style.css" />
   <link rel="icon" href="/assets/img/favicon.ico" type="image/x-icon" />
 </head>
+
 <body>
 
   <!-- ===== HEADER ===== -->
   <header>
     <div class="container header-content">
-      <div class="logo" aria-label="Logo de l'application Gestion Parking" role="banner">
+      <a href="/" class="logo" aria-label="Logo de l'application Gestion Parking" role="banner">
         🅿️ <span>Gestion Parking</span>
-      </div>
-
+      </a>
       <nav class="main-nav" aria-label="Navigation principale">
         <ul class="nav-links">
           <li><a href="/views/Login/Login.html">Connexion</a></li>
@@ -32,7 +32,7 @@
   <!-- ===== MAIN ===== -->
   <main id="main-content">
 
-    <!-- Section d'accueil -->
+    <!-- Hero -->
     <section class="hero" aria-label="Introduction à l'application">
       <div class="container">
         <h1>Gérez votre place de parking en un clic</h1>
@@ -41,24 +41,37 @@
       </div>
     </section>
 
-    <!-- Fonctionnalités principales -->
-    <section class="features" aria-label="Fonctionnalités de l'application">
+    <!-- Fonctionnalités -->
+    <section class="features" aria-label="Fonctionnalités principales">
       <div class="container features-container">
-        <div class="feature-card">
-          <img src="https://img.icons8.com/color/96/calendar--v1.png" alt="Icône de réservation en ligne">
+
+        <article class="feature-card">
+          <img src="https://img.icons8.com/color/96/calendar--v1.png" alt="Icône de réservation en ligne" loading="lazy">
           <h3>Réservation en ligne</h3>
           <p>Visualisez les places libres en temps réel et réservez à l’avance.</p>
-        </div>
-        <div class="feature-card">
-          <img src="https://img.icons8.com/color/96/bank-card-back-side.png" alt="Icône de paiement sécurisé">
+        </article>
+
+        <article class="feature-card">
+          <img src="https://img.icons8.com/color/96/bank-card-back-side.png" alt="Icône de paiement sécurisé" loading="lazy">
           <h3>Paiement sécurisé</h3>
           <p>Paiement rapide et fiable via carte bancaire ou PayPal.</p>
-        </div>
-        <div class="feature-card">
-          <img src="https://img.icons8.com/color/96/combo-chart--v1.png" alt="Icône de suivi personnalisé">
+        </article>
+
+        <article class="feature-card">
+          <img src="https://img.icons8.com/color/96/combo-chart--v1.png" alt="Icône de suivi personnalisé" loading="lazy">
           <h3>Suivi personnalisé</h3>
           <p>Consultez vos réservations, factures et paramètres depuis votre tableau de bord.</p>
-        </div>
+        </article>
+
+        <article class="feature-card">
+          <img src="https://cdn-icons-png.flaticon.com/512/1085/1085157.png" alt="Icône de caméra de sécurité" loading="lazy">
+          <h3>Parking sécurisé</h3>
+          <p>Votre véhicule est surveillé 24h/24 grâce à un système de caméras de sécurité.</p>
+        </article>
+        
+        
+        
+
       </div>
     </section>
 
@@ -77,7 +90,7 @@
 
   <!-- ===== SCRIPTS ===== -->
   <script src="/assets/js/main.js" defer></script>
-  <script src="/assets/js/include.js"></script>
+  <script src="/assets/js/include.js" defer></script>
 
 </body>
 </html>

@@ -65,8 +65,8 @@ img {
 
 /* ========== HEADER ========== */
 header {
-  background-color: var(--primary);
-  color: var(--white);
+  background-color: var(--white);
+  border-bottom: 1px solid var(--border);
   padding: 1.2rem 0;
   position: sticky;
   top: 0;
@@ -85,7 +85,7 @@ header {
 .logo {
   font-size: 1.6rem;
   font-weight: bold;
-  color: var(--white);
+  color: var(--secondary);
 }
 
 /* NAVIGATION */
@@ -98,7 +98,7 @@ header {
 }
 
 .nav-links a {
-  color: var(--white);
+  color: var(--text);
   font-weight: 500;
   position: relative;
   transition: var(--transition);
@@ -111,7 +111,7 @@ header {
   bottom: -4px;
   width: 0%;
   height: 2px;
-  background-color: var(--white);
+  background-color: var(--primary);
   transition: width 0.3s;
 }
 
@@ -124,14 +124,14 @@ header {
   border: none;
   font-size: 1rem;
   font-weight: 500;
-  color: var(--white);
+  color: var(--text);
   cursor: pointer;
   padding: 0.4rem 0.6rem;
   transition: var(--transition);
 }
 
 .nav-links button#toggle-theme:hover {
-  color: var(--secondary);
+  color: var(--primary);
 }
 
 /* ========== HERO ========== */
