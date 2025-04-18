@@ -2,13 +2,13 @@
 <html lang="fr">
 
 <head>
+  <link rel="stylesheet" href="assets/css/legal-notice.css" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mentions Légales | Gestion Parking</title>
   <meta name="description" content="Mentions légales de l'application Gestion Parking." />
-  <link rel="icon" href="/assets/img/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/assets/css/style.css" />
-  <link rel="stylesheet" href="Legal_Notice.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" href="assets/img/favicon.ico" type="image/x-icon" />
 </head>
 
 <body>
@@ -16,15 +16,15 @@
   <!-- ===== HEADER ===== -->
   <header>
     <div class="container header-content">
-      <div class="logo" role="banner">
+      <div class="logo" aria-label="Logo de Gestion Parking" role="banner">
         🅿️ <span>Gestion Parking</span>
       </div>
 
       <nav class="main-nav" aria-label="Navigation principale">
         <ul class="nav-links">
-          <li><a href="/index.html">Accueil</a></li>
-          <li><a href="/views/Login/Login.html">Connexion</a></li>
-          <li><a href="/views/Signup/Signup.html">Inscription</a></li>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="login.html">Connexion</a></li>
+          <li><a href="register.html">Inscription</a></li>
         </ul>
       </nav>
     </div>
@@ -36,7 +36,7 @@
       <h1>Mentions Légales</h1>
 
       <h2>1. Présentation du site</h2>
-      <p>Le présent site web est édité par [Nom de votre entreprise ou nom personnel], situé à :</p>
+      <p>Le présent site web est édité par [Nom de ton entreprise ou nom personnel], situé à :</p>
       <address>
         Adresse complète<br>
         Code Postal, Ville<br>
@@ -44,7 +44,7 @@
       </address>
 
       <h2>2. Responsable de la publication</h2>
-      <p>Le responsable éditorial est [Votre nom complet].</p>
+      <p>Le responsable éditorial est [Ton nom complet].</p>
 
       <h2>3. Hébergeur</h2>
       <p>L'hébergeur du site est :</p>
@@ -53,14 +53,14 @@
         Adresse complète<br>
         Code Postal, Ville<br>
         Pays<br>
-        Site web : <a href="https://site-web-de-lhebergeur.com" target="_blank" rel="noopener noreferrer">site-web-de-lhebergeur.com</a>
+        Site web : <a href="https://site-web-de-lhebergeur.com" target="_blank">site-web-de-lhebergeur.com</a>
       </address>
 
       <h2>4. Propriété intellectuelle</h2>
-      <p>Tous les éléments présents sur ce site (textes, graphismes, logos, images, etc.) sont protégés par le droit d'auteur. Toute reproduction est strictement interdite sans l’accord préalable de l’auteur.</p>
+      <p>Tous les éléments présents sur ce site (texte, graphismes, logos, images, etc.) sont protégés par le droit d'auteur. Toute reproduction est strictement interdite sans l’accord préalable de l’auteur.</p>
 
       <h2>5. Données personnelles</h2>
-      <p>Les informations collectées sont utilisées uniquement pour le bon fonctionnement du service. Conformément au RGPD, vous disposez d'un droit d’accès, de rectification et de suppression de vos données personnelles. Pour exercer ces droits, contactez-nous via la page <a href="/views/Contact/Contact.html">Contact</a>.</p>
+      <p>Les informations collectées sont utilisées uniquement pour le bon fonctionnement du service. Conformément à la réglementation RGPD, vous disposez d'un droit d’accès, de rectification et de suppression sur vos données personnelles. Pour exercer ce droit, contactez-nous via la page <a href="contact.html">Contact</a>.</p>
 
       <h2>6. Modification des mentions légales</h2>
       <p>Nous nous réservons le droit de modifier les présentes mentions à tout moment.</p>
@@ -72,11 +72,11 @@
   <!-- ===== FOOTER ===== -->
   <footer role="contentinfo">
     <div class="container">
-      <nav class="footer-nav" aria-label="Navigation secondaire">
+      <nav class="footer-nav">
         <ul>
-          <li><a href="/index.html">Accueil</a></li>
-          <li><a href="/views/Legal_Notice/Legal_Notice.html">Mentions légales</a></li>
-          <li><a href="/views/Contact/Contact.html">Contact</a></li>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="legal-notice.html">Mentions légales</a></li>
+          <li><a href="contact.html">Contact</a></li>
         </ul>
       </nav>
       <p>&copy; 2025 – Gestion Parking</p>
@@ -84,8 +84,9 @@
   </footer>
 
   <!-- ===== SCRIPTS ===== -->
-  <script src="/assets/js/main.js" defer></script>
-  <script src="Legal_Notice.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/legal-notice.js" defer></script>
+
 
 </body>
 </html>
