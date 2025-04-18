@@ -237,22 +237,6 @@ header {
   background-color: #2b2b2b;
 }
 
-/* ========== FORMS ========== */
-form input,
-form textarea {
-  width: 100%;
-  max-width: 100%;
-  padding: 0.6rem;
-  font-size: 1rem;
-  margin-bottom: 1rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-}
-
-form button {
-  margin-top: 1rem;
-}
-
 /* ========== FOOTER ========== */
 footer {
   background-color: var(--primary);
@@ -266,82 +250,31 @@ footer p:last-child {
   margin-bottom: 0;
 }
 
-/* ========== RESPONSIVE DESIGN ========== */
-
-/* Smartphones & petites tablettes */
-@media (max-width: 768px) {
-  .container {
-    width: 95%;
-  }
-
-  header {
-    padding: 0.8rem 0;
-  }
-
-  .header-content {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .nav-links {
-    justify-content: center;
-    flex-direction: column;
-    gap: 0.75rem;
-    padding: 0.5rem 0;
-  }
-
-  .hero {
-    padding: 3rem 1rem;
-  }
-
+/* ========== RESPONSIVE ========== */
+@media (min-width: 600px) {
   .hero h1 {
-    font-size: 1.8rem;
+    font-size: 2.6rem;
   }
 
   .hero p {
-    font-size: 1rem;
+    font-size: 1.2rem;
   }
 
+  .nav-links {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
   .btn {
     width: 100%;
   }
 
-  .features-container {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .feature-card {
-    width: 90%;
-  }
-
-  .login-form,
-  .signup-form,
-  .contact-form {
-    text-align: left;
-  }
-
-  .cta-section h2 {
-    font-size: 1.5rem;
-  }
-}
-
-/* Très petits écrans */
-@media (max-width: 480px) {
-  .hero h1 {
-    font-size: 1.6rem;
-  }
-
-  .hero p {
-    font-size: 0.95rem;
-  }
-
-  .cta-section h2 {
-    font-size: 1.3rem;
-  }
-
   .nav-links {
-    font-size: 0.95rem;
+    justify-content: center;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
   }
 }
