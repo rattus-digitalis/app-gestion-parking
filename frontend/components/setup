@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# Erreurs et descriptions
+declare -A ERRORS=(
+  ["404"]="Page non trouvée - La ressource demandée est introuvable."
+  ["403"]="Accès interdit - Vous n’avez pas les droits nécessaires pour accéder à cette page."
+  ["500"]="Erreur interne du serveur - Une erreur inattendue s’est produite sur le serveur."
+)
+
+# Parcours des erreurs
+for CODE in "${!ERRORS[@]}"; do
+  MESSAGE="${ERRORS[$CODE]}"
+  DIR="./$CODE"
+
+  # Créer le dossier de l’erreur
+  mkdir -p "$DIR"
+
+  # Créer les fichiers dans le dossier
+  echo "Création de $DIR/$CODE.html, $CODE.css, $CODE.js..."
+  touch "$DIR/$CODE.html" "$DIR/$CODE.css" "$DIR/$CODE.js"
+
+  # Générer le contenu HTML
+  cat > "$DIR/$CODE.html" <<EOF
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Erreur $CODE</title>
+  <link rel="stylesheet" href="$CODE.css">
+</head>
+<body>
+  <div class="error-container">
+    <h1>Erreur $CODE</h1>
+    <p>$MESSAGE</p>
+  </div>
+
+  <script src="$CODE.js"></script>
+</body>
+</html>
+EOF
+
+done
+
+echo "✅ Toutes les pages d’erreurs ont été générées dans le dossier courant."
