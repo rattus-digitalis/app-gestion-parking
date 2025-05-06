@@ -9,32 +9,60 @@
 <body>
 
   <main class="container">
-    <h1>Paiement</h1>
+    <h1>Paiement sécurisé via PayPal</h1>
 
-    <form id="paiement-form">
-      <div class="form-group">
-        <label for="montant">Montant à payer</label>
-        <input type="text" id="montant" name="montant" value="10,00 €" readonly>
-      </div>
+    <div class="form-group">
+      <label>Montant à payer (€)</label>
+      <p class="prix-affiche">10,00 €</p>
+      <input type="hidden" id="montant" value="10.00">
+    </div>
 
-      <div class="form-group">
-        <label>Méthode de paiement</label>
-        <div class="methods">
-          <label><input type="radio" name="methode" value="carte" checked> Carte bancaire 💳</label>
-          <label><input type="radio" name="methode" value="paypal"> PayPal 🅿️</label>
-          <label><input type="radio" name="methode" value="apple"> Apple Pay </label>
-          <label><input type="radio" name="methode" value="google"> Google Pay 🧾</label>
-        </div>
-      </div>
-
-      <button type="submit">Payer maintenant</button>
-    </form>
+    <div id="paypal-button-container"></div>
 
     <div id="confirmation" class="confirmation" style="display: none;">
       <p>✅ Paiement effectué avec succès.</p>
     </div>
   </main>
 
-  <script src="paiement.js"></script>
+  <!-- SDK PayPal Sandbox -->
+  <script src="https://www.paypal.com/sdk/js?client-id=ARy15nGQ7FAcP0iELZFgJnFllNG4xWyaWooXkY8wpHq_vxuD7G_QuKjj8Y3eIstTreyQ6LUxLdMupzy5&currency=EUR&intent=capture&commit=true&components=buttons,funding-eligibility"></script>
+
+  <script>
+    const montantField = document.getElementById("montant");
+    const confirmation = document.getElementById("confirmation");
+
+    paypal.Buttons({
+      style: {
+        layout: 'vertical',
+        color: 'blue',
+        shape: 'pill',
+        label: 'paypal',
+        height: 45
+      },
+      funding: {
+        allowed: [paypal.FUNDING.PAYPAL, paypal.FUNDING.CARD]
+      },
+      createOrder: function(data, actions) {
+        return actions.order.create({
+          purchase_units: [{
+            amount: {
+              value: montantField.value.trim()
+            }
+          }]
+        });
+      },
+      onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+          confirmation.innerHTML = `<p>✅ Paiement effectué par ${details.payer.name.given_name} ${details.payer.name.surname}</p>`;
+          confirmation.style.display = 'block';
+        });
+      },
+      onError: function(err) {
+        console.error("Erreur PayPal :", err);
+        alert("Erreur lors du paiement.");
+      }
+    }).render('#paypal-button-container');
+  </script>
+
 </body>
 </html>

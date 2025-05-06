@@ -5,34 +5,57 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard Utilisateur | Gestion Parking</title>
   <link rel="stylesheet" href="dashboard-user.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
 
-  <main class="container">
-    <h1>Bienvenue sur votre tableau de bord</h1>
+  <header class="navbar" role="banner">
+    <h1 class="logo">Gestion Parking</h1>
+    <nav role="navigation" aria-label="Menu principal">
+      <ul>
+        <li><a href="/profil"><i class="fa fa-user"></i> Profil</a></li>
+        <li><a href="/logout"><i class="fa fa-sign-out-alt"></i> Déconnexion</a></li>
+      </ul>
+    </nav>
+  </header>
 
-    <section class="cards">
+  <main class="container" role="main">
+    <h2>Bienvenue sur votre tableau de bord</h2>
+
+    <section class="cards" aria-label="Résumé de votre compte">
       <div class="card">
-        <h2>Prochaine réservation</h2>
+        <h3><i class="fa fa-calendar-check"></i> Prochaine réservation</h3>
         <p>21 avril 2025 à 08:00</p>
       </div>
 
       <div class="card">
-        <h2>Place assignée</h2>
+        <h3><i class="fa fa-parking"></i> Place assignée</h3>
         <p>P12 - RDC</p>
       </div>
 
       <div class="card">
-        <h2>Dernier paiement</h2>
+        <h3><i class="fa fa-credit-card"></i> Dernier paiement</h3>
         <p>10,00 € le 15 avril 2025</p>
       </div>
 
-      <div class="card">
-        <h2>Notifications</h2>
+      <div class="card notification-card">
+        <h3>
+          <i class="fa fa-bell"></i> Notifications
+          <span class="badge" aria-label="2 nouvelles notifications">2</span>
+        </h3>
         <p>2 nouvelles notifications</p>
+      </div>
+
+      <div class="card">
+        <h3><i class="fa fa-history"></i> Historique</h3>
+        <p>3 réservations ce mois-ci</p>
       </div>
     </section>
   </main>
+
+  <footer class="footer" role="contentinfo">
+    <p>&copy; 2025 Gestion Parking. Tous droits réservés.</p>
+  </footer>
 
   <script src="dashboard-user.js"></script>
 </body>

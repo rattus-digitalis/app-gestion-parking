@@ -1,20 +1,34 @@
-// paiement.js
+const montantField = document.getElementById("montant");
+const confirmation = document.getElementById("confirmation");
 
-document.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById("paiement-form");
-    const confirmation = document.getElementById("confirmation");
-  
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-  
-      const methode = document.querySelector('input[name="methode"]:checked').value;
-  
-      // Simuler un paiement
-      console.log(`Paiement via ${methode} en cours...`);
-  
-      // Afficher confirmation
-      confirmation.style.display = "block";
-      form.style.display = "none";
+paypal.Buttons({
+  style: {
+    layout: 'vertical',
+    color: 'blue',
+    shape: 'pill',
+    label: 'paypal',
+    height: 45
+  },
+  funding: {
+    allowed: [paypal.FUNDING.PAYPAL, paypal.FUNDING.CARD]
+  },
+  createOrder: function(data, actions) {
+    return actions.order.create({
+      purchase_units: [{
+        amount: {
+          value: montantField.value.trim()
+        }
+      }]
     });
-  });
-  
+  },
+  onApprove: function(data, actions) {
+    return actions.order.capture().then(function(details) {
+      confirmation.innerHTML = `<p>✅ Paiement effectué par ${details.payer.name.given_name} ${details.payer.name.surname}</p>`;
+      confirmation.style.display = 'block';
+    });
+  },
+  onError: function(err) {
+    console.error("Erreur PayPal :", err);
+    alert("Erreur lors du paiement.");
+  }
+}).render('#paypal-button-container');
