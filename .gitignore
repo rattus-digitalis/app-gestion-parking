@@ -1,6 +1,10 @@
 # Éditeur
 .vscode/
 
+
+# Notes
+.md
+
 # Fichier d'environnement
 .env
 
