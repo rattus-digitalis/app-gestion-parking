@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "ab152f9c9823e737",
+        "id": "6026970e9a18f4b3",
         "type": "tabs",
         "children": [
           {
-            "id": "b9dbb42942ae250e",
+            "id": "72a193e9da5b056f",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -35,19 +35,6 @@
         "type": "tabs",
         "children": [
           {
-            "id": "4071f88c025aed50",
-            "type": "leaf",
-            "state": {
-              "type": "file-explorer",
-              "state": {
-                "sortOrder": "alphabetical",
-                "autoReveal": false
-              },
-              "icon": "lucide-folder-closed",
-              "title": "Explorateur de fichiers"
-            }
-          },
-          {
             "id": "6e892ad39e941641",
             "type": "leaf",
             "state": {
@@ -73,12 +60,26 @@
               "icon": "lucide-bookmark",
               "title": "Signet"
             }
+          },
+          {
+            "id": "9e4b8c56cbfdec16",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Explorateur de fichiers"
+            }
           }
         ]
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "a42ee73aacb7b4c9",
@@ -94,7 +95,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Création de compte users.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Rétrolien pour Création de compte users"
+              "title": "Rétroliens"
             }
           },
           {
@@ -113,12 +113,11 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Création de compte users.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Liens sortants de Création de compte users"
+              "title": "Liens sortants"
             }
           },
           {
@@ -142,13 +141,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Création de compte users.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Plan de Création de compte users"
+              "title": "Plan"
             }
           }
         ]
@@ -168,10 +166,10 @@
       "command-palette:Ouvrir la palette de commandes": false
     }
   },
-  "active": "4071f88c025aed50",
+  "active": "72a193e9da5b056f",
   "lastOpenFiles": [
-    "Pages.md",
     "Création de compte users.md",
+    "Pages.md",
     "vrac.md",
     "sujet.md",
     "Bienvenue.md"
