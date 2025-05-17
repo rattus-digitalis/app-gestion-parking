@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mes informations | Espace utilisateur</title>
+  <link rel="stylesheet" href="mes-informations.css">
+</head>
+<body>
+
+  <main class="container">
+    <h1>Mes informations</h1>
+
+    <form>
+      <div class="form-group">
+        <label for="prenom">Prénom</label>
+        <input type="text" id="prenom" name="prenom" value="Jean" required>
+      </div>
+
+      <div class="form-group">
+        <label for="nom">Nom</label>
+        <input type="text" id="nom" name="nom" value="Dupont" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Adresse email</label>
+        <input type="email" id="email" name="email" value="jean.dupont@email.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="telephone">Téléphone</label>
+        <input type="tel" id="telephone" name="telephone" value="0601020304">
+      </div>
+
+      <button type="submit">Mettre à jour</button>
+    </form>
+  </main>
+
+  <script src="mes-informations.js"></script>
+</body>
+</html>

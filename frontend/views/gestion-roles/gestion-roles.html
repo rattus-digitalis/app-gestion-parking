@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestion des rôles | Admin</title>
+  <link rel="stylesheet" href="gestion-roles.css">
+</head>
+<body>
+
+  <aside class="sidebar">
+    <h2>Admin</h2>
+    <ul>
+      <li><a href="dashboard-admin.html">Dashboard</a></li>
+      <li><a href="gestion-utilisateurs.html">Utilisateurs</a></li>
+      <li><a href="gestion-places.html">Places</a></li>
+      <li><a href="gestion-tarifs.html">Tarifs</a></li>
+      <li><a href="#" class="active">Rôles</a></li>
+      <li><a href="gestion-horaires.html">Horaires</a></li>
+    </ul>
+  </aside>
+
+  <main class="main">
+    <h1>Gestion des rôles</h1>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Nom du rôle</th>
+            <th>Description</th>
+            <th>Permissions</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Administrateur</td>
+            <td>Accès complet à toutes les fonctionnalités</td>
+            <td>Création, modification, suppression</td>
+            <td><a href="#">Modifier</a> | <a href="#">Supprimer</a></td>
+          </tr>
+          <tr>
+            <td>Utilisateur</td>
+            <td>Accès à ses réservations et infos personnelles</td>
+            <td>Consultation, réservation</td>
+            <td><a href="#">Modifier</a> | <a href="#">Supprimer</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <button class="add-role-btn">Ajouter un rôle</button>
+  </main>
+
+  <script src="gestion-roles.js"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Paiement | Gestion Parking</title>
+  <link rel="stylesheet" href="paiement.css">
+</head>
+<body>
+
+  <main class="container">
+    <h1>Paiement</h1>
+
+    <form id="paiement-form">
+      <div class="form-group">
+        <label for="montant">Montant à payer</label>
+        <input type="text" id="montant" name="montant" value="10,00 €" readonly>
+      </div>
+
+      <div class="form-group">
+        <label>Méthode de paiement</label>
+        <div class="methods">
+          <label><input type="radio" name="methode" value="carte" checked> Carte bancaire 💳</label>
+          <label><input type="radio" name="methode" value="paypal"> PayPal 🅿️</label>
+          <label><input type="radio" name="methode" value="apple"> Apple Pay </label>
+          <label><input type="radio" name="methode" value="google"> Google Pay 🧾</label>
+        </div>
+      </div>
+
+      <button type="submit">Payer maintenant</button>
+    </form>
+
+    <div id="confirmation" class="confirmation" style="display: none;">
+      <p>✅ Paiement effectué avec succès.</p>
+    </div>
+  </main>
+
+  <script src="paiement.js"></script>
+</body>
+</html>

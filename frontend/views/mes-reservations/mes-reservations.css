@@ -1,0 +1,101 @@
+/* Reset et base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f8;
+    color: #333;
+    padding: 40px 20px;
+    line-height: 1.6;
+  }
+  
+  /* Container */
+  .container {
+    max-width: 960px;
+    margin: auto;
+  }
+  
+  h1 {
+    font-size: 28px;
+    margin-bottom: 30px;
+    color: #2c3e50;
+    text-align: center;
+  }
+  
+  /* Tableau */
+  .table-container {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    overflow-x: auto;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+  }
+  
+  thead {
+    background-color: #007BFF;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 14px;
+  }
+  
+  th, td {
+    padding: 14px 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 15px;
+  }
+  
+  tbody tr:hover {
+    background-color: #f9f9f9;
+  }
+  
+  /* Statuts */
+  td.status {
+    font-weight: bold;
+    text-transform: capitalize;
+  }
+  
+  .status:before {
+    content: "● ";
+    font-size: 14px;
+    vertical-align: middle;
+    margin-right: 5px;
+  }
+  
+  .status.a-venir {
+    color: #2980b9;
+  }
+  
+  .status.terminee {
+    color: #27ae60;
+  }
+  
+  .status.annulee {
+    color: #c0392b;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    table {
+      font-size: 14px;
+    }
+  
+    th, td {
+      padding: 10px;
+    }
+  
+    h1 {
+      font-size: 22px;
+    }
+  }
+  

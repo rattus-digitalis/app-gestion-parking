@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestion des tarifs | Admin</title>
+  <link rel="stylesheet" href="gestion-tarifs.css">
+</head>
+<body>
+
+  <aside class="sidebar">
+    <h2>Admin</h2>
+    <ul>
+      <li><a href="dashboard-admin.html">Dashboard</a></li>
+      <li><a href="gestion-utilisateurs.html">Utilisateurs</a></li>
+      <li><a href="#">Réservations</a></li>
+      <li><a href="#">Paiements</a></li>
+      <li><a href="#" class="active">Tarifs</a></li>
+      <li><a href="#">Paramètres</a></li>
+    </ul>
+  </aside>
+
+  <main class="main">
+    <h1>Gestion des tarifs</h1>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Type</th>
+            <th>Durée</th>
+            <th>Prix</th>
+            <th>Dernière modification</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>001</td>
+            <td>Heure</td>
+            <td>1h</td>
+            <td>2,00 €</td>
+            <td>2024-12-15</td>
+            <td><a href="#">Modifier</a> | <a href="#">Supprimer</a></td>
+          </tr>
+          <tr>
+            <td>002</td>
+            <td>Journée</td>
+            <td>24h</td>
+            <td>10,00 €</td>
+            <td>2025-01-10</td>
+            <td><a href="#">Modifier</a> | <a href="#">Supprimer</a></td>
+          </tr>
+          <!-- Ajoute d'autres lignes ici -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script src="gestion-tarifs.js"></script>
+</body>
+</html>

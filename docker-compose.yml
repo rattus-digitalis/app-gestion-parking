@@ -22,9 +22,18 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     volumes:
       - ./database/mysql-data:/var/lib/mysql
-      - ./database/init/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+      # Initialisation (si besoin CREATE DATABASE + USE)
+      - ./database/init/init.sql:/docker-entrypoint-initdb.d/00-init.sql
+
+      # Structure des tables
+      - ./database/sql/tables/users.sql:/docker-entrypoint-initdb.d/01-users.sql
+
+      # Données initiales (seed)
+      - ./database/sql/seed/users_seed.sql:/docker-entrypoint-initdb.d/02-users-seed.sql
     ports:
       - "3307:3306"
+
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin

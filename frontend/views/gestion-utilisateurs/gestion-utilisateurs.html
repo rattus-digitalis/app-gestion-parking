@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestion des utilisateurs | Admin</title>
+  <link rel="stylesheet" href="gestion-utilisateurs.css">
+</head>
+<body>
+
+  <aside class="sidebar">
+    <h2>Admin</h2>
+    <ul>
+      <li><a href="dashboard-admin.html">Dashboard</a></li>
+      <li><a href="#" class="active">Utilisateurs</a></li>
+      <li><a href="#">Réservations</a></li>
+      <li><a href="#">Paiements</a></li>
+      <li><a href="#">Paramètres</a></li>
+    </ul>
+  </aside>
+
+  <main class="main">
+    <h1>Gestion des utilisateurs</h1>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Email</th>
+            <th>Rôle</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>001</td>
+            <td>Jean Dupont</td>
+            <td>jean.dupont@email.com</td>
+            <td>Utilisateur</td>
+            <td>Actif</td>
+            <td><a href="#">Modifier</a> | <a href="#">Supprimer</a></td>
+          </tr>
+          <tr>
+            <td>002</td>
+            <td>Marie Curie</td>
+            <td>marie.curie@email.com</td>
+            <td>Admin</td>
+            <td>Inactif</td>
+            <td><a href="#">Modifier</a> | <a href="#">Supprimer</a></td>
+          </tr>
+          <!-- Ajoute d'autres lignes ici -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script src="gestion-utilisateurs.js"></script>
+</body>
+</html>

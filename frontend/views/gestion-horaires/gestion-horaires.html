@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestion des horaires | Admin</title>
+  <link rel="stylesheet" href="gestion-horaires.css">
+</head>
+<body>
+
+  <aside class="sidebar">
+    <h2>Admin</h2>
+    <ul>
+      <li><a href="dashboard-admin.html">Dashboard</a></li>
+      <li><a href="gestion-utilisateurs.html">Utilisateurs</a></li>
+      <li><a href="gestion-places.html">Places</a></li>
+      <li><a href="gestion-tarifs.html">Tarifs</a></li>
+      <li><a href="gestion-roles.html">Rôles</a></li>
+      <li><a href="#" class="active">Horaires</a></li>
+    </ul>
+  </aside>
+
+  <main class="main">
+    <h1>Gestion des horaires d'ouverture</h1>
+
+    <form>
+      <table>
+        <thead>
+          <tr>
+            <th>Jour</th>
+            <th>Ouverture</th>
+            <th>Fermeture</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Lundi</td>
+            <td><input type="time" name="open-monday" value="08:00"></td>
+            <td><input type="time" name="close-monday" value="20:00"></td>
+          </tr>
+          <tr>
+            <td>Mardi</td>
+            <td><input type="time" name="open-tuesday" value="08:00"></td>
+            <td><input type="time" name="close-tuesday" value="20:00"></td>
+          </tr>
+          <!-- Répéter pour tous les jours -->
+          <tr>
+            <td>Dimanche</td>
+            <td><input type="time" name="open-sunday" value="10:00"></td>
+            <td><input type="time" name="close-sunday" value="18:00"></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <button type="submit">Enregistrer</button>
+    </form>
+  </main>
+
+  <script src="gestion-horaires.js"></script>
+</body>
+</html>

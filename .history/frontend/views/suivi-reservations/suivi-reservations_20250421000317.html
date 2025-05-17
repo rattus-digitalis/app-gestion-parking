@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Suivi des réservations | Admin</title>
+  <link rel="stylesheet" href="suivi-reservations.css">
+</head>
+<body>
+
+  <aside class="sidebar">
+    <h2>Admin</h2>
+    <ul>
+      <li><a href="dashboard-admin.html">Dashboard</a></li>
+      <li><a href="gestion-utilisateurs.html">Utilisateurs</a></li>
+      <li><a href="#" class="active">Réservations</a></li>
+      <li><a href="suivi-paiements.html">Paiements</a></li>
+      <li><a href="gestion-tarifs.html">Tarifs</a></li>
+      <li><a href="gestion-places.html">Places</a></li>
+      <li><a href="#">Paramètres</a></li>
+    </ul>
+  </aside>
+
+  <main class="main">
+    <h1>Suivi des réservations</h1>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Utilisateur</th>
+            <th>Place</th>
+            <th>Date de début</th>
+            <th>Date de fin</th>
+            <th>Statut</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>R001</td>
+            <td>Jean Dupont</td>
+            <td>P12</td>
+            <td>2025-04-20 08:00</td>
+            <td>2025-04-20 18:00</td>
+            <td>Confirmée</td>
+          </tr>
+          <tr>
+            <td>R002</td>
+            <td>Marie Curie</td>
+            <td>P45</td>
+            <td>2025-04-21 09:00</td>
+            <td>2025-04-21 17:00</td>
+            <td>En attente</td>
+          </tr>
+          <!-- Ajoute d'autres lignes si nécessaire -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script src="suivi-reservations.js"></script>
+</body>
+</html>

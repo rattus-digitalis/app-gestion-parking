@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Préférences | Espace utilisateur</title>
+  <link rel="stylesheet" href="preferences.css">
+</head>
+<body>
+
+  <main class="container">
+    <h1>Préférences</h1>
+
+    <form>
+      <div class="form-group">
+        <label for="notifications">Notifications</label>
+        <select id="notifications" name="notifications">
+          <option value="email" selected>Email uniquement</option>
+          <option value="sms">SMS uniquement</option>
+          <option value="both">Email + SMS</option>
+          <option value="none">Aucune notification</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="langue">Langue de l’interface</label>
+        <select id="langue" name="langue">
+          <option value="fr" selected>Français</option>
+          <option value="en">Anglais</option>
+        </select>
+      </div>
+
+      <div class="form-group checkbox-group">
+        <input type="checkbox" id="darkmode" name="darkmode">
+        <label for="darkmode">Activer le mode sombre</label>
+      </div>
+
+      <button type="submit">Enregistrer les préférences</button>
+    </form>
+  </main>
+
+  <script src="preferences.js"></script>
+</body>
+</html>

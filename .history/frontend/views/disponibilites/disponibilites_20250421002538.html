@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Disponibilités | Gestion Parking</title>
+  <link rel="stylesheet" href="disponibilites.css">
+</head>
+<body>
+
+  <main class="container">
+    <h1>Consulter les disponibilités</h1>
+
+    <form id="dispo-form">
+      <div class="form-group">
+        <label for="date">Choisir une date</label>
+        <input type="date" id="date" name="date" required>
+      </div>
+
+      <div class="form-group">
+        <label for="heure">Choisir une heure</label>
+        <input type="time" id="heure" name="heure" required>
+      </div>
+
+      <button type="submit">Vérifier</button>
+    </form>
+
+    <div id="resultats" class="resultats">
+      <!-- Les résultats apparaîtront ici -->
+    </div>
+  </main>
+
+  <script src="disponibilites.js"></script>
+</body>
+</html>

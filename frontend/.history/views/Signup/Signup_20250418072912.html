@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inscription | Gestion Parking</title>
+  <meta name="description" content="Créez un compte utilisateur pour réserver et gérer vos places de parking." />
+  <link rel="icon" href="/assets/img/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <link rel="stylesheet" href="Signup.css" />
+</head>
+
+<body>
+  <!-- ===== HEADER ===== -->
+  <header>
+    <div class="container header-content">
+      <div class="logo" role="banner">
+        🅿️ <span>Gestion Parking</span>
+      </div>
+      <nav class="main-nav" aria-label="Navigation principale">
+        <ul class="nav-links">
+          <li><a href="/index.html">Accueil</a></li>
+          <li><a href="/views/Login/Login.html">Connexion</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== MAIN ===== -->
+  <main id="main-content">
+    <section class="signup container">
+      <h1>Créer un compte</h1>
+      <p>Remplissez le formulaire pour accéder à votre espace personnel.</p>
+
+      <form class="signup-form" method="POST" action="#">
+        <label for="name">Nom :</label>
+        <input type="text" id="name" name="name" required />
+
+        <label for="email">Email :</label>
+        <input type="email" id="email" name="email" required />
+
+        <label for="password">Mot de passe :</label>
+        <input type="password" id="password" name="password" required />
+
+        <label for="confirm-password">Confirmer le mot de passe :</label>
+        <input type="password" id="confirm-password" name="confirm-password" required />
+
+        <button type="submit" class="btn btn-primary">S'inscrire</button>
+
+        <p class="login-link">Déjà inscrit ? <a href="/views/Login/Login.html">Se connecter</a></p>
+      </form>
+    </section>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <div id="footer"></div>
+
+  <!-- ===== SCRIPTS ===== -->
+  <script src="/assets/js/main.js" defer></script>
+  <script src="Signup.js" defer></script>
+  <script src="/assets/js/include.js" defer></script>
+</body>
+
+</html>

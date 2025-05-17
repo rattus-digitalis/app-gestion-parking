@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestion des places | Admin</title>
+  <link rel="stylesheet" href="gestion-places.css">
+</head>
+<body>
+
+  <aside class="sidebar">
+    <h2>Admin</h2>
+    <ul>
+      <li><a href="dashboard-admin.html">Dashboard</a></li>
+      <li><a href="gestion-utilisateurs.html">Utilisateurs</a></li>
+      <li><a href="#">Réservations</a></li>
+      <li><a href="#">Paiements</a></li>
+      <li><a href="gestion-tarifs.html">Tarifs</a></li>
+      <li><a href="#" class="active">Places</a></li>
+      <li><a href="#">Paramètres</a></li>
+    </ul>
+  </aside>
+
+  <main class="main">
+    <h1>Gestion des places de parking</h1>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Numéro</th>
+            <th>Étage</th>
+            <th>Type</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>001</td>
+            <td>P12</td>
+            <td>RDC</td>
+            <td>Classique</td>
+            <td>Disponible</td>
+            <td><a href="#">Modifier</a> | <a href="#">Supprimer</a></td>
+          </tr>
+          <tr>
+            <td>002</td>
+            <td>P45</td>
+            <td>Niveau -1</td>
+            <td>PMR</td>
+            <td>Occupée</td>
+            <td><a href="#">Modifier</a> | <a href="#">Supprimer</a></td>
+          </tr>
+          <!-- Tu peux ajouter d'autres lignes -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script src="gestion-places.js"></script>
+</body>
+</html>

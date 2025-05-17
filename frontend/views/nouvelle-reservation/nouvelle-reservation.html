@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nouvelle réservation | Gestion Parking</title>
+  <link rel="stylesheet" href="nouvelle-reservation.css">
+</head>
+<body>
+
+  <main class="container">
+    <h1>Nouvelle réservation</h1>
+
+    <form>
+      <div class="form-group">
+        <label for="date">Date de réservation</label>
+        <input type="date" id="date" name="date" required>
+      </div>
+
+      <div class="form-group">
+        <label for="heure-debut">Heure d'arrivée</label>
+        <input type="time" id="heure-debut" name="heure-debut" required>
+      </div>
+
+      <div class="form-group">
+        <label for="heure-fin">Heure de départ</label>
+        <input type="time" id="heure-fin" name="heure-fin" required>
+      </div>
+
+      <div class="form-group">
+        <label for="place">Choix de la place</label>
+        <select id="place" name="place" required>
+          <option value="">-- Sélectionner une place --</option>
+          <option value="P12">P12 - RDC</option>
+          <option value="P45">P45 - Niveau -1</option>
+          <option value="PMR1">PMR1 - Accès PMR</option>
+        </select>
+      </div>
+
+      <button type="submit">Réserver</button>
+    </form>
+  </main>
+
+  <script src="nouvelle-reservation.js"></script>
+</body>
+</html>

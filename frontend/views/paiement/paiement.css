@@ -1,0 +1,64 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f4f6f8;
+  color: #333;
+  padding: 40px 20px;
+}
+
+.container {
+  max-width: 480px;
+  margin: auto;
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+h1 {
+  margin-bottom: 25px;
+  text-align: center;
+  font-size: 26px;
+  color: #2c3e50;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.prix-affiche {
+  font-size: 18px;
+  font-weight: bold;
+  color: #2c3e50;
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+#paypal-button-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.confirmation {
+  margin-top: 20px;
+  background: #e6ffed;
+  padding: 15px;
+  border-left: 4px solid #28a745;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: bold;
+  color: #28a745;
+}

@@ -1,0 +1,65 @@
+#!/bin/bash
+
+# Dossier de base
+BASE_DIR="/home/rattus/app-gestion-parking/frontend/views"
+
+# Liste des pages
+PAGES=(
+  "login"
+  "register"
+  "reset-password"
+  "confirm-email"
+  "dashboard-user"
+  "mes-informations"
+  "ma-voiture"
+  "mes-reservations"
+  "nouvelle-reservation"
+  "disponibilites"
+  "paiement"
+  "facturation"
+  "notifications"
+  "preferences"
+  "dashboard-admin"
+  "gestion-utilisateurs"
+  "gestion-places"
+  "gestion-tarifs"
+  "suivi-reservations"
+  "suivi-paiements"
+  "gestion-horaires"
+  "gestion-roles"
+  "logs"
+  "404"
+  "403"
+  "500"
+  "maintenance"
+)
+
+# Création des dossiers et fichiers
+for PAGE in "${PAGES[@]}"; do
+  DIR="$BASE_DIR/$PAGE"
+  mkdir -p "$DIR"
+
+  # Crée les fichiers vides
+  touch "$DIR/$PAGE.js" "$DIR/$PAGE.css"
+
+  # Ajoute du contenu HTML de base
+  cat > "$DIR/$PAGE.html" <<EOF
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${PAGE//-/ }</title>
+  <link rel="stylesheet" href="$PAGE.css">
+</head>
+<body>
+
+  <h1>Page : ${PAGE//-/ }</h1>
+
+  <script src="$PAGE.js"></script>
+</body>
+</html>
+EOF
+
+  echo "✔️ Créé : $DIR avec $PAGE.html, $PAGE.css, $PAGE.js"
+done

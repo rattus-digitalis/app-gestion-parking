@@ -1,0 +1,96 @@
+/* Reset de base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body, html {
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #1e1e2f;
+    color: #fff;
+  }
+  
+  /* Arrière-plan animé */
+  .background {
+    height: 100%;
+    background: linear-gradient(-45deg, #1e1e2f, #3b3b58, #2c3e50, #34495e);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  @keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  /* Overlay sombre */
+  .overlay {
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 60px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  }
+  
+  /* Texte principal */
+  .error-container h1 {
+    font-size: 120px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .error-container h2 {
+    font-size: 28px;
+    margin-bottom: 15px;
+  }
+  
+  .error-container p {
+    font-size: 18px;
+    margin-bottom: 30px;
+    color: #ccc;
+  }
+  
+  /* Bouton retour */
+  .home-link {
+    display: inline-block;
+    padding: 14px 28px;
+    font-size: 16px;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Styles spécifiques par code d’erreur */
+  .error-404 h1 { color: #e74c3c; }
+  .error-404 .home-link { background-color: #e74c3c; }
+  .error-404 .home-link:hover { background-color: #c0392b; }
+  
+  .error-403 h1 { color: #f39c12; }
+  .error-403 .home-link { background-color: #f39c12; }
+  .error-403 .home-link:hover { background-color: #d68910; }
+  
+  .error-500 h1 { color: #9b59b6; }
+  .error-500 .home-link { background-color: #9b59b6; }
+  .error-500 .home-link:hover { background-color: #8e44ad; }
+  
+  .maintenance-mode h1 {
+    font-size: 100px;
+    color: #3498db;
+  }
+  
+  .maintenance-mode .home-link {
+    background-color: #3498db;
+  }
+  
+  .maintenance-mode .home-link:hover {
+    background-color: #2980b9;
+  }
+  
