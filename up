@@ -4,7 +4,7 @@ echo "🚀 Démarrage de l'environnement Docker pour Parkly..."
 
 # Vérifier Docker
 if ! command -v docker &> /dev/null; then
-  echo "❌ Docker n'est pas installé. Installe-le d'abord !"
+  echo "❌ Docker n'est pas installé. Installe-le d'abord."
   exit 1
 fi
 
@@ -17,7 +17,7 @@ fi
 # Ajouter parkly.localhost au fichier hosts
 HOSTS_LINE="127.0.0.1 parkly.localhost"
 if ! grep -q "$HOSTS_LINE" /etc/hosts; then
-  echo "🔧 Ajout de 'parkly.localhost' dans /etc/hosts (sudo requis)..."
+  echo "🔧 Ajout de 'parkly.localhost' dans /etc/hosts (sudo requis)"
   echo "$HOSTS_LINE" | sudo tee -a /etc/hosts > /dev/null
 else
   echo "✅ 'parkly.localhost' déjà présent dans /etc/hosts"
@@ -27,9 +27,13 @@ fi
 echo "📦 Lancement des conteneurs..."
 docker-compose up --build -d
 
-# Statut
+# Vérifier le statut
 if [ $? -eq 0 ]; then
-  echo "✅ Parkly est accessible sur : http://parkly.localhost"
+  echo -e "\n✅ Environnement Parkly lancé avec succès !"
+  echo -e "🔗 Accès aux services :"
+  echo -e "   🖥️  Frontend      : http://parkly.localhost/"
+  echo -e "   ⚙️  Backend (API) : http://parkly.localhost/api/"
+  echo -e "   🗃️  phpMyAdmin    : http://parkly.localhost/pma/\n"
 else
   echo "❌ Erreur lors du démarrage de Docker."
   exit 1
