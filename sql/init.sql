@@ -1,0 +1,7 @@
+CREATE DATABASE IF NOT EXISTS zenpark;
+
+CREATE USER IF NOT EXISTS 'zenuser'@'%' IDENTIFIED BY 'zenpass';
+GRANT ALL PRIVILEGES ON zenpark.* TO 'zenuser'@'%';
+
+FLUSH PRIVILEGES;
+

@@ -1,0 +1,25 @@
+# Volumes, bases, etc.
+db_data/
+sql/init.sql # facultatif si auto-généré
+
+# Docker internals
+*.log
+*.sock
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Env vars
+.env
+
+# PHP junk
+vendor/
+*.lock
+
+# Node (si tu ajoutes du JS plus tard)
+node_modules/
+
+# Backup
+*.tar.gz
+
