@@ -122,6 +122,52 @@ footer {
   background-color: #fafafa;
 }
 
+.flash-message {
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 4px;
+  font-weight: 600;
+}
+.flash-message.info { background-color: #d1ecf1; color: #0c5460; }
+.flash-message.success { background-color: #d4edda; color: #155724; }
+.flash-message.error { background-color: #f8d7da; color: #721c24; }
+
+.btn-create {
+  display: inline-block;
+  margin-bottom: 1rem;
+  padding: 0.4rem 0.8rem;
+  background-color: #28a745;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+}
+.btn-create:hover {
+  background-color: #1e7e34;
+}
+
+.pagination {
+  list-style: none;
+  display: flex;
+  gap: 0.5rem;
+  padding: 0;
+}
+
+.pagination li a {
+  display: block;
+  padding: 0.3rem 0.6rem;
+  background: #f0f0f0;
+  color: #333;
+  border-radius: 3px;
+  text-decoration: none;
+}
+
+.pagination li.active a,
+.pagination li a:hover {
+  background: #007bff;
+  color: white;
+}
+
+
 /* ===== Status badges ===== */
 .status.online {
   color: #28a745; /* bootstrap green */
@@ -184,4 +230,19 @@ footer {
 /* ===== Utility ===== */
 .actions-cell {
   white-space: nowrap; /* Empêche les boutons de casser la ligne */
+}
+
+
+.btn-link {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: white !important;
+  text-decoration: none;
+  border-radius: 4px;
+  margin: 0.5rem 0;
+}
+
+.btn-link:hover {
+  background-color: #0056b3;
 }
