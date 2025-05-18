@@ -62,6 +62,43 @@ switch ($route) {
             require_once __DIR__ . '/../app/views/admin/dashboard_admin.php';
             break;
         
+            case 'admin_users':
+                if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
+                    header('Location: /?page=login');
+                    exit;
+                }
+                require_once __DIR__ . '/../app/controllers/AdminUserController.php';
+                $controller = new AdminUserController();
+            
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    // Gestion suppression ou modification
+                    $controller->handlePost($_POST);
+                } else {
+                    // Affichage de la liste
+                    $controller->listUsers();
+                }
+                break;
+            
+                case 'edit_user':
+                    if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
+                        header('Location: /?page=login');
+                        exit;
+                    }
+                    require_once __DIR__ . '/../app/controllers/AdminUserController.php';
+                    $controller = new AdminUserController();
+                
+                    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                        $controller->updateUser($_POST);
+                    } else {
+                        $userId = $_GET['id'] ?? null;
+                        if ($userId === null) {
+                            header('Location: /?page=admin_users');
+                            exit;
+                        }
+                        $controller->editUserForm($userId);
+                    }
+                    break;
+                
 
         session_unset();
         session_destroy();

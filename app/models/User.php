@@ -35,6 +35,34 @@ public function setStatus($id, $status)
     return $stmt->execute([$status, $id]);
 }
 
+public function getAllUsers()
+{
+    $stmt = $this->pdo->query("SELECT id, last_name, first_name, email, phone, role, status FROM users");
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+public function deleteUserById($id)
+{
+    $stmt = $this->pdo->prepare("DELETE FROM users WHERE id = ?");
+    return $stmt->execute([$id]);
+}
+
+public function getUserById($id)
+{
+    $stmt = $this->pdo->prepare("SELECT * FROM users WHERE id = ?");
+    $stmt->execute([$id]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+public function updateUser($id, $lastName, $firstName, $email, $phone, $role, $status)
+{
+    $stmt = $this->pdo->prepare("
+        UPDATE users SET last_name = ?, first_name = ?, email = ?, phone = ?, role = ?, status = ? WHERE id = ?
+    ");
+    return $stmt->execute([$lastName, $firstName, $email, $phone, $role, $status, $id]);
+}
+
+
 
 
 }

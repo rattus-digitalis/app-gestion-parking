@@ -1,79 +1,187 @@
-/* Reset minimal */
+/* ===== Reset minimal ===== */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  /* Typo et base */
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    color: #222;
-    line-height: 1.6;
-    padding: 0;
-    margin: 0;
-  }
-  
-  main {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 1rem;
-    background: #fff;
-    border-radius: 6px;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  h1 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
-  
-  form input,
-  form button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 1rem;
-    font-size: 1rem;
-  }
-  
-  form button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-  }
-  
-  form button:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Navigation simple */
-  nav {
-    background: #343a40;
-    padding: 1rem;
-  }
-  
-  nav ul {
-    list-style: none;
-    display: flex;
-    gap: 1rem;
-  }
-  
-  nav a {
-    color: #fff;
-    text-decoration: none;
-  }
-  
-  nav a:hover {
-    text-decoration: underline;
-  }
-  
-  footer {
-    text-align: center;
-    padding: 1rem;
-    background: #eee;
-    margin-top: 2rem;
-  }
-  
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ===== Base styles ===== */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  color: #222;
+  line-height: 1.6;
+  padding: 0;
+  margin: 0;
+}
+
+main {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+/* ===== Forms ===== */
+form input,
+form button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+form input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0,123,255,.5);
+}
+
+form button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+form button:hover {
+  background-color: #0056b3;
+}
+
+/* ===== Navigation ===== */
+nav {
+  background: #343a40;
+  padding: 1rem;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+nav a:hover {
+  text-decoration: underline;
+  color: #adb5bd;
+}
+
+/* ===== Footer ===== */
+footer {
+  text-align: center;
+  padding: 1rem;
+  background: #eee;
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* ===== Tables (User management) ===== */
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.users-table th,
+.users-table td {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ddd;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.users-table th {
+  background-color: #f0f0f0;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  font-weight: 600;
+}
+
+.users-table tbody tr:hover {
+  background-color: #fafafa;
+}
+
+/* ===== Status badges ===== */
+.status.online {
+  color: #28a745; /* bootstrap green */
+  font-weight: 700;
+}
+
+.status.offline {
+  color: #6c757d; /* bootstrap gray */
+  font-weight: 700;
+}
+
+/* ===== Buttons ===== */
+.btn-delete,
+.actions-cell a.btn-edit,
+.actions-cell button.btn-delete {
+  padding: 0.3rem 0.6rem;
+  border-radius: 3px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+}
+
+.actions-cell a.btn-edit {
+  background-color: #007bff;
+  color: #fff;
+  margin-right: 0.5rem;
+}
+
+.actions-cell a.btn-edit:hover {
+  background-color: #0056b3;
+}
+
+.btn-delete,
+.actions-cell button.btn-delete {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.btn-delete:hover,
+.actions-cell button.btn-delete:hover {
+  background-color: #a71d2a;
+}
+
+/* ===== Back button/link ===== */
+.btn-back {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.btn-back:hover {
+  text-decoration: underline;
+  color: #0056b3;
+}
+
+/* ===== Utility ===== */
+.actions-cell {
+  white-space: nowrap; /* Empêche les boutons de casser la ligne */
+}
