@@ -29,11 +29,12 @@ public function getUserByEmail($email)
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-public function setStatus($userId, $status)
+public function setStatus($id, $status)
 {
     $stmt = $this->pdo->prepare("UPDATE users SET status = ? WHERE id = ?");
-    return $stmt->execute([$status, $userId]);
+    return $stmt->execute([$status, $id]);
 }
+
 
 
 }

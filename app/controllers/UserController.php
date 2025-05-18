@@ -43,7 +43,7 @@ class UserController
 
     public function login($postData)
     {
-        session_start();
+    
 
         if (empty($postData['email']) || empty($postData['password'])) {
             echo "❌ Email et mot de passe requis.";

@@ -1,9 +1,21 @@
-<form action="/?page=login" method="POST">
-    <label for="email">Email :</label>
-    <input type="email" id="email" name="email" required><br>
+<?php
+$title = "Connexion";
+require_once __DIR__ . '/../templates/head.php';
+require_once __DIR__ . '/../templates/nav.php';
+?>
 
-    <label for="password">Mot de passe :</label>
-    <input type="password" id="password" name="password" required><br>
+<main>
+    <h1>Connexion</h1>
 
-    <button type="submit">Se connecter</button>
-</form>
+    <form action="/?page=login" method="POST">
+        <label for="email">Email :</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="password">Mot de passe :</label><br>
+        <input type="password" id="password" name="password" required><br><br>
+
+        <button type="submit">Se connecter</button>
+    </form>
+</main>
+
+<?php require_once __DIR__ . '/../templates/footer.php'; ?>
