@@ -46,6 +46,23 @@ switch ($route) {
             $userModel->setStatus($_SESSION['user']['id'], 'offline');
         }
 
+        case 'dashboard_user':
+            if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'user') {
+                header('Location: /?page=login');
+                exit;
+            }
+            require_once __DIR__ . '/../app/views/pages/dashboard_user.php';
+            break;
+        
+        case 'dashboard_admin':
+            if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
+                header('Location: /?page=login');
+                exit;
+            }
+            require_once __DIR__ . '/../app/views/admin/dashboard_admin.php';
+            break;
+        
+
         session_unset();
         session_destroy();
 

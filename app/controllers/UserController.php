@@ -68,7 +68,12 @@ class UserController
 
             $userModel->setStatus($user['id'], 'online');
 
-            header('Location: /?page=dashboard');
+            if ($user['role'] === 'admin') {
+                header('Location: /?page=dashboard_admin');
+            } else {
+                header('Location: /?page=dashboard_user');
+            }
+            
             exit;
         } else {
             echo "❌ Identifiants incorrects.";
