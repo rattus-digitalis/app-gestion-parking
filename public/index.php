@@ -29,6 +29,14 @@ switch ($route) {
         require_once __DIR__ . '/../app/views/pages/home.php';
         break;
 
+    case 'contact':
+        require_once __DIR__ . '/../app/views/pages/contact.php';
+        break;
+
+    case 'cgu':
+        require_once __DIR__ . '/../app/views/pages/cgu.php';
+        break;
+
     case 'login':
         require_once __DIR__ . '/../app/controllers/UserController.php';
         $controller = new UserController();
@@ -128,4 +136,3 @@ switch ($route) {
         require_once __DIR__ . '/../app/views/errors/404.php';
         break;
 }
-

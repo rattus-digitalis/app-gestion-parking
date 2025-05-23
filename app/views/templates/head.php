@@ -1,9 +1,11 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title><?= $title ?? 'Zenpark' ?></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/assets/css/style.css">
-</head>
-<body>
+<footer class="site-footer">
+    <p>&copy; <?= date('Y') ?> <strong>Zenpark</strong>. Tous droits réservés.</p>
+
+    <nav class="footer-links">
+        <a href="/?page=contact" class="footer-link">Contact</a>
+        <a href="/?page=cgu" class="footer-link">CGU</a>
+    </nav>
+</footer>
+</body>
+</html>
+
