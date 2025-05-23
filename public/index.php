@@ -5,6 +5,23 @@ session_start();
 require_once __DIR__ . '/../config/constants.php';
 require_once __DIR__ . '/../config/routes.php';
 
+// Gestion des erreurs 500
+set_exception_handler(function ($e) {
+    error_log($e); // Enregistre l'erreur pour le debug
+    http_response_code(500);
+    require_once __DIR__ . '/../app/views/errors/500.php';
+    exit;
+});
+
+// Fonction d'autorisation par rôle
+function checkRole(string $role) {
+    if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== $role) {
+        http_response_code(401);
+        require_once __DIR__ . '/../app/views/errors/401.php';
+        exit;
+    }
+}
+
 $route = $_GET['page'] ?? 'home';
 
 switch ($route) {
@@ -34,10 +51,6 @@ switch ($route) {
         }
         break;
 
-    case 'dashboard':
-        require_once __DIR__ . '/../app/views/pages/dashboard.php';
-        break;
-
     case 'logout':
         require_once __DIR__ . '/../app/models/User.php';
 
@@ -53,26 +66,17 @@ switch ($route) {
         exit;
 
     case 'dashboard_user':
-        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'user') {
-            header('Location: /?page=login');
-            exit;
-        }
+        checkRole('user');
         require_once __DIR__ . '/../app/views/pages/dashboard_user.php';
         break;
 
     case 'dashboard_admin':
-        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
-            header('Location: /?page=login');
-            exit;
-        }
+        checkRole('admin');
         require_once __DIR__ . '/../app/views/admin/dashboard_admin.php';
         break;
 
     case 'admin_users':
-        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
-            header('Location: /?page=login');
-            exit;
-        }
+        checkRole('admin');
         require_once __DIR__ . '/../app/controllers/AdminUserController.php';
         $controller = new AdminUserController();
 
@@ -84,10 +88,7 @@ switch ($route) {
         break;
 
     case 'edit_user':
-        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
-            header('Location: /?page=login');
-            exit;
-        }
+        checkRole('admin');
         require_once __DIR__ . '/../app/controllers/AdminUserController.php';
         $controller = new AdminUserController();
 
@@ -104,10 +105,7 @@ switch ($route) {
         break;
 
     case 'admin_parkings':
-        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
-            header('Location: /?page=login');
-            exit;
-        }
+        checkRole('admin');
         require_once __DIR__ . '/../app/controllers/AdminParkingController.php';
         $controller = new AdminParkingController();
 
@@ -119,10 +117,7 @@ switch ($route) {
         break;
 
     case 'reservations_list':
-        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
-            header('Location: /?page=login');
-            exit;
-        }
+        checkRole('admin');
         require_once __DIR__ . '/../app/controllers/AdminReservationController.php';
         $controller = new AdminReservationController();
         $controller->listReservations();
@@ -130,6 +125,7 @@ switch ($route) {
 
     default:
         http_response_code(404);
-        echo "Page non trouvée";
+        require_once __DIR__ . '/../app/views/errors/404.php';
         break;
 }
+
