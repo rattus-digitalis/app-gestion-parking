@@ -1,9 +1,9 @@
 <?php
 $title = "Connexion";
+$page_css = "/assets/css/pages/login.css"; // On définit le CSS à charger
 require_once __DIR__ . '/../templates/head.php';
 require_once __DIR__ . '/../templates/nav.php';
 ?>
-
 <main>
     <h1>Connexion</h1>
 
@@ -17,5 +17,4 @@ require_once __DIR__ . '/../templates/nav.php';
         <button type="submit">Se connecter</button>
     </form>
 </main>
-
 <?php require_once __DIR__ . '/../templates/footer.php'; ?>
