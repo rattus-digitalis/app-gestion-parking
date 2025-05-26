@@ -126,6 +126,7 @@ class Reservation
             JOIN users u ON r.user_id = u.id
             JOIN parking p ON r.parking_id = p.id
             LEFT JOIN cars c ON r.car_id = c.id
+            WHERE r.status != 'cancelled'
             ORDER BY r.date_start DESC
         ");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

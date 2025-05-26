@@ -27,7 +27,7 @@ function checkRole(string $role)
 $route = $_GET['page'] ?? 'home';
 
 switch ($route) {
-    // ----------- PAGES PUBLIQUES -----------
+    // --- Pages publiques ---
     case 'home':
         require_once __DIR__ . '/../app/views/pages/home.php';
         break;
@@ -40,7 +40,7 @@ switch ($route) {
         require_once __DIR__ . '/../app/views/pages/cgu.php';
         break;
 
-    // ----------- AUTHENTIFICATION -----------
+    // --- Auth ---
     case 'login':
         require_once __DIR__ . '/../app/controllers/LoginController.php';
         $controller = new LoginController();
@@ -67,7 +67,7 @@ switch ($route) {
         }
         break;
 
-    // ----------- DASHBOARDS -----------
+    // --- Dashboard ---
     case 'dashboard':
         if (!isset($_SESSION['user'])) {
             header('Location: /?page=login');
@@ -94,7 +94,7 @@ switch ($route) {
         require_once __DIR__ . '/../app/views/admin/dashboard_admin.php';
         break;
 
-    // ----------- UTILISATEURS (ADMIN) -----------
+    // --- Admin Utilisateurs ---
     case 'admin_users':
         checkRole('admin');
         require_once __DIR__ . '/../app/controllers/AdminUserController.php';
@@ -122,7 +122,7 @@ switch ($route) {
         }
         break;
 
-    // ----------- PLACES DE PARKING (ADMIN) -----------
+    // --- Admin Parkings ---
     case 'admin_parkings':
         checkRole('admin');
         require_once __DIR__ . '/../app/controllers/AdminParkingController.php';
@@ -134,7 +134,7 @@ switch ($route) {
         }
         break;
 
-    // ----------- RÉSERVATIONS (ADMIN & USER) -----------
+    // --- Admin Réservations ---
     case 'reservations_list':
         checkRole('admin');
         require_once __DIR__ . '/../app/controllers/AdminReservationController.php';
@@ -142,6 +142,21 @@ switch ($route) {
         $controller->listReservations();
         break;
 
+    case 'admin_edit_reservation':
+        checkRole('admin');
+        require_once __DIR__ . '/../app/controllers/AdminReservationController.php';
+        $controller = new AdminReservationController();
+        $controller->editReservation();
+        break;
+
+    case 'admin_delete_reservation':
+        checkRole('admin');
+        require_once __DIR__ . '/../app/controllers/AdminReservationController.php';
+        $controller = new AdminReservationController();
+        $controller->deleteReservation();
+        break;
+
+    // --- User Réservations ---
     case 'nouvelle_reservation':
         checkRole('user');
         require_once __DIR__ . '/../app/controllers/ReservationController.php';
@@ -187,7 +202,7 @@ switch ($route) {
         $controller->update($_POST);
         break;
 
-    // ----------- VÉHICULES -----------
+    // --- Véhicules ---
     case 'ma_voiture':
         checkRole('user');
         require_once __DIR__ . '/../app/controllers/CarController.php';
@@ -199,7 +214,7 @@ switch ($route) {
         }
         break;
 
-    // ----------- COMPTE UTILISATEUR -----------
+    // --- Compte ---
     case 'mon_compte':
         require_once __DIR__ . '/../app/controllers/UserController.php';
         $controller = new UserController();
@@ -210,7 +225,7 @@ switch ($route) {
         }
         break;
 
-    // ----------- TARIFS -----------
+    // --- Tarifs ---
     case 'admin_tarifs':
         checkRole('admin');
         require_once __DIR__ . '/../app/controllers/AdminTarifController.php';
@@ -222,7 +237,7 @@ switch ($route) {
         }
         break;
 
-    // ----------- PAIEMENT -----------
+    // --- Paiement ---
     case 'paiement':
         checkRole('user');
         require_once __DIR__ . '/../app/controllers/PaiementController.php';
@@ -236,7 +251,7 @@ switch ($route) {
         }
         break;
 
-    // ----------- ERREUR 404 -----------
+    // --- 404 ---
     default:
         http_response_code(404);
         require_once __DIR__ . '/../app/views/errors/404.php';

@@ -35,10 +35,10 @@ require_once __DIR__ . '/../templates/nav.php';
                             <td><?= htmlspecialchars($res['date_end']) ?></td>
                             <td><?= htmlspecialchars(ucfirst($res['status'])) ?></td>
                             <td class="actions-cell">
-                                <a href="/?page=edit_reservation&id=<?= urlencode($res['id']) ?>" class="btn-link btn-edit" aria-label="Modifier la réservation #<?= $res['id'] ?>">Modifier</a>
-                                <form method="POST" style="display:inline;" onsubmit="return confirm('Supprimer cette réservation ?');" aria-label="Supprimer la réservation #<?= $res['id'] ?>">
+                                <a href="/?page=admin_edit_reservation&id=<?= urlencode($res['id']) ?>" class="btn-link btn-edit" aria-label="Modifier la réservation #<?= $res['id'] ?>">✏️ Modifier</a>
+                                <form method="POST" action="/?page=admin_delete_reservation" style="display:inline;" onsubmit="return confirm('Supprimer cette réservation ?');" aria-label="Supprimer la réservation #<?= $res['id'] ?>">
                                     <input type="hidden" name="delete_reservation_id" value="<?= $res['id'] ?>">
-                                    <button type="submit" class="btn-link btn-delete">Supprimer</button>
+                                    <button type="submit" class="btn-link btn-delete">🗑 Supprimer</button>
                                 </form>
                             </td>
                         </tr>
