@@ -5,19 +5,16 @@ error_reporting(E_ALL);
 
 session_start();
 
-// Chargement des fichiers nécessaires
 require_once __DIR__ . '/../config/constants.php';
 require_once __DIR__ . '/../config/routes.php';
 
-// Gestion des erreurs 500
 set_exception_handler(function ($e) {
-    error_log($e); // Enregistre l'erreur pour le debug
+    error_log($e);
     http_response_code(500);
     require_once __DIR__ . '/../app/views/errors/500.php';
     exit;
 });
 
-// Fonction d'autorisation par rôle
 function checkRole(string $role)
 {
     if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== $role) {
@@ -30,6 +27,7 @@ function checkRole(string $role)
 $route = $_GET['page'] ?? 'home';
 
 switch ($route) {
+    // ----------- PAGES PUBLIQUES -----------
     case 'home':
         require_once __DIR__ . '/../app/views/pages/home.php';
         break;
@@ -42,6 +40,7 @@ switch ($route) {
         require_once __DIR__ . '/../app/views/pages/cgu.php';
         break;
 
+    // ----------- AUTHENTIFICATION -----------
     case 'login':
         require_once __DIR__ . '/../app/controllers/LoginController.php';
         $controller = new LoginController();
@@ -68,12 +67,12 @@ switch ($route) {
         }
         break;
 
+    // ----------- DASHBOARDS -----------
     case 'dashboard':
         if (!isset($_SESSION['user'])) {
             header('Location: /?page=login');
             exit;
         }
-
         $role = $_SESSION['user']['role'];
         if ($role === 'admin') {
             header('Location: /?page=dashboard_admin');
@@ -95,6 +94,7 @@ switch ($route) {
         require_once __DIR__ . '/../app/views/admin/dashboard_admin.php';
         break;
 
+    // ----------- UTILISATEURS (ADMIN) -----------
     case 'admin_users':
         checkRole('admin');
         require_once __DIR__ . '/../app/controllers/AdminUserController.php';
@@ -122,6 +122,7 @@ switch ($route) {
         }
         break;
 
+    // ----------- PLACES DE PARKING (ADMIN) -----------
     case 'admin_parkings':
         checkRole('admin');
         require_once __DIR__ . '/../app/controllers/AdminParkingController.php';
@@ -133,21 +134,12 @@ switch ($route) {
         }
         break;
 
+    // ----------- RÉSERVATIONS (ADMIN & USER) -----------
     case 'reservations_list':
         checkRole('admin');
         require_once __DIR__ . '/../app/controllers/AdminReservationController.php';
         $controller = new AdminReservationController();
         $controller->listReservations();
-        break;
-
-    case 'mon_compte':
-        require_once __DIR__ . '/../app/controllers/UserController.php';
-        $controller = new UserController();
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $controller->updateCurrentUser($_POST);
-        } else {
-            require_once __DIR__ . '/../app/views/pages/mon_compte.php';
-        }
         break;
 
     case 'nouvelle_reservation':
@@ -168,14 +160,34 @@ switch ($route) {
         $controller->mesReservations();
         break;
 
-        case 'annuler_reservation':
-    checkRole('user');
-    require_once __DIR__ . '/../app/controllers/ReservationController.php';
-    $controller = new ReservationController();
-    $controller->cancelReservation();
-    break;
+    case 'annuler_reservation':
+        checkRole('user');
+        require_once __DIR__ . '/../app/controllers/ReservationController.php';
+        $controller = new ReservationController();
+        $controller->cancelReservation();
+        break;
 
+    case 'modifier_reservation':
+        checkRole('user');
+        require_once __DIR__ . '/../app/controllers/ReservationController.php';
+        $controller = new ReservationController();
+        $id = $_GET['id'] ?? null;
+        if ($id === null) {
+            http_response_code(400);
+            echo "ID manquant.";
+            exit;
+        }
+        $controller->editForm((int)$id);
+        break;
 
+    case 'update_reservation':
+        checkRole('user');
+        require_once __DIR__ . '/../app/controllers/ReservationController.php';
+        $controller = new ReservationController();
+        $controller->update($_POST);
+        break;
+
+    // ----------- VÉHICULES -----------
     case 'ma_voiture':
         checkRole('user');
         require_once __DIR__ . '/../app/controllers/CarController.php';
@@ -187,92 +199,44 @@ switch ($route) {
         }
         break;
 
-case 'edit_reservation':
-    checkRole('user');
-    require_once __DIR__ . '/../app/controllers/ReservationController.php';
-    $controller = new ReservationController();
-    $controller->editForm((int)$_GET['id']);
-    break;
+    // ----------- COMPTE UTILISATEUR -----------
+    case 'mon_compte':
+        require_once __DIR__ . '/../app/controllers/UserController.php';
+        $controller = new UserController();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $controller->updateCurrentUser($_POST);
+        } else {
+            require_once __DIR__ . '/../app/views/pages/mon_compte.php';
+        }
+        break;
 
-case 'update_reservation':
-    checkRole('user');
-    require_once __DIR__ . '/../app/controllers/ReservationController.php';
-    $controller = new ReservationController();
-    $controller->update($_POST);
-    break;
-
-    case 'modifier_reservation':
-    checkRole('user');
-    require_once __DIR__ . '/../app/controllers/ReservationController.php';
-    $controller = new ReservationController();
-    $id = $_GET['id'] ?? null;
-    if ($id === null) {
-        http_response_code(400);
-        echo "ID manquant.";
-        exit;
-    }case 'admin_tarifs':
-    checkRole('admin');
-    require_once __DIR__ . '/../app/controllers/AdminTarifController.php';
-    $controller = new AdminTarifController();
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $controller->update($_POST);
-    } else {
-        $controller->show();
-    }
-    break;
-
-    $controller->editForm((int)$id);
-    break;
-
+    // ----------- TARIFS -----------
     case 'admin_tarifs':
-    checkRole('admin');
-    require_once __DIR__ . '/../app/controllers/AdminTarifController.php';
-    $controller = new AdminTarifController();
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $controller->update($_POST);
-    } else {
-        $controller->show();
-    }
-    break;
+        checkRole('admin');
+        require_once __DIR__ . '/../app/controllers/AdminTarifController.php';
+        $controller = new AdminTarifController();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $controller->update($_POST);
+        } else {
+            $controller->show();
+        }
+        break;
 
-
-    case 'admin_tarifs':
-    checkRole('admin');
-    require_once __DIR__ . '/../app/controllers/AdminTarifController.php';
-    $controller = new AdminTarifController();
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $controller->update($_POST);
-    } else {
-        $controller->show();
-    }
-    break;
-
-
+    // ----------- PAIEMENT -----------
     case 'paiement':
-    checkRole('user');
-    require_once __DIR__ . '/../app/controllers/PaiementController.php';
-    $controller = new PaiementController();
-    $reservationId = $_GET['id'] ?? null;
-    if ($reservationId) {
-        $controller->payer((int)$reservationId);
-    } else {
-        http_response_code(400);
-        echo "ID de réservation manquant.";
-    }
-    break;
+        checkRole('user');
+        require_once __DIR__ . '/../app/controllers/PaiementController.php';
+        $controller = new PaiementController();
+        $reservationId = $_GET['id'] ?? null;
+        if ($reservationId) {
+            $controller->payer((int)$reservationId);
+        } else {
+            http_response_code(400);
+            echo "ID de réservation manquant.";
+        }
+        break;
 
-    case 'admin_tarifs':
-    checkRole('admin');
-    require_once __DIR__ . '/../app/controllers/AdminTarifController.php';
-    $controller = new AdminTarifController();
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $controller->update($_POST);
-    } else {
-        $controller->show();
-    }
-    break;
-
-
+    // ----------- ERREUR 404 -----------
     default:
         http_response_code(404);
         require_once __DIR__ . '/../app/views/errors/404.php';

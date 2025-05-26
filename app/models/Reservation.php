@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../config/constants.php';
+require_once __DIR__ . '/Tarif.php';
 
 class Reservation
 {
@@ -93,23 +94,40 @@ class Reservation
 
         return $stmt->fetchColumn() == 0;
     }
-public function calculerPrix(string $start, string $end, string $type): float
-{
-    $tarifModel = new Tarif();
-    $prixHoraire = $tarifModel->getByType($type);
 
-    $debut = new DateTime($start);
-    $fin = new DateTime($end);
-    $diffHeures = ($fin->getTimestamp() - $debut->getTimestamp()) / 3600;
+    public function calculerPrix(string $start, string $end, string $type): float
+    {
+        $tarifModel = new Tarif();
+        $tarifs = $tarifModel->getAll();
 
-    return round($prixHoraire * $diffHeures, 2);
-}
+        $prixHeure = isset($tarifs[$type]['heure']) ? (float)$tarifs[$type]['heure'] : 0;
 
+        $debut = new DateTime($start);
+        $fin = new DateTime($end);
+        $diffHeures = ($fin->getTimestamp() - $debut->getTimestamp()) / 3600;
 
+        return round($prixHeure * $diffHeures, 2);
+    }
 
     public function marquerCommePayee(int $id): bool
     {
         $stmt = $this->pdo->prepare("UPDATE reservations SET paid = 1 WHERE id = ?");
         return $stmt->execute([$id]);
+    }
+
+    public function getAll(): array
+    {
+        $stmt = $this->pdo->query("
+            SELECT r.*, 
+                   u.first_name, u.last_name, 
+                   p.numero_place, p.etage,
+                   c.marque, c.modele, c.immatriculation
+            FROM reservations r
+            JOIN users u ON r.user_id = u.id
+            JOIN parking p ON r.parking_id = p.id
+            LEFT JOIN cars c ON r.car_id = c.id
+            ORDER BY r.date_start DESC
+        ");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
