@@ -187,6 +187,34 @@ switch ($route) {
         }
         break;
 
+case 'edit_reservation':
+    checkRole('user');
+    require_once __DIR__ . '/../app/controllers/ReservationController.php';
+    $controller = new ReservationController();
+    $controller->editForm((int)$_GET['id']);
+    break;
+
+case 'update_reservation':
+    checkRole('user');
+    require_once __DIR__ . '/../app/controllers/ReservationController.php';
+    $controller = new ReservationController();
+    $controller->update($_POST);
+    break;
+
+    case 'modifier_reservation':
+    checkRole('user');
+    require_once __DIR__ . '/../app/controllers/ReservationController.php';
+    $controller = new ReservationController();
+    $id = $_GET['id'] ?? null;
+    if ($id === null) {
+        http_response_code(400);
+        echo "ID manquant.";
+        exit;
+    }
+    $controller->editForm((int)$id);
+    break;
+
+
     default:
         http_response_code(404);
         require_once __DIR__ . '/../app/views/errors/404.php';

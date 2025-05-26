@@ -24,10 +24,10 @@ class ReservationController
         $past = [];
 
         foreach ($all as $r) {
-            if ($r['date_end'] > $now) {
-                $actives[] = $r;
-            } else {
+            if ($r['status'] === 'cancelled' || $r['date_end'] <= $now) {
                 $past[] = $r;
+            } else {
+                $actives[] = $r;
             }
         }
 
@@ -57,25 +57,25 @@ class ReservationController
     }
 
     public function cancelReservation()
-{
-    if (!isset($_SESSION['user'])) {
-        header('Location: /?page=login');
+    {
+        if (!isset($_SESSION['user'])) {
+            header('Location: /?page=login');
+            exit;
+        }
+
+        $id = $_GET['id'] ?? null;
+        if (!$id) {
+            http_response_code(400);
+            echo "ID de réservation manquant.";
+            return;
+        }
+
+        $reservationModel = new Reservation();
+        $reservationModel->cancel((int)$id);
+
+        header('Location: /?page=mes_reservations');
         exit;
     }
-
-    $id = $_GET['id'] ?? null;
-    if (!$id) {
-        http_response_code(400);
-        echo "ID de réservation manquant.";
-        return;
-    }
-
-    $reservationModel = new Reservation();
-    $reservationModel->cancel((int)$id);
-
-    header('Location: /?page=mes_reservations');
-    exit;
-}
 
     public function create(array $data)
     {
@@ -96,7 +96,58 @@ class ReservationController
         }
 
         $reservationModel = new Reservation();
+
+        if (!$reservationModel->isAvailable((int)$parkingId, $start, $end)) {
+            echo "❌ Ce créneau n'est pas disponible.";
+            return;
+        }
+
         $reservationModel->create($userId, (int)$parkingId, $start, $end, 'pending', (int)$carId);
+
+        header('Location: /?page=mes_reservations');
+        exit;
+    }
+
+    public function editForm(int $reservationId)
+    {
+        $reservationModel = new Reservation();
+        $reservation = $reservationModel->getReservationById($reservationId);
+
+        if (!$reservation || $reservation['user_id'] != $_SESSION['user']['id']) {
+            http_response_code(403);
+            echo "Accès refusé.";
+            exit;
+        }
+
+        $parkingModel = new Parking();
+        $parkings = $parkingModel->getAllParkings();
+
+        require __DIR__ . '/../views/pages/edit_reservation.php';
+    }
+
+    public function update(array $data)
+    {
+        $reservationModel = new Reservation();
+
+        $reservationId = (int)$data['id'];
+        $userId = $_SESSION['user']['id'];
+        $parkingId = (int)$data['parking_id'];
+        $start = $data['start_time'];
+        $end = $data['end_time'];
+
+        if (!$reservationModel->isAvailable($parkingId, $start, $end, $reservationId)) {
+            echo "❌ La place n'est pas disponible à ce créneau.";
+            exit;
+        }
+
+        $reservationModel->updateReservation($reservationId, [
+            'user_id' => $userId,
+            'parking_id' => $parkingId,
+            'date_start' => $start,
+            'date_end' => $end,
+            'status' => 'pending',
+            'car_id' => null
+        ]);
 
         header('Location: /?page=mes_reservations');
         exit;
