@@ -15,12 +15,13 @@ class CarController
     {
         $carModel = new Car();
 
-        $marque = trim($data['marque'] ?? '');
-        $modele = trim($data['modele'] ?? '');
-        $immat  = trim($data['immatriculation'] ?? '');
+        $marque  = trim($data['marque'] ?? '');
+        $modele  = trim($data['modele'] ?? '');
+        $immat   = trim($data['immatriculation'] ?? '');
         $couleur = trim($data['couleur'] ?? '');
+        $type    = in_array($data['type'] ?? '', ['voiture', 'moto']) ? $data['type'] : 'voiture';
 
-        $carModel->save($_SESSION['user']['id'], $marque, $modele, $immat, $couleur);
+        $carModel->save($_SESSION['user']['id'], $marque, $modele, $immat, $couleur, $type);
 
         header("Location: /?page=ma_voiture");
         exit;

@@ -19,9 +19,8 @@ class Car
         return $car ?: null;
     }
 
-    public function save(int $userId, string $marque, string $modele, string $immat, string $couleur): bool
+    public function save(int $userId, string $marque, string $modele, string $immat, string $couleur, string $type): bool
     {
-        // Check si une voiture existe déjà
         $stmt = $this->pdo->prepare("SELECT id FROM cars WHERE user_id = ?");
         $stmt->execute([$userId]);
         $exists = $stmt->fetchColumn();
@@ -29,17 +28,17 @@ class Car
         if ($exists) {
             // UPDATE
             $stmt = $this->pdo->prepare("
-                UPDATE cars SET marque = ?, modele = ?, immatriculation = ?, couleur = ?
+                UPDATE cars SET marque = ?, modele = ?, immatriculation = ?, couleur = ?, type = ?
                 WHERE user_id = ?
             ");
-            return $stmt->execute([$marque, $modele, $immat, $couleur, $userId]);
+            return $stmt->execute([$marque, $modele, $immat, $couleur, $type, $userId]);
         } else {
             // INSERT
             $stmt = $this->pdo->prepare("
-                INSERT INTO cars (user_id, marque, modele, immatriculation, couleur)
-                VALUES (?, ?, ?, ?, ?)
+                INSERT INTO cars (user_id, marque, modele, immatriculation, couleur, type)
+                VALUES (?, ?, ?, ?, ?, ?)
             ");
-            return $stmt->execute([$userId, $marque, $modele, $immat, $couleur]);
+            return $stmt->execute([$userId, $marque, $modele, $immat, $couleur, $type]);
         }
     }
 }
