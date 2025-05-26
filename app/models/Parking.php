@@ -24,4 +24,10 @@ class Parking
         $stmt = $this->pdo->prepare("UPDATE parking SET statut = ?, date_maj = NOW() WHERE id = ?");
         return $stmt->execute([$status, $id]);
     }
+
+    // ✅ Alias attendu par ReservationController
+    public function getAll()
+    {
+        return $this->getAllParkings();
+    }
 }

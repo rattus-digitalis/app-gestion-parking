@@ -14,14 +14,19 @@ class Car
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
-    public function getByUserId(int $userId): ?array
+    /**
+     * Récupère toutes les voitures d’un utilisateur
+     */
+    public function getByUserId(int $userId): array
     {
         $stmt = $this->pdo->prepare("SELECT * FROM cars WHERE user_id = ?");
         $stmt->execute([$userId]);
-        $car = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $car ?: null;
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Crée ou met à jour la voiture de l’utilisateur
+     */
     public function save(int $userId, string $marque, string $modele, string $immat, string $couleur): bool
     {
         $stmt = $this->pdo->prepare("SELECT id FROM cars WHERE user_id = ?");

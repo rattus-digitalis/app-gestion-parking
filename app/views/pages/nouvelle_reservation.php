@@ -1,5 +1,5 @@
 <?php
-$title = "Nouvelle réservation";
+$title = "Nouvelle Réservation";
 require_once __DIR__ . '/../templates/head.php';
 require_once __DIR__ . '/../templates/nav.php';
 ?>
@@ -7,21 +7,36 @@ require_once __DIR__ . '/../templates/nav.php';
 <main>
     <h1>Réserver une place</h1>
 
-    <form method="POST" action="/?page=nouvelle_reservation">
-        <label>Parking :</label><br>
-        <select name="parking_id" required>
+    <form method="post">
+        <label for="car_id">Votre voiture :</label>
+        <select name="car_id" id="car_id" required>
+            <?php if (is_array($cars)): ?>
+                <?php foreach ($cars as $car): ?>
+                    <option value="<?= $car['id'] ?>">
+                        <?= htmlspecialchars($car['marque'] . ' ' . $car['modele'] . ' (' . $car['immatriculation'] . ')') ?>
+                    </option>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <option value="<?= $cars['id'] ?>">
+                    <?= htmlspecialchars($cars['marque'] . ' ' . $cars['modele'] . ' (' . $cars['immatriculation'] . ')') ?>
+                </option>
+            <?php endif; ?>
+        </select>
+
+        <label for="parking_id">Place de parking :</label>
+        <select name="parking_id" id="parking_id" required>
             <?php foreach ($parkings as $parking): ?>
                 <option value="<?= $parking['id'] ?>">
-                    <?= htmlspecialchars($parking['name']) ?> – <?= htmlspecialchars($parking['address']) ?>
+                    <?= "Étage {$parking['etage']} – Place {$parking['numero_place']}" ?>
                 </option>
             <?php endforeach; ?>
-        </select><br><br>
+        </select>
 
-        <label>Date de début :</label><br>
-        <input type="datetime-local" name="start_time" required><br><br>
+        <label for="date_start">Date de début :</label>
+        <input type="datetime-local" name="date_start" required>
 
-        <label>Date de fin :</label><br>
-        <input type="datetime-local" name="end_time" required><br><br>
+        <label for="date_end">Date de fin :</label>
+        <input type="datetime-local" name="date_end" required>
 
         <button type="submit">Réserver</button>
     </form>

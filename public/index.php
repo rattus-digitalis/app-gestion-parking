@@ -182,6 +182,19 @@ switch ($route) {
         }
         break;
 
+        case 'nouvelle_reservation':
+    checkRole('user');
+    require_once __DIR__ . '/../app/controllers/ReservationController.php';
+    $controller = new ReservationController();
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $controller->create($_POST);
+    } else {
+        $controller->form();
+    }
+    break;
+
+
     default:
         http_response_code(404);
         require_once __DIR__ . '/../app/views/errors/404.php';
