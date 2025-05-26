@@ -1,4 +1,9 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+
 session_start();
 
 // Chargement des fichiers nécessaires
@@ -14,7 +19,8 @@ set_exception_handler(function ($e) {
 });
 
 // Fonction d'autorisation par rôle
-function checkRole(string $role) {
+function checkRole(string $role)
+{
     if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== $role) {
         http_response_code(401);
         require_once __DIR__ . '/../app/views/errors/401.php';
@@ -38,14 +44,20 @@ switch ($route) {
         break;
 
     case 'login':
-        require_once __DIR__ . '/../app/controllers/UserController.php';
-        $controller = new UserController();
+        require_once __DIR__ . '/../app/controllers/LoginController.php';
+        $controller = new LoginController();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $controller->login($_POST);
         } else {
             require_once __DIR__ . '/../app/views/pages/login.php';
         }
+        break;
+
+    case 'logout':
+        require_once __DIR__ . '/../app/controllers/LoginController.php';
+        $controller = new LoginController();
+        $controller->logout();
         break;
 
     case 'register':
@@ -59,19 +71,22 @@ switch ($route) {
         }
         break;
 
-    case 'logout':
-        require_once __DIR__ . '/../app/models/User.php';
-
-        if (isset($_SESSION['user'])) {
-            $userModel = new User();
-            $userModel->setStatus($_SESSION['user']['id'], 'offline');
+    case 'dashboard': // Redirection intelligente
+        if (!isset($_SESSION['user'])) {
+            header('Location: /?page=login');
+            exit;
         }
 
-        session_unset();
-        session_destroy();
-
-        header('Location: /?page=login');
-        exit;
+        $role = $_SESSION['user']['role'];
+        if ($role === 'admin') {
+            header('Location: /?page=dashboard_admin');
+        } elseif ($role === 'user') {
+            header('Location: /?page=dashboard_user');
+        } else {
+            http_response_code(401);
+            require_once __DIR__ . '/../app/views/errors/401.php';
+        }
+        break;
 
     case 'dashboard_user':
         checkRole('user');
