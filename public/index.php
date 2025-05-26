@@ -45,7 +45,6 @@ switch ($route) {
     case 'login':
         require_once __DIR__ . '/../app/controllers/LoginController.php';
         $controller = new LoginController();
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $controller->login($_POST);
         } else {
@@ -62,7 +61,6 @@ switch ($route) {
     case 'register':
         require_once __DIR__ . '/../app/controllers/UserController.php';
         $controller = new UserController();
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $controller->register($_POST);
         } else {
@@ -70,7 +68,7 @@ switch ($route) {
         }
         break;
 
-    case 'dashboard': // Redirection intelligente
+    case 'dashboard':
         if (!isset($_SESSION['user'])) {
             header('Location: /?page=login');
             exit;
@@ -79,16 +77,13 @@ switch ($route) {
         $role = $_SESSION['user']['role'];
         if ($role === 'admin') {
             header('Location: /?page=dashboard_admin');
-            exit;
         } elseif ($role === 'user') {
             header('Location: /?page=dashboard_user');
-            exit;
         } else {
             http_response_code(401);
             require_once __DIR__ . '/../app/views/errors/401.php';
-            exit;
         }
-        break;
+        exit;
 
     case 'dashboard_user':
         checkRole('user');
@@ -104,7 +99,6 @@ switch ($route) {
         checkRole('admin');
         require_once __DIR__ . '/../app/controllers/AdminUserController.php';
         $controller = new AdminUserController();
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $controller->handlePost($_POST);
         } else {
@@ -116,7 +110,6 @@ switch ($route) {
         checkRole('admin');
         require_once __DIR__ . '/../app/controllers/AdminUserController.php';
         $controller = new AdminUserController();
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $controller->updateUser($_POST);
         } else {
@@ -133,7 +126,6 @@ switch ($route) {
         checkRole('admin');
         require_once __DIR__ . '/../app/controllers/AdminParkingController.php';
         $controller = new AdminParkingController();
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $controller->updateStatus($_POST);
         } else {
@@ -151,7 +143,6 @@ switch ($route) {
     case 'mon_compte':
         require_once __DIR__ . '/../app/controllers/UserController.php';
         $controller = new UserController();
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $controller->updateCurrentUser($_POST);
         } else {
@@ -163,12 +154,18 @@ switch ($route) {
         checkRole('user');
         require_once __DIR__ . '/../app/controllers/ReservationController.php';
         $controller = new ReservationController();
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $controller->create($_POST);
         } else {
             $controller->form();
         }
+        break;
+
+    case 'mes_reservations':
+        checkRole('user');
+        require_once __DIR__ . '/../app/controllers/ReservationController.php';
+        $controller = new ReservationController();
+        $controller->mesReservations();
         break;
 
     case 'ma_voiture':
@@ -181,19 +178,6 @@ switch ($route) {
             $controller->form();
         }
         break;
-
-        case 'nouvelle_reservation':
-    checkRole('user');
-    require_once __DIR__ . '/../app/controllers/ReservationController.php';
-    $controller = new ReservationController();
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $controller->create($_POST);
-    } else {
-        $controller->form();
-    }
-    break;
-
 
     default:
         http_response_code(404);

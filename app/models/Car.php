@@ -11,12 +11,35 @@ class Car
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
-    // Récupère UNE voiture (1 utilisateur = 1 voiture)
     public function getByUserId(int $userId): ?array
     {
         $stmt = $this->pdo->prepare("SELECT * FROM cars WHERE user_id = ?");
         $stmt->execute([$userId]);
         $car = $stmt->fetch(PDO::FETCH_ASSOC);
         return $car ?: null;
+    }
+
+    public function save(int $userId, string $marque, string $modele, string $immat, string $couleur): bool
+    {
+        // Check si une voiture existe déjà
+        $stmt = $this->pdo->prepare("SELECT id FROM cars WHERE user_id = ?");
+        $stmt->execute([$userId]);
+        $exists = $stmt->fetchColumn();
+
+        if ($exists) {
+            // UPDATE
+            $stmt = $this->pdo->prepare("
+                UPDATE cars SET marque = ?, modele = ?, immatriculation = ?, couleur = ?
+                WHERE user_id = ?
+            ");
+            return $stmt->execute([$marque, $modele, $immat, $couleur, $userId]);
+        } else {
+            // INSERT
+            $stmt = $this->pdo->prepare("
+                INSERT INTO cars (user_id, marque, modele, immatriculation, couleur)
+                VALUES (?, ?, ?, ?, ?)
+            ");
+            return $stmt->execute([$userId, $marque, $modele, $immat, $couleur]);
+        }
     }
 }
