@@ -18,6 +18,18 @@ class Parking
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getByType(string $type): array
+{
+    $stmt = $this->pdo->prepare("
+        SELECT * FROM parking
+        WHERE actif = 1 AND type_place = ? AND statut = 'libre'
+        ORDER BY etage, numero_place
+    ");
+    $stmt->execute([$type]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
     // Met à jour le statut d'une place et la date de mise à jour
     public function updateStatus(int $id, string $status)
     {

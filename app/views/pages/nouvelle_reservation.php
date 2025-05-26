@@ -1,42 +1,49 @@
 <?php
-$title = "Nouvelle Réservation";
+$title = "Nouvelle réservation";
 require_once __DIR__ . '/../templates/head.php';
 require_once __DIR__ . '/../templates/nav.php';
 ?>
 
 <main>
-    <h1>Réserver une place</h1>
+    <h1>Nouvelle réservation</h1>
 
-    <form method="post">
-        <label for="car_id">Votre voiture :</label>
-        <select name="car_id" id="car_id" required>
-            <?php if (is_array($cars)): ?>
-                <?php foreach ($cars as $car): ?>
-                    <option value="<?= $car['id'] ?>">
-                        <?= htmlspecialchars($car['marque'] . ' ' . $car['modele'] . ' (' . $car['immatriculation'] . ')') ?>
-                    </option>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <option value="<?= $cars['id'] ?>">
-                    <?= htmlspecialchars($cars['marque'] . ' ' . $cars['modele'] . ' (' . $cars['immatriculation'] . ')') ?>
-                </option>
-            <?php endif; ?>
-        </select>
+    <form method="POST" action="/?page=nouvelle_reservation">
+        <!-- Voiture -->
+        <label for="car">Votre voiture :</label>
+        <input type="text" id="car_display" name="car_display"
+            value="<?= isset($car) 
+                ? htmlspecialchars(($car['marque'] ?? '') . ' ' . ($car['modele'] ?? '') . ' (' . ($car['immatriculation'] ?? '') . ')') 
+                : 'Aucune voiture enregistrée'
+            ?>" 
+            readonly>
 
-        <label for="parking_id">Place de parking :</label>
+        <?php if (isset($car['id'])): ?>
+            <input type="hidden" name="car_id" value="<?= htmlspecialchars($car['id']) ?>">
+        <?php endif; ?>
+
+        <!-- Choix de la place -->
+        <label for="parking_id">Choisissez votre place :</label>
         <select name="parking_id" id="parking_id" required>
-            <?php foreach ($parkings as $parking): ?>
-                <option value="<?= $parking['id'] ?>">
-                    <?= "Étage {$parking['etage']} – Place {$parking['numero_place']}" ?>
-                </option>
+            <option value="" disabled selected>-- Choisissez une place --</option>
+            <?php foreach ($parkingsByType as $type => $places): ?>
+                <?php if (!empty($places)): ?>
+                    <optgroup label="<?= ucfirst($type) ?>">
+                        <?php foreach ($places as $place): ?>
+                            <option value="<?= $place['id'] ?>">
+                                <?= htmlspecialchars("Place {$place['numero_place']} - Étage {$place['etage']}") ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </optgroup>
+                <?php endif; ?>
             <?php endforeach; ?>
         </select>
 
-        <label for="date_start">Date de début :</label>
-        <input type="datetime-local" name="date_start" required>
+        <!-- Dates -->
+        <label for="start_time">Début :</label>
+        <input type="datetime-local" name="start_time" id="start_time" required>
 
-        <label for="date_end">Date de fin :</label>
-        <input type="datetime-local" name="date_end" required>
+        <label for="end_time">Fin :</label>
+        <input type="datetime-local" name="end_time" id="end_time" required>
 
         <button type="submit">Réserver</button>
     </form>

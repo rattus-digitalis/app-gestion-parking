@@ -12,15 +12,15 @@ class Reservation
     }
 
     /**
-     * Créer une réservation
+     * Créer une réservation avec une voiture associée (car_id)
      */
-    public function create(int $userId, int $parkingId, string $start, string $end, string $status = 'pending'): bool
+    public function create(int $userId, int $parkingId, string $start, string $end, string $status = 'pending', ?int $carId = null): bool
     {
         $stmt = $this->pdo->prepare("
-            INSERT INTO reservations (user_id, parking_id, date_start, date_end, status)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO reservations (user_id, parking_id, date_start, date_end, status, car_id)
+            VALUES (?, ?, ?, ?, ?, ?)
         ");
-        return $stmt->execute([$userId, $parkingId, $start, $end, $status]);
+        return $stmt->execute([$userId, $parkingId, $start, $end, $status, $carId]);
     }
 
     /**
@@ -55,13 +55,13 @@ class Reservation
     }
 
     /**
-     * Met à jour une réservation
+     * Met à jour une réservation avec car_id
      */
     public function updateReservation(int $id, array $data): bool
     {
         $stmt = $this->pdo->prepare("
             UPDATE reservations
-            SET user_id = ?, parking_id = ?, date_start = ?, date_end = ?, status = ?
+            SET user_id = ?, parking_id = ?, date_start = ?, date_end = ?, status = ?, car_id = ?
             WHERE id = ?
         ");
         return $stmt->execute([
@@ -70,6 +70,7 @@ class Reservation
             $data['date_start'],
             $data['date_end'],
             $data['status'],
+            $data['car_id'],
             $id
         ]);
     }

@@ -1,17 +1,33 @@
 <?php
 require_once __DIR__ . '/../models/Reservation.php';
 require_once __DIR__ . '/../models/Parking.php';
-require_once __DIR__ . '/../models/Car.php'; // Ajout du modèle Car
+require_once __DIR__ . '/../models/Car.php';
 
 class ReservationController
 {
     public function form()
     {
+        if (!isset($_SESSION['user'])) {
+            header('Location: /?page=login');
+            exit;
+        }
+
         $parkingModel = new Parking();
         $carModel = new Car();
 
-        $parkings = $parkingModel->getAllParkings(); // appel correct de la méthode
-        $cars = $carModel->getByUserId($_SESSION['user']['id']);
+        // Filtrage des places par type
+        $types = ['standard', 'chargeur', 'moto', 'handicap'];
+        $parkingsByType = [];
+
+        foreach ($types as $type) {
+            if (method_exists($parkingModel, 'getByType')) {
+                $parkingsByType[$type] = $parkingModel->getByType($type);
+            } else {
+                $parkingsByType[$type] = []; // fallback si méthode absente
+            }
+        }
+
+        $car = $carModel->getByUserId($_SESSION['user']['id']);
 
         require __DIR__ . '/../views/pages/nouvelle_reservation.php';
     }
@@ -35,7 +51,7 @@ class ReservationController
         }
 
         $reservationModel = new Reservation();
-        $reservationModel->create($userId, $parkingId, $start, $end, 'pending', $carId); // ajout du car_id
+        $reservationModel->create($userId, (int)$parkingId, $start, $end);
 
         header('Location: /?page=dashboard_user');
         exit;
