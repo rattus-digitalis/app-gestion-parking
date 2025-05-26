@@ -7,10 +7,15 @@ class AdminParkingController
     {
         $parkingModel = new Parking();
         $parkings = $parkingModel->getAllParkings();
+
+        // Debug : décommenter pour voir les données récupérées
+        // var_dump($parkings);
+        // exit;
+
         require_once __DIR__ . '/../views/admin/parkings_list.php';
     }
 
-    public function updateStatus($postData)
+    public function updateStatus(array $postData)
     {
         if (!isset($postData['parking_id'], $postData['status'])) {
             header('Location: /?page=admin_parkings');
@@ -27,4 +32,3 @@ class AdminParkingController
         exit;
     }
 }
-

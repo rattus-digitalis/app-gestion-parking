@@ -11,33 +11,36 @@ class Parking
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
-    // Récupère toutes les places de parking actives, triées par étage et numéro de place
+    // Récupère toutes les places de parking actives, triées par étage et numéro de place (tri numérique)
     public function getAllParkings()
     {
-        $stmt = $this->pdo->query("SELECT id, numero_place, etage, type_place, statut, disponible_depuis, date_maj, derniere_reservation_id, commentaire, actif FROM parking WHERE actif = 1 ORDER BY etage, numero_place");
+        $sql = "SELECT id, numero_place, etage, type_place, statut, disponible_depuis, date_maj, derniere_reservation_id, commentaire, actif
+                FROM parking
+                WHERE actif = 1
+                ORDER BY etage, CAST(numero_place AS UNSIGNED)";
+        $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getByType(string $type): array
-{
-    $stmt = $this->pdo->prepare("
-        SELECT * FROM parking
-        WHERE actif = 1 AND type_place = ? AND statut = 'libre'
-        ORDER BY etage, numero_place
-    ");
-    $stmt->execute([$type]);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
+    {
+        $sql = "SELECT * FROM parking
+                WHERE actif = 1 AND type_place = ? AND statut = 'libre'
+                ORDER BY etage, CAST(numero_place AS UNSIGNED)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$type]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     // Met à jour le statut d'une place et la date de mise à jour
     public function updateStatus(int $id, string $status)
     {
-        $stmt = $this->pdo->prepare("UPDATE parking SET statut = ?, date_maj = NOW() WHERE id = ?");
+        $sql = "UPDATE parking SET statut = ?, date_maj = NOW() WHERE id = ?";
+        $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([$status, $id]);
     }
 
-    // ✅ Alias attendu par ReservationController
+    // Alias attendu par ReservationController
     public function getAll()
     {
         return $this->getAllParkings();

@@ -42,7 +42,7 @@ CREATE TABLE `cars` (
 
 LOCK TABLES `cars` WRITE;
 /*!40000 ALTER TABLE `cars` DISABLE KEYS */;
-INSERT INTO `cars` VALUES (1,5,'audi','r8','acab','bleu','moto');
+INSERT INTO `cars` VALUES (1,5,'audi','r8','acab','bleu','voiture');
 /*!40000 ALTER TABLE `cars` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -66,7 +66,7 @@ CREATE TABLE `parking` (
   `actif` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `numero_place` (`numero_place`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -75,7 +75,7 @@ CREATE TABLE `parking` (
 
 LOCK TABLES `parking` WRITE;
 /*!40000 ALTER TABLE `parking` DISABLE KEYS */;
-INSERT INTO `parking` VALUES (1,'A1',0,'standard','libre','2025-05-17 08:00:00','2025-05-18 05:00:17',NULL,'RAS',1),(2,'A2',0,'standard','occupe',NULL,'2025-05-18 05:00:17',NULL,'Voiture prsente',1),(3,'A3',0,'electrique','libre','2025-05-17 06:30:00','2025-05-18 05:00:17',NULL,'Chargeur dispo',1),(4,'B1',1,'moto','reserve',NULL,'2025-05-18 05:00:17',NULL,'Rservation  14h',1),(5,'B2',1,'handicap','libre','2025-05-17 09:15:00','2025-05-18 05:00:17',NULL,'Proche ascenseur',1);
+INSERT INTO `parking` VALUES (1,'A1',0,'standard','libre','2025-05-17 08:00:00','2025-05-18 05:00:17',NULL,'RAS',1),(2,'A2',0,'standard','occupe',NULL,'2025-05-18 05:00:17',NULL,'Voiture prsente',1),(3,'A3',0,'electrique','libre','2025-05-17 06:30:00','2025-05-18 05:00:17',NULL,'Chargeur dispo',1),(4,'B1',1,'moto','reserve',NULL,'2025-05-18 05:00:17',NULL,'Rservation  14h',1),(5,'B2',1,'handicap','libre','2025-05-17 09:15:00','2025-05-18 05:00:17',NULL,'Proche ascenseur',1),(6,'001',0,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(7,'002',0,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(8,'003',0,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(9,'004',0,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(10,'005',0,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(11,'006',0,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(12,'007',0,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(13,'008',0,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(14,'009',0,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(15,'010',0,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(16,'011',1,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(17,'012',1,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(18,'013',1,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(19,'014',1,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(20,'015',1,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(21,'016',1,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(22,'017',1,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(23,'018',1,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(24,'019',1,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(25,'020',1,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(26,'021',2,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(27,'022',2,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(28,'023',2,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(29,'024',2,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(30,'025',2,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(31,'026',2,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(32,'027',2,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(33,'028',2,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(34,'029',2,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(35,'030',2,'standard','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(36,'031',0,'handicap','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(37,'032',0,'handicap','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(38,'033',0,'handicap','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(39,'034',0,'handicap','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(40,'035',0,'handicap','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(41,'036',1,'electrique','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(42,'037',1,'electrique','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(43,'038',1,'electrique','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(44,'039',1,'electrique','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(45,'040',1,'electrique','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(46,'041',2,'moto','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(47,'042',2,'moto','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(48,'043',2,'moto','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(49,'044',2,'moto','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(50,'045',2,'moto','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(51,'046',2,'moto','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(52,'047',2,'moto','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(53,'048',2,'moto','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(54,'049',2,'moto','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1),(55,'050',2,'moto','libre',NULL,'2025-05-26 13:34:49',NULL,NULL,1);
 /*!40000 ALTER TABLE `parking` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -204,7 +204,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (5,'test','test','test@hotmail.fr','0606060606',0,'$2y$10$HG2VQj5Cr7vZGgZwCMgayO7ohkE5msvEpvUfho6jKNNImeIqvwr7C','2025-05-26 06:48:56','user','offline'),(6,'test','test','testtest@hotmail.fr','0648078747',0,'$2y$10$B3UCGwhtmWCzmtXEvkJNLujou5aXc9nBeepXUgNTtCmZ3Ro.wnpga','2025-05-26 07:20:35','user','offline'),(9,'root','root','root@hotmail.fr','0648078747',0,'$2y$10$GWEQFn/WRR/8QDVpGjK7peKwS41Y3RA/7FmbOZ9O0WBbo8N7kRVx6','2025-05-26 07:43:25','admin','online');
+INSERT INTO `users` VALUES (5,'test','test','test@hotmail.fr','0606060606',0,'$2y$10$HG2VQj5Cr7vZGgZwCMgayO7ohkE5msvEpvUfho6jKNNImeIqvwr7C','2025-05-26 06:48:56','user','online'),(6,'test','test','testtest@hotmail.fr','0648078747',0,'$2y$10$B3UCGwhtmWCzmtXEvkJNLujou5aXc9nBeepXUgNTtCmZ3Ro.wnpga','2025-05-26 07:20:35','user','offline'),(9,'root','root','root@hotmail.fr','0648078747',0,'$2y$10$GWEQFn/WRR/8QDVpGjK7peKwS41Y3RA/7FmbOZ9O0WBbo8N7kRVx6','2025-05-26 07:43:25','admin','online');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -217,4 +217,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-26 12:14:18
+-- Dump completed on 2025-05-26 13:35:52

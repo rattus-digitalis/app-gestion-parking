@@ -4,13 +4,13 @@ require_once __DIR__ . '/../templates/head.php';
 require_once __DIR__ . '/../templates/nav.php';
 ?>
 
-<main class="container parking-list">
+<main class="container parking-list" role="main">
     <header>
-        <h1>Liste des places de parking</h1>
+        <h1>🚗 Liste des places de parking</h1>
     </header>
 
     <?php if (empty($parkings)): ?>
-        <p>Aucune place de parking trouvée.</p>
+        <p class="alert alert-info">Aucune place de parking trouvée.</p>
     <?php else: ?>
         <section class="table-wrapper">
             <table class="data-table" role="grid" aria-label="Liste des places de parking">
@@ -33,16 +33,17 @@ require_once __DIR__ . '/../templates/nav.php';
                             <td><?= htmlspecialchars($parking['id']) ?></td>
                             <td><?= htmlspecialchars($parking['numero_place'] ?? 'N/A') ?></td>
                             <td><?= htmlspecialchars($parking['etage'] ?? 'N/A') ?></td>
-                            <td><?= htmlspecialchars(ucfirst($parking['type_place'] ?? 'inconnu')) ?></td>
+                            <td><?= htmlspecialchars(ucfirst($parking['type_place'] ?? 'Inconnu')) ?></td>
                             <td>
                                 <form method="POST" class="status-form" aria-label="Modifier le statut de la place <?= htmlspecialchars($parking['numero_place'] ?? '') ?>">
-                                    <input type="hidden" name="parking_id" value="<?= $parking['id'] ?>">
+                                    <input type="hidden" name="parking_id" value="<?= htmlspecialchars($parking['id']) ?>">
                                     <select name="status" onchange="this.form.submit()" aria-live="polite">
                                         <?php
                                         $statuses = [
                                             'libre' => 'Libre',
                                             'occupe' => 'Occupée',
-                                            'reserve' => 'Réservée'
+                                            'reserve' => 'Réservée',
+                                            'maintenance' => 'Maintenance'
                                         ];
                                         $currentStatus = $parking['statut'] ?? 'libre';
                                         foreach ($statuses as $key => $label):
@@ -57,7 +58,11 @@ require_once __DIR__ . '/../templates/nav.php';
                             <td><?= htmlspecialchars($parking['date_maj'] ?? '-') ?></td>
                             <td><?= htmlspecialchars($parking['commentaire'] ?? '') ?></td>
                             <td>
-                                <!-- Boutons d'action à ajouter ici si besoin -->
+                                <a href="/?page=edit_parking&id=<?= htmlspecialchars($parking['id']) ?>" class="btn btn-sm btn-warning" aria-label="Modifier la place <?= htmlspecialchars($parking['numero_place']) ?>">✏️</a>
+                                <form method="POST" action="/?page=delete_parking" onsubmit="return confirm('Supprimer cette place ?');" style="display:inline;">
+                                    <input type="hidden" name="id" value="<?= htmlspecialchars($parking['id']) ?>">
+                                    <button type="submit" class="btn btn-sm btn-danger" aria-label="Supprimer la place <?= htmlspecialchars($parking['numero_place']) ?>">🗑️</button>
+                                </form>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -66,8 +71,9 @@ require_once __DIR__ . '/../templates/nav.php';
         </section>
     <?php endif; ?>
 
-    <footer>
-        <a href="/?page=dashboard_admin" class="btn-link btn-back">Retour au tableau de bord</a>
+    <footer class="footer-actions">
+        <a href="/?page=dashboard_admin" class="btn-link btn-back">← Retour au tableau de bord</a>
+        <a href="/?page=add_parking" class="btn btn-primary">➕ Ajouter une place</a>
     </footer>
 </main>
 

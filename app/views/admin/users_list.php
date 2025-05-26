@@ -5,7 +5,7 @@ require_once __DIR__ . '/../templates/nav.php';
 
 // Message flash
 if (isset($_SESSION['flash_message'])): ?>
-    <div class="flash-message <?= htmlspecialchars($_SESSION['flash_type'] ?? 'info') ?>">
+    <div class="flash-message <?= htmlspecialchars($_SESSION['flash_type'] ?? 'info') ?>" role="alert">
         <?= htmlspecialchars($_SESSION['flash_message']) ?>
     </div>
 <?php
@@ -20,27 +20,29 @@ $paginatedUsers = array_slice($users, $offset, $itemsPerPage);
 $totalPages = ceil(count($users) / $itemsPerPage);
 ?>
 
-<main class="container users-list">
+<main class="container users-list" role="main">
     <header>
-        <h1>Liste des utilisateurs</h1>
+        <h1>👥 Gestion des utilisateurs</h1>
     </header>
 
-    <p><a href="/?page=create_user" class="btn-link btn-create">Créer un utilisateur</a></p>
+    <p>
+        <a href="/?page=create_user" class="btn btn-primary">➕ Créer un utilisateur</a>
+    </p>
 
     <?php if (empty($users)): ?>
-        <p>Aucun utilisateur trouvé.</p>
+        <p class="alert alert-info">Aucun utilisateur trouvé.</p>
     <?php else: ?>
         <section class="table-wrapper">
             <table class="data-table" role="grid" aria-label="Liste des utilisateurs">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Nom</th>
-                        <th>Prénom</th>
-                        <th>Email</th>
-                        <th>Téléphone</th>
-                        <th>Rôle</th>
-                        <th>Actions</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Prénom</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Téléphone</th>
+                        <th scope="col">Rôle</th>
+                        <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -49,14 +51,26 @@ $totalPages = ceil(count($users) / $itemsPerPage);
                             <td><?= htmlspecialchars($user['id']) ?></td>
                             <td><?= htmlspecialchars($user['last_name']) ?></td>
                             <td><?= htmlspecialchars($user['first_name']) ?></td>
-                            <td><a href="mailto:<?= htmlspecialchars($user['email']) ?>"><?= htmlspecialchars($user['email']) ?></a></td>
+                            <td>
+                                <a href="mailto:<?= htmlspecialchars($user['email']) ?>">
+                                    <?= htmlspecialchars($user['email']) ?>
+                                </a>
+                            </td>
                             <td><?= htmlspecialchars($user['phone']) ?></td>
                             <td><?= htmlspecialchars(ucfirst($user['role'])) ?></td>
                             <td class="actions-cell">
-                                <a href="/?page=edit_user&id=<?= urlencode($user['id']) ?>" class="btn-link btn-edit" aria-label="Modifier l'utilisateur <?= htmlspecialchars($user['last_name']) ?>">Modifier</a>
-                                <form method="POST" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');" aria-label="Supprimer l'utilisateur <?= htmlspecialchars($user['last_name']) ?>">
-                                    <input type="hidden" name="delete_user_id" value="<?= $user['id'] ?>">
-                                    <button type="submit" class="btn-link btn-delete">Supprimer</button>
+                                <a href="/?page=edit_user&id=<?= urlencode($user['id']) ?>"
+                                   class="btn btn-sm btn-warning"
+                                   aria-label="Modifier l'utilisateur <?= htmlspecialchars($user['last_name']) ?>">✏️</a>
+
+                                <form method="POST"
+                                      action="/?page=admin_delete_user"
+                                      onsubmit="return confirm('Supprimer cet utilisateur ?');"
+                                      style="display:inline;">
+                                    <input type="hidden" name="delete_user_id" value="<?= htmlspecialchars($user['id']) ?>">
+                                    <button type="submit"
+                                            class="btn btn-sm btn-danger"
+                                            aria-label="Supprimer l'utilisateur <?= htmlspecialchars($user['last_name']) ?>">🗑️</button>
                                 </form>
                             </td>
                         </tr>
@@ -70,7 +84,10 @@ $totalPages = ceil(count($users) / $itemsPerPage);
                 <ul class="pagination">
                     <?php for ($i = 1; $i <= $totalPages; $i++): ?>
                         <li class="<?= $i === $page ? 'active' : '' ?>">
-                            <a href="/?page=admin_users&p=<?= $i ?>"><?= $i ?></a>
+                            <a href="/?page=admin_users&p=<?= $i ?>"
+                               aria-current="<?= $i === $page ? 'page' : 'false' ?>">
+                               <?= $i ?>
+                            </a>
                         </li>
                     <?php endfor; ?>
                 </ul>
@@ -78,10 +95,9 @@ $totalPages = ceil(count($users) / $itemsPerPage);
         <?php endif; ?>
     <?php endif; ?>
 
-    <footer>
-        <a href="/?page=dashboard_admin" class="btn-link btn-back">Retour au tableau de bord</a>
+    <footer class="footer-actions">
+        <a href="/?page=dashboard_admin" class="btn btn-secondary">← Retour au tableau de bord</a>
     </footer>
 </main>
 
 <?php require_once __DIR__ . '/../templates/footer.php'; ?>
- 

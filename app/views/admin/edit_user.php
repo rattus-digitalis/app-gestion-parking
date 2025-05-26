@@ -4,15 +4,15 @@ require_once __DIR__ . '/../templates/head.php';
 require_once __DIR__ . '/../templates/nav.php';
 
 if (!isset($user)) {
-    echo "<main><p>Utilisateur non trouvé.</p></main>";
+    echo '<main class="container"><p class="alert alert-warning">Utilisateur non trouvé.</p></main>';
     require_once __DIR__ . '/../templates/footer.php';
     exit;
 }
 ?>
 
-<main class="container edit-user">
+<main class="container edit-user" role="main">
     <header>
-        <h1>Modifier l'utilisateur #<?= htmlspecialchars($user['id']) ?></h1>
+        <h1>🧑‍💼 Modifier l'utilisateur #<?= htmlspecialchars($user['id']) ?></h1>
     </header>
 
     <form action="/?page=edit_user" method="POST" class="form">
@@ -35,7 +35,7 @@ if (!isset($user)) {
 
         <div class="form-group">
             <label for="phone">Téléphone</label>
-            <input type="tel" id="phone" name="phone" value="<?= htmlspecialchars($user['phone']) ?>" required>
+            <input type="tel" id="phone" name="phone" value="<?= htmlspecialchars($user['phone']) ?>" pattern="[0-9+\s]+" required>
         </div>
 
         <div class="form-group">
@@ -49,14 +49,14 @@ if (!isset($user)) {
         <div class="form-group">
             <label for="status">Statut</label>
             <select id="status" name="status" required>
-                <option value="online" <?= $user['status'] === 'online' ? 'selected' : '' ?>>En ligne</option>
-                <option value="offline" <?= $user['status'] === 'offline' ? 'selected' : '' ?>>Hors ligne</option>
+                <option value="online" <?= $user['status'] === 'online' ? 'selected' : '' ?>>🟢 En ligne</option>
+                <option value="offline" <?= $user['status'] === 'offline' ? 'selected' : '' ?>>🔴 Hors ligne</option>
             </select>
         </div>
 
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Enregistrer</button>
-            <a href="/?page=admin_users" class="btn btn-secondary">Annuler</a>
+            <button type="submit" class="btn btn-primary">💾 Enregistrer</button>
+            <a href="/?page=admin_users" class="btn btn-secondary">← Annuler</a>
         </div>
     </form>
 </main>

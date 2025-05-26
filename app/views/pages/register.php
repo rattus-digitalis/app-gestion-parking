@@ -4,26 +4,38 @@ require_once __DIR__ . '/../templates/head.php';
 require_once __DIR__ . '/../templates/nav.php';
 ?>
 
-<main>
+<main class="container register-form" role="main">
     <h1>Créer un compte</h1>
 
-    <form action="/?page=register" method="POST">
-        <label for="last_name">Nom :</label><br>
-        <input type="text" id="last_name" name="last_name" required><br><br>
+    <form action="/?page=register" method="POST" aria-label="Formulaire de création de compte">
+        <div class="form-group">
+            <label for="last_name">Nom</label>
+            <input type="text" id="last_name" name="last_name" required>
+        </div>
 
-        <label for="first_name">Prénom :</label><br>
-        <input type="text" id="first_name" name="first_name" required><br><br>
+        <div class="form-group">
+            <label for="first_name">Prénom</label>
+            <input type="text" id="first_name" name="first_name" required>
+        </div>
 
-        <label for="email">Adresse e-mail :</label><br>
-        <input type="email" id="email" name="email" required><br><br>
+        <div class="form-group">
+            <label for="email">Adresse e-mail</label>
+            <input type="email" id="email" name="email" required autocomplete="email">
+        </div>
 
-        <label for="phone">Numéro de téléphone :</label><br>
-        <input type="tel" id="phone" name="phone" required><br><br>
+        <div class="form-group">
+            <label for="phone">Numéro de téléphone</label>
+            <input type="tel" id="phone" name="phone" required>
+        </div>
 
-        <label for="password">Mot de passe :</label><br>
-        <input type="password" id="password" name="password" required><br><br>
+        <div class="form-group">
+            <label for="password">Mot de passe</label>
+            <input type="password" id="password" name="password" required autocomplete="new-password">
+        </div>
 
-        <button type="submit">Créer le compte</button>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Créer le compte</button>
+        </div>
     </form>
 </main>
 

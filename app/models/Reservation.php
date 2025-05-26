@@ -1,4 +1,5 @@
 <?php
+
 require_once __DIR__ . '/../../config/constants.php';
 require_once __DIR__ . '/Tarif.php';
 
@@ -12,53 +13,67 @@ class Reservation
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
-    public function create(int $userId, int $parkingId, string $start, string $end, string $status = 'pending', ?int $carId = null): bool
-    {
-        $stmt = $this->pdo->prepare("
+    public function create(
+        int $userId,
+        int $parkingId,
+        string $start,
+        string $end,
+        string $status = 'pending',
+        ?int $carId = null
+    ): bool {
+        $sql = "
             INSERT INTO reservations (user_id, parking_id, date_start, date_end, status, car_id)
             VALUES (?, ?, ?, ?, ?, ?)
-        ");
+        ";
+        $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([$userId, $parkingId, $start, $end, $status, $carId]);
     }
 
     public function cancel(int $id): bool
     {
-        $stmt = $this->pdo->prepare("UPDATE reservations SET status = 'cancelled', updated_at = NOW() WHERE id = ?");
+        $sql = "UPDATE reservations SET status = 'cancelled', updated_at = NOW() WHERE id = ?";
+        $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([$id]);
     }
 
     public function getByUserId(int $userId): array
     {
-        $stmt = $this->pdo->prepare("
+        $sql = "
             SELECT r.*, p.numero_place, p.etage
-            FROM reservations r
-            JOIN parking p ON r.parking_id = p.id
+            FROM reservations AS r
+            JOIN parking AS p ON r.parking_id = p.id
             WHERE r.user_id = ?
             ORDER BY r.date_start DESC
-        ");
+        ";
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$userId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getReservationById(int $id): ?array
     {
-        $stmt = $this->pdo->prepare("
+        $sql = "
             SELECT r.*, p.numero_place, p.etage
-            FROM reservations r
-            JOIN parking p ON r.parking_id = p.id
+            FROM reservations AS r
+            JOIN parking AS p ON r.parking_id = p.id
             WHERE r.id = ?
-        ");
+        ";
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+        $reservation = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $reservation ?: null;
     }
 
     public function updateReservation(int $id, array $data): bool
     {
-        $stmt = $this->pdo->prepare("
+        $sql = "
             UPDATE reservations
             SET user_id = ?, parking_id = ?, date_start = ?, date_end = ?, status = ?, car_id = ?
             WHERE id = ?
-        ");
+        ";
+        $stmt = $this->pdo->prepare($sql);
+
         return $stmt->execute([
             $data['user_id'],
             $data['parking_id'],
@@ -75,11 +90,11 @@ class Reservation
         $sql = "
             SELECT COUNT(*) FROM reservations
             WHERE parking_id = ?
-            AND status != 'cancelled'
-            AND (
-                (date_start < ? AND date_end > ?) OR
-                (date_start >= ? AND date_start < ?)
-            )
+              AND status != 'cancelled'
+              AND (
+                    (date_start < ? AND date_end > ?) OR
+                    (date_start >= ? AND date_start < ?)
+              )
         ";
 
         $params = [$parkingId, $end, $start, $start, $end];
@@ -92,7 +107,7 @@ class Reservation
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
 
-        return $stmt->fetchColumn() == 0;
+        return (int) $stmt->fetchColumn() === 0;
     }
 
     public function calculerPrix(string $start, string $end, string $type): float
@@ -100,10 +115,11 @@ class Reservation
         $tarifModel = new Tarif();
         $tarifs = $tarifModel->getAll();
 
-        $prixHeure = isset($tarifs[$type]['heure']) ? (float)$tarifs[$type]['heure'] : 0;
+        $prixHeure = isset($tarifs[$type]['heure']) ? (float) $tarifs[$type]['heure'] : 0.0;
 
-        $debut = new DateTime($start);
-        $fin = new DateTime($end);
+        $debut = new DateTimeImmutable($start);
+        $fin = new DateTimeImmutable($end);
+
         $diffHeures = ($fin->getTimestamp() - $debut->getTimestamp()) / 3600;
 
         return round($prixHeure * $diffHeures, 2);
@@ -111,24 +127,26 @@ class Reservation
 
     public function marquerCommePayee(int $id): bool
     {
-        $stmt = $this->pdo->prepare("UPDATE reservations SET paid = 1 WHERE id = ?");
+        $sql = "UPDATE reservations SET paid = 1 WHERE id = ?";
+        $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([$id]);
     }
 
     public function getAll(): array
     {
-        $stmt = $this->pdo->query("
-            SELECT r.*, 
-                   u.first_name, u.last_name, 
+        $sql = "
+            SELECT r.*,
+                   u.first_name, u.last_name,
                    p.numero_place, p.etage,
                    c.marque, c.modele, c.immatriculation
-            FROM reservations r
-            JOIN users u ON r.user_id = u.id
-            JOIN parking p ON r.parking_id = p.id
-            LEFT JOIN cars c ON r.car_id = c.id
+            FROM reservations AS r
+            JOIN users AS u ON r.user_id = u.id
+            JOIN parking AS p ON r.parking_id = p.id
+            LEFT JOIN cars AS c ON r.car_id = c.id
             WHERE r.status != 'cancelled'
             ORDER BY r.date_start DESC
-        ");
+        ";
+        $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

@@ -6,27 +6,40 @@ require_once __DIR__ . '/../templates/nav.php';
 $user = $_SESSION['user'];
 ?>
 
-<main>
-    <h1>Mon compte</h1>
+<main class="container account-form" role="main">
+    <h1>👤 Mon compte</h1>
     <p>Gérez ici les informations de votre compte utilisateur.</p>
 
     <form action="/?page=mon_compte" method="POST">
-        <label for="first_name">Prénom :</label>
-        <input type="text" id="first_name" name="first_name" value="<?= htmlspecialchars($user['first_name'] ?? '') ?>" required>
+        <div class="form-group">
+            <label for="first_name">Prénom</label>
+            <input type="text" id="first_name" name="first_name" value="<?= htmlspecialchars($user['first_name'] ?? '') ?>" required>
+        </div>
 
-        <label for="last_name">Nom :</label>
-        <input type="text" id="last_name" name="last_name" value="<?= htmlspecialchars($user['last_name'] ?? '') ?>" required>
+        <div class="form-group">
+            <label for="last_name">Nom</label>
+            <input type="text" id="last_name" name="last_name" value="<?= htmlspecialchars($user['last_name'] ?? '') ?>" required>
+        </div>
 
-        <label for="email">Email :</label>
-        <input type="email" id="email" name="email" value="<?= htmlspecialchars($user['email'] ?? '') ?>" required>
+        <div class="form-group">
+            <label for="email">Adresse email</label>
+            <input type="email" id="email" name="email" value="<?= htmlspecialchars($user['email'] ?? '') ?>" required>
+        </div>
 
-        <label for="phone">Téléphone :</label>
-        <input type="text" id="phone" name="phone" value="<?= htmlspecialchars($user['phone'] ?? '') ?>">
+        <div class="form-group">
+            <label for="phone">Téléphone</label>
+            <input type="text" id="phone" name="phone" value="<?= htmlspecialchars($user['phone'] ?? '') ?>">
+        </div>
 
-        <label for="password">Nouveau mot de passe :</label>
-        <input type="password" id="password" name="password" placeholder="Laisser vide pour ne pas changer">
+        <div class="form-group">
+            <label for="password">Nouveau mot de passe</label>
+            <input type="password" id="password" name="password" placeholder="Laissez vide pour ne pas modifier">
+        </div>
 
-        <button type="submit">Mettre à jour</button>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">💾 Mettre à jour</button>
+            <a href="/?page=dashboard_user" class="btn btn-secondary">← Retour</a>
+        </div>
     </form>
 </main>
 
