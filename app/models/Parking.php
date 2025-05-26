@@ -40,6 +40,14 @@ class Parking
         return $stmt->execute([$status, $id]);
     }
 
+    public function getById(int $id): ?array
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM parking WHERE id = ?");
+        $stmt->execute([$id]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ?: null;
+    }
+
     // Alias attendu par ReservationController
     public function getAll()
     {

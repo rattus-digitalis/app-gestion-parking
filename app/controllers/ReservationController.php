@@ -6,6 +6,7 @@ error_reporting(E_ALL);
 require_once __DIR__ . '/../models/Reservation.php';
 require_once __DIR__ . '/../models/Parking.php';
 require_once __DIR__ . '/../models/Car.php';
+require_once __DIR__ . '/../models/Tarif.php';
 
 class ReservationController
 {
@@ -96,20 +97,73 @@ class ReservationController
         }
 
         $reservationModel = new Reservation();
+        $parkingModel = new Parking();
+        $tarifModel = new Tarif();
 
         if (!$reservationModel->isAvailable((int)$parkingId, $start, $end)) {
             echo "❌ Ce créneau n'est pas disponible.";
             return;
         }
 
-        $reservationModel->create($userId, (int)$parkingId, $start, $end, 'pending', (int)$carId);
+        $parking = $parkingModel->getById((int)$parkingId);
+        if (!$parking) {
+            echo "❌ Parking introuvable.";
+            return;
+        }
 
-        header('Location: /?page=mes_reservations');
+        $typeVehicule = strtolower($parking['type_place']); // ex : 'standard', 'moto'
+
+        $map = [
+            'standard'  => 'voiture',
+            'chargeur'  => 'voiture',
+            'handicap'  => 'voiture',
+            'moto'      => 'moto',
+        ];
+
+        if (!isset($map[$typeVehicule])) {
+            echo "❌ Type de place inconnu : $typeVehicule";
+            return;
+        }
+
+        $typeVehicule = $map[$typeVehicule];
+
+        $tarifs = $tarifModel->getAll();
+
+        if (!isset($tarifs[$typeVehicule])) {
+            echo "❌ Tarif non défini pour le type de véhicule : $typeVehicule";
+            return;
+        }
+
+        $typeTarif = 'horaire'; // ou 'journalier'
+        $montantTarif = (float) $tarifs[$typeVehicule][$typeTarif === 'horaire' ? 'heure' : 'jour'];
+
+        $montant = $this->calculerMontant($start, $end, $typeTarif, $montantTarif);
+
+        $reservationId = $reservationModel->create(
+            $userId,
+            (int)$parkingId,
+            $start,
+            $end,
+            'pending',
+            (int)$carId
+        );
+
+        if (!$reservationId) {
+            echo "❌ Erreur lors de la création de la réservation.";
+            return;
+        }
+
+        header("Location: /?page=paiement&id=$reservationId&montant=$montant");
         exit;
     }
 
     public function editForm(int $reservationId)
     {
+        if (!isset($_SESSION['user'])) {
+            header('Location: /?page=login');
+            exit;
+        }
+
         $reservationModel = new Reservation();
         $reservation = $reservationModel->getReservationById($reservationId);
 
@@ -151,5 +205,39 @@ class ReservationController
 
         header('Location: /?page=mes_reservations');
         exit;
+    }
+
+    public function validerPaiement()
+    {
+        if (!isset($_SESSION['user'])) {
+            header('Location: /?page=login');
+            exit;
+        }
+
+        $reservationId = $_GET['id'] ?? null;
+        if (!$reservationId) {
+            echo "❌ ID de réservation manquant.";
+            return;
+        }
+
+        $reservationModel = new Reservation();
+        $reservationModel->marquerCommePayee((int)$reservationId);
+
+        header('Location: /?page=mes_reservations&success=paiement');
+        exit;
+    }
+
+    private function calculerMontant(string $start, string $end, string $type, float $tarif): float
+    {
+        $debut = new DateTimeImmutable($start);
+        $fin = new DateTimeImmutable($end);
+
+        if ($type === 'horaire') {
+            $diffHeures = ($fin->getTimestamp() - $debut->getTimestamp()) / 3600;
+            return round($tarif * $diffHeures, 2);
+        } else {
+            $diffJours = ceil(($fin->getTimestamp() - $debut->getTimestamp()) / 86400);
+            return round($tarif * $diffJours, 2);
+        }
     }
 }

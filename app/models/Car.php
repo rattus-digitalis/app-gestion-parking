@@ -19,6 +19,15 @@ class Car
         return $car ?: null;
     }
 
+    public function getById(int $id): ?array
+{
+    $stmt = $this->pdo->prepare("SELECT * FROM cars WHERE id = ?");
+    $stmt->execute([$id]);
+    $car = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $car ?: null;
+}
+
+
     public function save(int $userId, string $marque, string $modele, string $immat, string $couleur, string $type): bool
     {
         $stmt = $this->pdo->prepare("SELECT id FROM cars WHERE user_id = ?");
