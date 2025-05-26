@@ -10,33 +10,41 @@ class LoginController
 {
     public function login(array $data)
     {
-        $email = $data['email'] ?? '';
-        $password = $data['password'] ?? '';
+        $email = trim($data['email'] ?? '');
+        $password = trim($data['password'] ?? '');
 
-        if (!$email || !$password) {
-            echo "Veuillez remplir tous les champs.";
+        if (empty($email) || empty($password)) {
+            echo "❌ Veuillez remplir tous les champs.";
             return;
         }
 
         $userModel = new User();
         $user = $userModel->getUserByEmail($email);
 
-        if ($user /* && password_verify($password, $user['password']) */ && $password === $user['password']) {
-            // ⚠️ REMARQUE : remplace "$password === $user['password']" par password_verify() dès que tu hashes les mots de passe
-
-            $_SESSION['user'] = [
-                'id'         => $user['id'],
-                'email'      => $user['email'],
-                'role'       => $user['role'],
-                'first_name' => $user['first_name'] ?? '',
-                'last_name'  => $user['last_name'] ?? '',
-            ];
-
-            header('Location: /?page=dashboard');
-            exit;
-        } else {
-            echo "Identifiants incorrects.";
+        if (!$user) {
+            echo "❌ Utilisateur introuvable.";
+            return;
         }
+
+        // ⚠️ Comparaison en clair (temporaire)
+        if ($password !== $user['password']) {
+            echo "❌ Mot de passe incorrect.";
+            return;
+        }
+
+        $_SESSION['user'] = [
+            'id'         => $user['id'],
+            'email'      => $user['email'],
+            'role'       => $user['role'],
+            'first_name' => $user['first_name'] ?? '',
+            'last_name'  => $user['last_name'] ?? '',
+            'phone'      => $user['phone'] ?? '',
+        ];
+
+        $userModel->setStatus($user['id'], 'online');
+
+        header('Location: /?page=dashboard');
+        exit;
     }
 
     public function logout()

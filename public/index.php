@@ -3,7 +3,6 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-
 session_start();
 
 // Chargement des fichiers nécessaires
@@ -144,6 +143,17 @@ switch ($route) {
         require_once __DIR__ . '/../app/controllers/AdminReservationController.php';
         $controller = new AdminReservationController();
         $controller->listReservations();
+        break;
+
+    case 'mon_compte':
+        require_once __DIR__ . '/../app/controllers/UserController.php';
+        $controller = new UserController();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $controller->updateCurrentUser($_POST);
+        } else {
+            require_once __DIR__ . '/../app/views/pages/mon_compte.php';
+        }
         break;
 
     default:

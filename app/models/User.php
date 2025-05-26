@@ -10,8 +10,8 @@ class User
             // Connexion à MySQL (service "mysql" dans Docker)
             $this->pdo = new PDO(
                 'mysql:host=mysql;dbname=zenpark;charset=utf8',
-                $_ENV['MYSQL_USER'],      // rattus
-                $_ENV['MYSQL_PASSWORD']   // rattus
+                getenv('MYSQL_USER'),      // ✔️ plus sûr que $_ENV[]
+                getenv('MYSQL_PASSWORD')
             );
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
@@ -103,5 +103,32 @@ class User
             WHERE id = ?
         ");
         return $stmt->execute([$lastName, $firstName, $email, $phone, $role, $status, $id]);
+    }
+
+    /**
+     * Met à jour un utilisateur (avec mot de passe)
+     */
+    public function updateUserWithPassword(
+        int $id,
+        string $lastName,
+        string $firstName,
+        string $email,
+        string $phone,
+        string $role,
+        string $status,
+        string $password
+    ): bool {
+        $stmt = $this->pdo->prepare("
+            UPDATE users SET 
+                last_name = ?, 
+                first_name = ?, 
+                email = ?, 
+                phone = ?, 
+                role = ?, 
+                status = ?, 
+                password = ?
+            WHERE id = ?
+        ");
+        return $stmt->execute([$lastName, $firstName, $email, $phone, $role, $status, $password, $id]);
     }
 }

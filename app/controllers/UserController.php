@@ -21,11 +21,10 @@ class UserController
         $firstName = htmlspecialchars(trim($postData['first_name']));
         $email = htmlspecialchars(trim($postData['email']));
         $phone = htmlspecialchars(trim($postData['phone']));
-        $password = trim($postData['password']); // non hashé pour le moment
+        $password = password_hash(trim($postData['password']), PASSWORD_DEFAULT); // ✅ Hash
 
         $userModel = new User();
 
-        // Vérifie si l'email existe déjà
         if ($userModel->getUserByEmail($email)) {
             echo "❌ Cet email est déjà utilisé.";
             return;
@@ -34,7 +33,7 @@ class UserController
         $result = $userModel->createUser($lastName, $firstName, $email, $phone, $password);
 
         if ($result) {
-            header('Location: /?page=dashboard');
+            header('Location: /?page=login'); // mieux de rediriger vers login
             exit;
         } else {
             echo "❌ Erreur lors de l'enregistrement du compte.";
@@ -43,8 +42,6 @@ class UserController
 
     public function login($postData)
     {
-    
-
         if (empty($postData['email']) || empty($postData['password'])) {
             echo "❌ Email et mot de passe requis.";
             return;
@@ -56,13 +53,15 @@ class UserController
         $userModel = new User();
         $user = $userModel->getUserByEmail($email);
 
-        if ($user && $password === $user['password']) {
+        // Vérifie le mot de passe hashé
+        if ($user && password_verify($password, $user['password'])) {
             // ✅ Connexion réussie
             $_SESSION['user'] = [
                 'id' => $user['id'],
                 'first_name' => $user['first_name'],
                 'last_name' => $user['last_name'],
                 'email' => $user['email'],
+                'phone' => $user['phone'] ?? '',
                 'role' => $user['role']
             ];
 
@@ -73,10 +72,43 @@ class UserController
             } else {
                 header('Location: /?page=dashboard_user');
             }
-            
             exit;
         } else {
             echo "❌ Identifiants incorrects.";
         }
+    }
+
+    public function updateCurrentUser(array $data)
+    {
+        if (!isset($_SESSION['user'])) {
+            header("Location: /?page=login");
+            exit;
+        }
+
+        $userModel = new User();
+        $id = $_SESSION['user']['id'];
+
+        $firstName = htmlspecialchars($data['first_name'] ?? '');
+        $lastName = htmlspecialchars($data['last_name'] ?? '');
+        $email = htmlspecialchars($data['email'] ?? '');
+        $phone = htmlspecialchars($data['phone'] ?? '');
+        $password = trim($data['password'] ?? '');
+
+        $current = $userModel->getUserById($id);
+        $role = $current['role'];
+        $status = $current['status'];
+
+        $passwordHashed = !empty($password)
+            ? password_hash($password, PASSWORD_DEFAULT)
+            : $current['password'];
+
+        $userModel->updateUserWithPassword($id, $lastName, $firstName, $email, $phone, $role, $status, $passwordHashed);
+
+        $_SESSION['user']['first_name'] = $firstName;
+        $_SESSION['user']['last_name'] = $lastName;
+        $_SESSION['user']['email'] = $email;
+        $_SESSION['user']['phone'] = $phone;
+
+        header("Location: /?page=mon_compte");
     }
 }

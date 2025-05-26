@@ -40,7 +40,6 @@ $totalPages = ceil(count($users) / $itemsPerPage);
                         <th>Email</th>
                         <th>Téléphone</th>
                         <th>Rôle</th>
-                        <th>Statut</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -53,7 +52,6 @@ $totalPages = ceil(count($users) / $itemsPerPage);
                             <td><a href="mailto:<?= htmlspecialchars($user['email']) ?>"><?= htmlspecialchars($user['email']) ?></a></td>
                             <td><?= htmlspecialchars($user['phone']) ?></td>
                             <td><?= htmlspecialchars(ucfirst($user['role'])) ?></td>
-                            <td><span class="status <?= htmlspecialchars($user['status']) ?>"><?= htmlspecialchars(ucfirst($user['status'])) ?></span></td>
                             <td class="actions-cell">
                                 <a href="/?page=edit_user&id=<?= urlencode($user['id']) ?>" class="btn-link btn-edit" aria-label="Modifier l'utilisateur <?= htmlspecialchars($user['last_name']) ?>">Modifier</a>
                                 <form method="POST" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');" aria-label="Supprimer l'utilisateur <?= htmlspecialchars($user['last_name']) ?>">
