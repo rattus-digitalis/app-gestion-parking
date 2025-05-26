@@ -13,9 +13,10 @@ $prenom = $_SESSION['user']['first_name'] ?? 'Utilisateur';
     <section class="dashboard-menu">
         <ul>
             <li><a href="/?page=mon_compte">Mon compte</a></li>
-            <li><a href="/?page=ma_voiture">Ma voiture</a></li>
-            <li><a href="/?page=mes_reservations">Mes réservations</a></li>
-            <li><a href="/?page=nouvelle_reservation">Nouvelle réservation</a></li>
+<li><a href="#">Ma voiture (à venir)</a></li>
+<li><a href="#">Mes réservations (à venir)</a></li>
+<li><a href="/?page=nouvelle_reservation">Nouvelle réservation</a></li>
+
         </ul>
     </section>
 </main>

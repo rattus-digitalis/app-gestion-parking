@@ -26,8 +26,8 @@ class LoginController
             return;
         }
 
-        // ⚠️ Comparaison en clair (temporaire)
-        if ($password !== $user['password']) {
+        // ✅ Vérification du mot de passe hashé
+        if (!password_verify($password, $user['password'])) {
             echo "❌ Mot de passe incorrect.";
             return;
         }

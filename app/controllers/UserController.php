@@ -17,11 +17,11 @@ class UserController
             return;
         }
 
-        $lastName = htmlspecialchars(trim($postData['last_name']));
+        $lastName  = htmlspecialchars(trim($postData['last_name']));
         $firstName = htmlspecialchars(trim($postData['first_name']));
-        $email = htmlspecialchars(trim($postData['email']));
-        $phone = htmlspecialchars(trim($postData['phone']));
-        $password = password_hash(trim($postData['password']), PASSWORD_DEFAULT); // ✅ Hash
+        $email     = htmlspecialchars(trim($postData['email']));
+        $phone     = htmlspecialchars(trim($postData['phone']));
+        $password  = password_hash(trim($postData['password']), PASSWORD_DEFAULT); // ✅ Mot de passe hashé
 
         $userModel = new User();
 
@@ -33,10 +33,10 @@ class UserController
         $result = $userModel->createUser($lastName, $firstName, $email, $phone, $password);
 
         if ($result) {
-            header('Location: /?page=login'); // mieux de rediriger vers login
+            header('Location: /?page=login');
             exit;
         } else {
-            echo "❌ Erreur lors de l'enregistrement du compte.";
+            echo "❌ Erreur lors de l\'enregistrement du compte.";
         }
     }
 
@@ -47,31 +47,25 @@ class UserController
             return;
         }
 
-        $email = htmlspecialchars(trim($postData['email']));
+        $email    = htmlspecialchars(trim($postData['email']));
         $password = trim($postData['password']);
 
         $userModel = new User();
         $user = $userModel->getUserByEmail($email);
 
-        // Vérifie le mot de passe hashé
         if ($user && password_verify($password, $user['password'])) {
-            // ✅ Connexion réussie
             $_SESSION['user'] = [
-                'id' => $user['id'],
+                'id'         => $user['id'],
                 'first_name' => $user['first_name'],
-                'last_name' => $user['last_name'],
-                'email' => $user['email'],
-                'phone' => $user['phone'] ?? '',
-                'role' => $user['role']
+                'last_name'  => $user['last_name'],
+                'email'      => $user['email'],
+                'phone'      => $user['phone'] ?? '',
+                'role'       => $user['role']
             ];
 
             $userModel->setStatus($user['id'], 'online');
 
-            if ($user['role'] === 'admin') {
-                header('Location: /?page=dashboard_admin');
-            } else {
-                header('Location: /?page=dashboard_user');
-            }
+            header('Location: /?page=' . ($user['role'] === 'admin' ? 'dashboard_admin' : 'dashboard_user'));
             exit;
         } else {
             echo "❌ Identifiants incorrects.";
@@ -89,25 +83,28 @@ class UserController
         $id = $_SESSION['user']['id'];
 
         $firstName = htmlspecialchars($data['first_name'] ?? '');
-        $lastName = htmlspecialchars($data['last_name'] ?? '');
-        $email = htmlspecialchars($data['email'] ?? '');
-        $phone = htmlspecialchars($data['phone'] ?? '');
-        $password = trim($data['password'] ?? '');
+        $lastName  = htmlspecialchars($data['last_name'] ?? '');
+        $email     = htmlspecialchars($data['email'] ?? '');
+        $phone     = htmlspecialchars($data['phone'] ?? '');
+        $password  = trim($data['password'] ?? '');
 
         $current = $userModel->getUserById($id);
-        $role = $current['role'];
-        $status = $current['status'];
+        $role    = $current['role'];
+        $status  = $current['status'];
 
         $passwordHashed = !empty($password)
             ? password_hash($password, PASSWORD_DEFAULT)
             : $current['password'];
 
-        $userModel->updateUserWithPassword($id, $lastName, $firstName, $email, $phone, $role, $status, $passwordHashed);
+        $userModel->updateUserWithPassword(
+            $id, $lastName, $firstName, $email, $phone, $role, $status, $passwordHashed
+        );
 
+        // MAJ session
         $_SESSION['user']['first_name'] = $firstName;
-        $_SESSION['user']['last_name'] = $lastName;
-        $_SESSION['user']['email'] = $email;
-        $_SESSION['user']['phone'] = $phone;
+        $_SESSION['user']['last_name']  = $lastName;
+        $_SESSION['user']['email']      = $email;
+        $_SESSION['user']['phone']      = $phone;
 
         header("Location: /?page=mon_compte");
     }

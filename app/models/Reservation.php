@@ -3,7 +3,7 @@ require_once __DIR__ . '/../../config/constants.php';
 
 class Reservation
 {
-    private $pdo;
+    private PDO $pdo;
 
     public function __construct()
     {
@@ -11,8 +11,22 @@ class Reservation
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
-    // Récupérer toutes les réservations avec infos utilisateur et place
-    public function getAllReservations()
+    /**
+     * Créer une réservation
+     */
+    public function create(int $userId, int $parkingId, string $start, string $end, string $status = 'pending'): bool
+    {
+        $stmt = $this->pdo->prepare("
+            INSERT INTO reservations (user_id, parking_id, date_start, date_end, status)
+            VALUES (?, ?, ?, ?, ?)
+        ");
+        return $stmt->execute([$userId, $parkingId, $start, $end, $status]);
+    }
+
+    /**
+     * Récupère toutes les réservations (admin)
+     */
+    public function getAllReservations(): array
     {
         $sql = "SELECT r.id, u.first_name, u.last_name, p.numero_place, r.date_start, r.date_end, r.status
                 FROM reservations r
@@ -23,8 +37,10 @@ class Reservation
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Récupérer une réservation par son ID
-    public function getReservationById(int $id)
+    /**
+     * Récupère une réservation par ID
+     */
+    public function getReservationById(int $id): ?array
     {
         $stmt = $this->pdo->prepare("
             SELECT r.*, u.first_name, u.last_name, p.numero_place 
@@ -34,21 +50,14 @@ class Reservation
             WHERE r.id = ?
         ");
         $stmt->execute([$id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $res = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $res ?: null;
     }
 
-    // Créer une réservation
-    public function createReservation($user_id, $parking_id, $date_start, $date_end, $status = 'pending')
-    {
-        $stmt = $this->pdo->prepare("
-            INSERT INTO reservations (user_id, parking_id, date_start, date_end, status)
-            VALUES (?, ?, ?, ?, ?)
-        ");
-        return $stmt->execute([$user_id, $parking_id, $date_start, $date_end, $status]);
-    }
-
-    // Mettre à jour une réservation
-    public function updateReservation(int $id, $data)
+    /**
+     * Met à jour une réservation
+     */
+    public function updateReservation(int $id, array $data): bool
     {
         $stmt = $this->pdo->prepare("
             UPDATE reservations
@@ -56,17 +65,19 @@ class Reservation
             WHERE id = ?
         ");
         return $stmt->execute([
-            $data['user_id'], 
-            $data['parking_id'], 
-            $data['date_start'], 
-            $data['date_end'], 
-            $data['status'], 
+            $data['user_id'],
+            $data['parking_id'],
+            $data['date_start'],
+            $data['date_end'],
+            $data['status'],
             $id
         ]);
     }
 
-    // Supprimer une réservation
-    public function deleteReservation(int $id)
+    /**
+     * Supprime une réservation
+     */
+    public function deleteReservation(int $id): bool
     {
         $stmt = $this->pdo->prepare("DELETE FROM reservations WHERE id = ?");
         return $stmt->execute([$id]);

@@ -79,11 +79,14 @@ switch ($route) {
         $role = $_SESSION['user']['role'];
         if ($role === 'admin') {
             header('Location: /?page=dashboard_admin');
+            exit;
         } elseif ($role === 'user') {
             header('Location: /?page=dashboard_user');
+            exit;
         } else {
             http_response_code(401);
             require_once __DIR__ . '/../app/views/errors/401.php';
+            exit;
         }
         break;
 
@@ -153,6 +156,18 @@ switch ($route) {
             $controller->updateCurrentUser($_POST);
         } else {
             require_once __DIR__ . '/../app/views/pages/mon_compte.php';
+        }
+        break;
+
+    case 'nouvelle_reservation':
+        checkRole('user');
+        require_once __DIR__ . '/../app/controllers/ReservationController.php';
+        $controller = new ReservationController();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $controller->create($_POST);
+        } else {
+            $controller->form();
         }
         break;
 
