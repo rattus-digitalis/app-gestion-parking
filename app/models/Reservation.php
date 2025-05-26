@@ -20,6 +20,14 @@ class Reservation
         return $stmt->execute([$userId, $parkingId, $start, $end, $status, $carId]);
     }
 
+
+public function cancel(int $id): bool
+{
+    $stmt = $this->pdo->prepare("UPDATE reservations SET status = 'cancelled', updated_at = NOW() WHERE id = ?");
+    return $stmt->execute([$id]);
+}
+
+
     public function getByUserId(int $userId): array
     {
         $stmt = $this->pdo->prepare("

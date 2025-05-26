@@ -56,6 +56,27 @@ class ReservationController
         require __DIR__ . '/../views/pages/nouvelle_reservation.php';
     }
 
+    public function cancelReservation()
+{
+    if (!isset($_SESSION['user'])) {
+        header('Location: /?page=login');
+        exit;
+    }
+
+    $id = $_GET['id'] ?? null;
+    if (!$id) {
+        http_response_code(400);
+        echo "ID de réservation manquant.";
+        return;
+    }
+
+    $reservationModel = new Reservation();
+    $reservationModel->cancel((int)$id);
+
+    header('Location: /?page=mes_reservations');
+    exit;
+}
+
     public function create(array $data)
     {
         if (!isset($_SESSION['user'])) {

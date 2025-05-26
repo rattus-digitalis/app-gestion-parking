@@ -20,7 +20,14 @@ require_once __DIR__ . '/../templates/nav.php';
                         <strong>Place <?= htmlspecialchars($res['numero_place']) ?> (Étage <?= htmlspecialchars($res['etage']) ?>)</strong><br>
                         Du <time><?= date('d/m/Y H:i', strtotime($res['date_start'])) ?></time>
                         au <time><?= date('d/m/Y H:i', strtotime($res['date_end'])) ?></time><br>
-                        Statut : <em><?= htmlspecialchars($res['status']) ?></em>
+                        Statut : <em><?= htmlspecialchars($res['status']) ?></em><br>
+
+                        <?php if ($res['status'] !== 'cancelled') : ?>
+                            <a href="/?page=annuler_reservation&id=<?= $res['id'] ?>"
+                               onclick="return confirm('Voulez-vous vraiment annuler cette réservation ?');">
+                                ❌ Annuler la réservation
+                            </a>
+                        <?php endif; ?>
                     </li>
                 <?php endforeach; ?>
             </ul>

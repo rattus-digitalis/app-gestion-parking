@@ -168,6 +168,14 @@ switch ($route) {
         $controller->mesReservations();
         break;
 
+        case 'annuler_reservation':
+    checkRole('user');
+    require_once __DIR__ . '/../app/controllers/ReservationController.php';
+    $controller = new ReservationController();
+    $controller->cancelReservation();
+    break;
+
+
     case 'ma_voiture':
         checkRole('user');
         require_once __DIR__ . '/../app/controllers/CarController.php';
