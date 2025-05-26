@@ -93,4 +93,23 @@ class Reservation
 
         return $stmt->fetchColumn() == 0;
     }
+public function calculerPrix(string $start, string $end, string $type): float
+{
+    $tarifModel = new Tarif();
+    $prixHoraire = $tarifModel->getByType($type);
+
+    $debut = new DateTime($start);
+    $fin = new DateTime($end);
+    $diffHeures = ($fin->getTimestamp() - $debut->getTimestamp()) / 3600;
+
+    return round($prixHoraire * $diffHeures, 2);
+}
+
+
+
+    public function marquerCommePayee(int $id): bool
+    {
+        $stmt = $this->pdo->prepare("UPDATE reservations SET paid = 1 WHERE id = ?");
+        return $stmt->execute([$id]);
+    }
 }

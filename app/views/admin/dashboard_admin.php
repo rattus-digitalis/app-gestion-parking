@@ -16,6 +16,7 @@ require_once __DIR__ . '/../templates/nav.php';
             <li><a href="/?page=admin_users" class="btn-link">Gestion des utilisateurs</a></li>
             <li><a href="/?page=admin_parkings" class="btn-link">Gestion des places de parking</a></li>
             <li><a href="/?page=reservations_list" class="btn-link">Gestion des réservations</a></li>
+            <li><a href="/?page=admin_tarifs" class="btn-link">Gestion des tarifs</a></li> <!-- ✅ Ajout ici -->
         </ul>
     </section>
 

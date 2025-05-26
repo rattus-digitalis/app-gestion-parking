@@ -210,8 +210,66 @@ case 'update_reservation':
         http_response_code(400);
         echo "ID manquant.";
         exit;
+    }case 'admin_tarifs':
+    checkRole('admin');
+    require_once __DIR__ . '/../app/controllers/AdminTarifController.php';
+    $controller = new AdminTarifController();
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $controller->update($_POST);
+    } else {
+        $controller->show();
     }
+    break;
+
     $controller->editForm((int)$id);
+    break;
+
+    case 'admin_tarifs':
+    checkRole('admin');
+    require_once __DIR__ . '/../app/controllers/AdminTarifController.php';
+    $controller = new AdminTarifController();
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $controller->update($_POST);
+    } else {
+        $controller->show();
+    }
+    break;
+
+
+    case 'admin_tarifs':
+    checkRole('admin');
+    require_once __DIR__ . '/../app/controllers/AdminTarifController.php';
+    $controller = new AdminTarifController();
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $controller->update($_POST);
+    } else {
+        $controller->show();
+    }
+    break;
+
+
+    case 'paiement':
+    checkRole('user');
+    require_once __DIR__ . '/../app/controllers/PaiementController.php';
+    $controller = new PaiementController();
+    $reservationId = $_GET['id'] ?? null;
+    if ($reservationId) {
+        $controller->payer((int)$reservationId);
+    } else {
+        http_response_code(400);
+        echo "ID de réservation manquant.";
+    }
+    break;
+
+    case 'admin_tarifs':
+    checkRole('admin');
+    require_once __DIR__ . '/../app/controllers/AdminTarifController.php';
+    $controller = new AdminTarifController();
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $controller->update($_POST);
+    } else {
+        $controller->show();
+    }
     break;
 
 

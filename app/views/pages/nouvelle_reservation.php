@@ -47,6 +47,15 @@ require_once __DIR__ . '/../templates/nav.php';
 
         <button type="submit">Réserver</button>
     </form>
+
+    <?php if (isset($_GET['id'])): ?>
+        <hr>
+        <form method="GET" action="/index.php">
+            <input type="hidden" name="page" value="paiement">
+            <input type="hidden" name="id" value="<?= (int)$_GET['id'] ?>">
+            <button type="submit">💳 Payer maintenant</button>
+        </form>
+    <?php endif; ?>
 </main>
 
 <?php require_once __DIR__ . '/../templates/footer.php'; ?>
