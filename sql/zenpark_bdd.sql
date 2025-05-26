@@ -16,6 +16,37 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `cars`
+--
+
+DROP TABLE IF EXISTS `cars`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `cars` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `marque` varchar(100) DEFAULT NULL,
+  `modele` varchar(100) DEFAULT NULL,
+  `immatriculation` varchar(50) DEFAULT NULL,
+  `couleur` varchar(50) DEFAULT NULL,
+  `type` enum('voiture','moto') DEFAULT 'voiture',
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `cars_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cars`
+--
+
+LOCK TABLES `cars` WRITE;
+/*!40000 ALTER TABLE `cars` DISABLE KEYS */;
+INSERT INTO `cars` VALUES (1,5,'audi','r8','acab','bleu','moto');
+/*!40000 ALTER TABLE `cars` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `parking`
 --
 
@@ -64,12 +95,16 @@ CREATE TABLE `reservations` (
   `status` enum('confirmed','cancelled','pending') DEFAULT 'pending',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `car_id` int DEFAULT NULL,
+  `paid` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `parking_id` (`parking_id`),
+  KEY `car_id` (`car_id`),
   CONSTRAINT `reservations_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  CONSTRAINT `reservations_ibfk_2` FOREIGN KEY (`parking_id`) REFERENCES `parking` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `reservations_ibfk_2` FOREIGN KEY (`parking_id`) REFERENCES `parking` (`id`),
+  CONSTRAINT `reservations_ibfk_3` FOREIGN KEY (`car_id`) REFERENCES `cars` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -78,7 +113,66 @@ CREATE TABLE `reservations` (
 
 LOCK TABLES `reservations` WRITE;
 /*!40000 ALTER TABLE `reservations` DISABLE KEYS */;
+INSERT INTO `reservations` VALUES (1,5,5,'2025-05-28 14:00:00','2025-05-29 14:00:00','cancelled','2025-05-26 09:03:33','2025-05-26 09:06:28',1,0),(2,5,5,'2025-05-28 14:00:00','2025-05-29 14:00:00','cancelled','2025-05-26 09:30:26','2025-05-26 09:38:26',1,0),(3,5,4,'2025-05-30 14:00:00','2025-06-01 17:00:00','cancelled','2025-05-26 09:38:54','2025-05-26 11:48:59',NULL,0),(4,5,1,'2025-05-28 14:00:00','2025-05-31 14:00:00','cancelled','2025-05-26 09:51:12','2025-05-26 11:54:23',1,0);
 /*!40000 ALTER TABLE `reservations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tarifs`
+--
+
+DROP TABLE IF EXISTS `tarifs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tarifs` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `type` varchar(20) DEFAULT NULL,
+  `heure` float DEFAULT '0',
+  `jour` float DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `type` (`type`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tarifs`
+--
+
+LOCK TABLES `tarifs` WRITE;
+/*!40000 ALTER TABLE `tarifs` DISABLE KEYS */;
+INSERT INTO `tarifs` VALUES (1,'voiture',8,48),(2,'moto',4,32);
+/*!40000 ALTER TABLE `tarifs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `nom` varchar(100) NOT NULL,
+  `prenom` varchar(100) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `mot_de_passe` varchar(255) NOT NULL,
+  `numero_telephone` varchar(20) DEFAULT NULL,
+  `date_inscription` datetime DEFAULT CURRENT_TIMESTAMP,
+  `role` enum('utilisateur','admin') DEFAULT 'utilisateur',
+  `statut` enum('actif','inactif','banni') DEFAULT 'actif',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user`
+--
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -101,7 +195,7 @@ CREATE TABLE `users` (
   `status` enum('offline','online') DEFAULT 'offline',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -110,7 +204,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (2,'Michi','Victor','victor.michi@hotmail.fr','0648078747',0,'test','2025-05-18 01:49:51','admin','online'),(3,'Michi','Victor','vi@hotmail.fr','0648078747',0,'test','2025-05-18 02:53:12','user','offline');
+INSERT INTO `users` VALUES (5,'test','test','test@hotmail.fr','0606060606',0,'$2y$10$HG2VQj5Cr7vZGgZwCMgayO7ohkE5msvEpvUfho6jKNNImeIqvwr7C','2025-05-26 06:48:56','user','offline'),(6,'test','test','testtest@hotmail.fr','0648078747',0,'$2y$10$B3UCGwhtmWCzmtXEvkJNLujou5aXc9nBeepXUgNTtCmZ3Ro.wnpga','2025-05-26 07:20:35','user','offline'),(9,'root','root','root@hotmail.fr','0648078747',0,'$2y$10$GWEQFn/WRR/8QDVpGjK7peKwS41Y3RA/7FmbOZ9O0WBbo8N7kRVx6','2025-05-26 07:43:25','admin','online');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -123,4 +217,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-24 10:46:02
+-- Dump completed on 2025-05-26 12:14:18
