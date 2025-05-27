@@ -14,7 +14,17 @@ class PaiementController
             return;
         }
 
-        require __DIR__ . '/../views/pages/paiement.php';
+        $montant = $_GET['montant'] ?? null;
+
+        if (!$montant || !is_numeric($montant)) {
+            echo "<p class='alert alert-danger'>❌ Informations de paiement manquantes ou invalides.</p>";
+            require_once __DIR__ . '/../views/templates/footer.php';
+            return;
+        }
+
+        // Redirection vers la page avec bouton PayPal
+        header('Location: /?page=valider_paiement&id=' . urlencode($reservationId) . '&montant=' . urlencode($montant));
+        exit;
     }
 
     public function effectuerPaiement(array $data)

@@ -264,6 +264,12 @@ case 'admin_parkings':
         }
         break;
 
+        case 'valider_paiement':
+    checkRoles('user');
+    require_once __DIR__ . '/../app/views/pages/valider_paiement.php';
+    break;
+
+
     // --- 404 ---
     default:
         http_response_code(404);

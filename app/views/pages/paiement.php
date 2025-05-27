@@ -69,6 +69,17 @@ $prix = number_format((float)$montant, 2, ',', ' ');
 
         <button type="submit" class="btn btn-primary mt-3" aria-label="Payer la réservation">✅ Payer maintenant</button>
     </form>
+
+    <!-- Zone de rendu PayPal -->
+    <div id="paypal-button-container" class="mt-4"></div>
+    <p id="result-message"></p>
 </main>
+
+<!-- PayPal SDK et script -->
+<script
+    src="https://www.paypal.com/sdk/js?client-id=test&buyer-country=US&currency=USD&components=buttons&enable-funding=venmo,paylater,card"
+    data-sdk-integration-source="developer-studio"
+></script>
+<script src="/js/app.js"></script>
 
 <?php require_once __DIR__ . '/../templates/footer.php'; ?>
