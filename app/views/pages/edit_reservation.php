@@ -31,7 +31,7 @@
     </div>
 
     <div class="form-actions">
-        <button type="submit" class="btn btn-primary">💾 Enregistrer les modifications</button>
+        <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
         <a href="/?page=mes_reservations" class="btn btn-secondary">← Annuler</a>
     </div>
 </form>

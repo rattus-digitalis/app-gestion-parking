@@ -6,7 +6,7 @@ require_once __DIR__ . '/../templates/nav.php';
 
 <main class="container" role="main">
     <section class="contact-form">
-        <h1>📨 Contactez-nous</h1>
+        <h1>Contactez-nous</h1>
         <p>Vous avez une question, un problème ou une suggestion ? Envoyez-nous un message via ce formulaire :</p>
 
         <form action="/?page=contact" method="POST" aria-label="Formulaire de contact">
@@ -26,7 +26,7 @@ require_once __DIR__ . '/../templates/nav.php';
             </div>
 
             <div class="form-actions">
-                <button type="submit" class="btn btn-primary" aria-label="Envoyer le message">📤 Envoyer</button>
+                <button type="submit" class="btn btn-primary" aria-label="Envoyer le message">Envoyer</button>
             </div>
         </form>
     </section>

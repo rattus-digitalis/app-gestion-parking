@@ -6,5 +6,8 @@
     </nav>
 </footer>
 
+<!-- Script JS principal (modules ES6) -->
+<script type="module" src="/public/js/app.js"></script>
+
 </body>
 </html>

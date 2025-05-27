@@ -5,7 +5,7 @@ require_once __DIR__ . '/../templates/nav.php';
 ?>
 
 <main class="container user-reservations" role="main">
-    <h1>📅 Mes réservations</h1>
+    <h1> Mes réservations</h1>
 
     <?php if (empty($actives) && empty($past)) : ?>
         <p class="alert alert-info" role="alert">Vous n'avez encore effectué aucune réservation.</p>
@@ -13,7 +13,7 @@ require_once __DIR__ . '/../templates/nav.php';
 
     <?php if (!empty($actives)) : ?>
         <section class="active-reservations" aria-label="Réservations actives">
-            <h2>🔒 Réservations actives</h2>
+            <h2>Réservations actives</h2>
 
             <?php foreach ($actives as $res) : ?>
                 <article class="reservation-card" aria-labelledby="reservation-<?= $res['id'] ?>">
@@ -45,7 +45,7 @@ require_once __DIR__ . '/../templates/nav.php';
 
     <?php if (!empty($past)) : ?>
         <section class="past-reservations" aria-label="Historique des réservations">
-            <h2>📜 Historique des réservations</h2>
+            <h2>Historique des réservations</h2>
 
             <?php foreach ($past as $res) : ?>
                 <article class="reservation-card" aria-labelledby="past-reservation-<?= $res['id'] ?>">

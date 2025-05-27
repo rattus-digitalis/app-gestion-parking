@@ -7,7 +7,7 @@ $user = $_SESSION['user'];
 ?>
 
 <main class="container account-form" role="main">
-    <h1>👤 Mon compte</h1>
+    <h1>Mon compte</h1>
     <p>Gérez ici les informations de votre compte utilisateur.</p>
 
     <form action="/?page=mon_compte" method="POST">
@@ -37,7 +37,7 @@ $user = $_SESSION['user'];
         </div>
 
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">💾 Mettre à jour</button>
+            <button type="submit" class="btn btn-primary">Mettre à jour</button>
             <a href="/?page=dashboard_user" class="btn btn-secondary">← Retour</a>
         </div>
     </form>

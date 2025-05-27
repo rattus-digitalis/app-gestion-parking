@@ -6,7 +6,7 @@ require_once __DIR__ . '/../templates/nav.php';
 
 <main class="container legal" role="main">
     <section>
-        <h1>📄 Conditions Générales d'Utilisation (CGU)</h1>
+        <h1> Conditions Générales d'Utilisation (CGU)</h1>
 
         <p>Bienvenue sur Zenpark. En accédant à ce site, vous acceptez pleinement et entièrement les conditions générales d'utilisation ci-après.</p>
 

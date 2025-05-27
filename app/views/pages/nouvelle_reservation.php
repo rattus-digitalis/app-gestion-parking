@@ -5,7 +5,7 @@ require_once __DIR__ . '/../templates/nav.php';
 ?>
 
 <main class="container new-reservation" role="main">
-    <h1>🆕 Nouvelle réservation</h1>
+    <h1> Nouvelle réservation</h1>
 
     <form method="POST" action="/?page=nouvelle_reservation" aria-label="Formulaire nouvelle réservation">
         <!-- Voiture -->
@@ -54,7 +54,7 @@ require_once __DIR__ . '/../templates/nav.php';
         </div>
 
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">🚗 Réserver</button>
+            <button type="submit" class="btn btn-primary">Réserver</button>
         </div>
     </form>
 
@@ -63,7 +63,7 @@ require_once __DIR__ . '/../templates/nav.php';
         <form method="GET" action="/index.php" aria-label="Formulaire paiement réservation">
             <input type="hidden" name="page" value="paiement">
             <input type="hidden" name="id" value="<?= (int)$_GET['id'] ?>">
-            <button type="submit" class="btn btn-secondary">💳 Payer maintenant</button>
+            <button type="submit" class="btn btn-secondary">Payer maintenant</button>
         </form>
     <?php endif; ?>
 </main>

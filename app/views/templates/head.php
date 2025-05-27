@@ -16,7 +16,9 @@
     <!-- Favicon -->
     <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon" />
 </head>
-<body>
+
+<!-- Ajout de l'attribut data-page avec PHP -->
+<body data-page="<?= htmlspecialchars($page_id ?? '') ?>">
     <header class="site-header">
         <div class="container">
             <h1><a href="/?page=home" class="logo">Zenpark</a></h1>

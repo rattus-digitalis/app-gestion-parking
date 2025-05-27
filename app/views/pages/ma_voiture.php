@@ -5,17 +5,12 @@ require_once __DIR__ . '/../templates/nav.php';
 ?>
 
 <main class="container car-form" role="main">
-    <h1>🚗 Mon véhicule</h1>
+    <h1>Mon véhicule</h1>
 
     <form method="POST" action="/?page=ma_voiture">
         <div class="form-group">
             <label for="marque">Marque</label>
             <input type="text" id="marque" name="marque" value="<?= htmlspecialchars($car['marque'] ?? '') ?>" required>
-        </div>
-
-        <div class="form-group">
-            <label for="modele">Modèle</label>
-            <input type="text" id="modele" name="modele" value="<?= htmlspecialchars($car['modele'] ?? '') ?>" required>
         </div>
 
         <div class="form-group">
@@ -37,7 +32,7 @@ require_once __DIR__ . '/../templates/nav.php';
         </div>
 
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">💾 Enregistrer</button>
+            <button type="submit" class="btn btn-primary"> Enregistrer</button>
             <a href="/?page=dashboard_user" class="btn btn-secondary">← Retour</a>
         </div>
     </form>

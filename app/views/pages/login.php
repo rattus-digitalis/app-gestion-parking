@@ -7,7 +7,7 @@ require_once __DIR__ . '/../templates/nav.php';
 
 <main class="login-page container" role="main">
     <section class="login-box">
-        <h1>🔐 Connexion</h1>
+        <h1>Connexion</h1>
 
         <form action="/?page=login" method="POST" aria-label="Formulaire de connexion">
             <div class="form-group">

@@ -16,7 +16,7 @@ $reservationId = $_GET['id'] ?? null;
 $montant = $_GET['montant'] ?? null;
 
 if (!$reservationId || !$montant) {
-    echo "<p class='alert alert-danger'>❌ Informations de paiement manquantes.</p>";
+    echo "<p class='alert alert-danger'>Informations de paiement manquantes.</p>";
     require_once __DIR__ . '/../templates/footer.php';
     exit;
 }
@@ -26,7 +26,7 @@ $reservationModel = new Reservation();
 $reservation = $reservationModel->getReservationById((int)$reservationId);
 
 if (!$reservation) {
-    echo "<p class='alert alert-danger'>❌ Réservation introuvable.</p>";
+    echo "<p class='alert alert-danger'>Réservation introuvable.</p>";
     require_once __DIR__ . '/../templates/footer.php';
     exit;
 }
@@ -58,12 +58,12 @@ $prix = number_format((float)$montant, 2, ',', ' ');
 
             <div>
                 <input type="radio" id="cb" name="methode" value="cb" checked required>
-                <label for="cb">💳 Carte bancaire</label>
+                <label for="cb">Carte bancaire</label>
             </div>
 
             <div>
                 <input type="radio" id="paypal" name="methode" value="paypal" required>
-                <label for="paypal">🅿️ PayPal</label>
+                <label for="paypal">PayPal</label>
             </div>
         </fieldset>
 

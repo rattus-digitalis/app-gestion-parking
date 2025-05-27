@@ -13,7 +13,7 @@ $reservationId = $_GET['id'] ?? null;
 $montant = $_GET['montant'] ?? null;
 
 if (!$reservationId || !$montant || !is_numeric($montant)) {
-    echo "<p class='alert alert-danger'>❌ Informations de paiement manquantes ou invalides.</p>";
+    echo "<p class='alert alert-danger'>Informations de paiement manquantes ou invalides.</p>";
     require_once __DIR__ . '/../templates/footer.php';
     exit;
 }
@@ -23,7 +23,7 @@ $reservationModel = new Reservation();
 $reservation = $reservationModel->getReservationById((int)$reservationId);
 
 if (!$reservation) {
-    echo "<p class='alert alert-danger'>❌ Réservation introuvable.</p>";
+    echo "<p class='alert alert-danger'> Réservation introuvable.</p>";
     require_once __DIR__ . '/../templates/footer.php';
     exit;
 }
@@ -38,7 +38,7 @@ $prixJs = number_format((float)$montant, 2, '.', ''); // pour JS (avec point)
 ?>
 
 <main class="container payment-page" role="main">
-    <h1 class="mb-4">🔐 Paiement sécurisé</h1>
+    <h1 class="mb-4">Paiement sécurisé</h1>
 
     <section class="reservation-summary mb-4" aria-label="Résumé de la réservation">
         <p><strong>Réservation :</strong> Place <?= htmlspecialchars($reservation['numero_place']) ?> (Étage <?= htmlspecialchars($reservation['etage']) ?>)</p>
