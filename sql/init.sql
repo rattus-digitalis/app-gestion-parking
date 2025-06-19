@@ -1,7 +1,7 @@
-CREATE DATABASE IF NOT EXISTS zenpark;
+CREATE DATABASE IF NOT EXISTS parkly;
 
-CREATE USER IF NOT EXISTS 'zenuser'@'%' IDENTIFIED BY 'zenpass';
-GRANT ALL PRIVILEGES ON zenpark.* TO 'zenuser'@'%';
+CREATE USER IF NOT EXISTS 'parkly_user'@'%' IDENTIFIED BY 'parkpass';
+GRANT ALL PRIVILEGES ON zenpark.* TO 'parkly_user'@'%';
 
 FLUSH PRIVILEGES;
 

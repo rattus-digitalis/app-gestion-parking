@@ -9,7 +9,7 @@ class User
         try {
             // Connexion à MySQL (service "mysql" dans Docker)
             $this->pdo = new PDO(
-                'mysql:host=mysql;dbname=zenpark;charset=utf8',
+                'mysql:host=mysql;dbname=parkly;charset=utf8',
                 getenv('MYSQL_USER'),      // ✔️ plus sûr que $_ENV[]
                 getenv('MYSQL_PASSWORD')
             );

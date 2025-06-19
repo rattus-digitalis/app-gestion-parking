@@ -1,7 +1,7 @@
 <?php
 
 $host = getenv('MYSQL_HOST') ?: 'mysql';
-$db   = getenv('MYSQL_DATABASE') ?: 'zenpark';
+$db   = getenv('MYSQL_DATABASE') ?: 'parkly';
 $user = getenv('MYSQL_USER') ?: 'rattus';
 $pass = getenv('MYSQL_PASSWORD') ?: 'rattus';
 $charset = 'utf8mb4';
