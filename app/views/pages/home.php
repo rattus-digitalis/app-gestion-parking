@@ -105,27 +105,6 @@ require_once __DIR__ . '/../templates/nav.php';
                 <div class="availability-indicator warning" aria-label="Parking complet"></div>
             <?php endif; ?>
         </div>
-
-        <!-- ACTIONS PRINCIPALES -->
-        <nav class="cta home-buttons" role="navigation" aria-label="Actions principales">
-            <?php if ($places_libres > 0): ?>
-                <a href="/?page=reservation" class="btn btn-primary" aria-label="Réserver une place maintenant">
-                    <span class="btn-icon" aria-hidden="true">📅</span>
-                    Réserver maintenant
-                </a>
-            <?php endif; ?>
-            
-            <a href="/?page=login" class="btn btn-secondary" aria-label="Se connecter à son compte">
-                <span class="btn-icon" aria-hidden="true">👤</span>
-                Connexion
-            </a>
-            <a href="/?page=register" class="btn btn-outline" aria-label="Créer un nouveau compte">
-                <span class="btn-icon" aria-hidden="true">✨</span>
-                Créer un compte
-            </a>
-        </nav>
-    </section>
-
     <!-- FONCTIONNALITÉS -->
     <section class="features" aria-labelledby="features-title">
         <h2 id="features-title" class="section-title">Pourquoi choisir Parkly ?</h2>

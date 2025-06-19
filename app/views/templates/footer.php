@@ -15,16 +15,30 @@
         </nav>
         
         <div class="footer-social">
-            <a href="https://twitter.com/parkly" class="social-link" aria-label="Suivez-nous sur Twitter" target="_blank" rel="noopener">
-                Twitter  
-            </a>
-            <a href="https://facebook.com/parkly" class="social-link" aria-label="Suivez-nous sur Facebook" target="_blank" rel="noopener">
-                Facebook
-            </a>
-            <a href="https://linkedin.com/company/parkly" class="social-link" aria-label="Suivez-nous sur LinkedIn" target="_blank" rel="noopener">
-                LinkedIn
-            </a>
-        </div>
+    <a href="https://twitter.com/parkly" 
+       class="social-link" 
+       aria-label="Suivez Parkly sur Twitter - Restez informé de nos dernières actualités" 
+       target="_blank" 
+       rel="noopener noreferrer">
+        <span class="social-text">Twitter</span>
+    </a>
+    
+    <a href="https://facebook.com/parkly" 
+       class="social-link" 
+       aria-label="Rejoignez la communauté Parkly sur Facebook" 
+       target="_blank" 
+       rel="noopener noreferrer">
+        <span class="social-text">Facebook</span>
+    </a>
+    
+    <a href="https://linkedin.com/company/parkly" 
+       class="social-link" 
+       aria-label="Connectez-vous avec Parkly sur LinkedIn - Réseau professionnel" 
+       target="_blank" 
+       rel="noopener noreferrer">
+        <span class="social-text">LinkedIn</span>
+    </a>
+</div>
     </div>
     
     <div class="footer-bottom">
