@@ -1,5 +1,5 @@
 # Projet #2 - Application de gestion d'un parking pour voitures
-**Répertoire GitLab :** `~/app-gestion-parking`
+
 
 ---
 
