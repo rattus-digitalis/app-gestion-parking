@@ -59,8 +59,8 @@ class PaiementController {
             exit;
         }
         
-        // Inclure la vue de paiement
-        include __DIR__ . '/../views/pages/paiement.php';
+        // CORRECT
+include __DIR__ . '/../views/pages/paiement.php';
     }
     
     /**
@@ -107,8 +107,8 @@ class PaiementController {
                     'description' => "Réservation parking - Place {$reservation['numero_place']}"
                 ]],
                 'application_context' => [
-                    'return_url' => $_SERVER['HTTP_HOST'] . '/?page=valider_paiement&success=1',
-                    'cancel_url' => $_SERVER['HTTP_HOST'] . '/?page=paiement&cancelled=1'
+                    'return_url' => 'http://' . $_SERVER['HTTP_HOST'] . '/?page=valider_paiement&success=1',
+                    'cancel_url' => 'http://' . $_SERVER['HTTP_HOST'] . '/?page=paiement&cancelled=1'
                 ]
             ];
             
@@ -120,13 +120,12 @@ class PaiementController {
             
             // Enregistrement du paiement en base
             $this->paymentModel->createPayment([
-                'reservation_id' => $reservationId,
-                'paypal_order_id' => $paypalOrder['id'],
-                'amount' => $amount,
-                'currency' => 'EUR',
-                'status' => 'pending'
-            ]);
-            
+    'reservation_id' => $reservationId,
+    'paypal_order_id' => $paypalOrder['id'],
+    'amount' => $amount,
+    'currency' => 'EUR',
+    'status' => 'pending'
+]);
             echo json_encode([
                 'success' => true,
                 'order_id' => $paypalOrder['id']
@@ -161,7 +160,8 @@ class PaiementController {
             $reservationId = (int)$input['reservation_id'];
             
             // Capture du paiement via PayPal
-            $captureResult = $this->callPayPalAPI("/v2/checkout/orders/{$orderId}/capture", []);
+            $captureResult = $this->callPayPalAPI("/v2/checkout/orders/{$orderId}/capture", new stdClass());
+
             
             if (!$captureResult || $captureResult['status'] !== 'COMPLETED') {
                 throw new Exception('Échec de la capture du paiement');

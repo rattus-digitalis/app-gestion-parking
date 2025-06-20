@@ -1,7 +1,6 @@
 <?php
 /**
  * Configuration PayPal pour Zenpark
- * Fichier simplifié sans erreurs
  */
 
 // Mode sandbox (développement) ou live (production)
@@ -11,29 +10,15 @@ if (!defined('PAYPAL_MODE')) {
 
 // URLs des API PayPal
 if (!defined('PAYPAL_API_URL')) {
-    define('PAYPAL_API_URL', PAYPAL_MODE === 'sandbox' 
-        ? 'https://api-m.sandbox.paypal.com' 
-        : 'https://api-m.paypal.com'
-    );
+    define('PAYPAL_API_URL', 'https://api-m.sandbox.paypal.com');
 }
 
-// Clés PayPal - REMPLACEZ par vos vraies clés
-if (PAYPAL_MODE === 'sandbox') {
-    // Clés de test PayPal Sandbox
-    if (!defined('PAYPAL_CLIENT_ID')) {
-        define('PAYPAL_CLIENT_ID', 'test_client_id_sandbox');
-    }
-    if (!defined('PAYPAL_CLIENT_SECRET')) {
-        define('PAYPAL_CLIENT_SECRET', 'test_client_secret_sandbox');
-    }
-} else {
-    // Clés de production PayPal Live
-    if (!defined('PAYPAL_CLIENT_ID')) {
-        define('PAYPAL_CLIENT_ID', 'your_live_client_id');
-    }
-    if (!defined('PAYPAL_CLIENT_SECRET')) {
-        define('PAYPAL_CLIENT_SECRET', 'your_live_client_secret');
-    }
+// Clés PayPal - VOS VRAIES CLÉS
+if (!defined('PAYPAL_CLIENT_ID')) {
+    define('PAYPAL_CLIENT_ID', 'AbB8di9Z--U4bMEwQ_WbbvtrFhucU4x6y_oL6sBoLIAJfOzGXGSBDMVN7O30-dGflH1z4imNwRt7Q0D8');
+}
+if (!defined('PAYPAL_CLIENT_SECRET')) {
+    define('PAYPAL_CLIENT_SECRET', 'EFs9rXrkvgj7HFAT-30MaJ_v5zpN9lrfhGqrVfyADgLLB2SCendeFk5PCCFQuBVuMZV7CCrwqQ-vExOA');
 }
 
 // URL de base de votre site
@@ -49,14 +34,4 @@ if (!defined('PAYPAL_CURRENCY')) {
 // Configuration des timeouts
 if (!defined('PAYPAL_TIMEOUT')) {
     define('PAYPAL_TIMEOUT', 30);
-}
-
-// Messages d'erreur personnalisés
-if (!defined('PAYPAL_ERROR_MESSAGES')) {
-    define('PAYPAL_ERROR_MESSAGES', serialize([
-        'INVALID_CLIENT' => 'Configuration PayPal invalide',
-        'INSUFFICIENT_FUNDS' => 'Fonds insuffisants sur le compte PayPal',
-        'PAYMENT_ALREADY_DONE' => 'Ce paiement a déjà été effectué',
-        'INVALID_PAYMENT_METHOD' => 'Méthode de paiement non autorisée'
-    ]));
 }

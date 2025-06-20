@@ -130,6 +130,16 @@
                     <span>Numéro de réservation :</span>
                     <span><strong>#<?= htmlspecialchars($_GET['reservation_id'] ?? 'N/A') ?></strong></span>
                 </div>
+                <div class="actions">
+    <a href="/?page=download_invoice&payment_id=<?= htmlspecialchars($_GET['payment_id'] ?? '') ?>&reservation_id=<?= htmlspecialchars($_GET['reservation_id'] ?? '') ?>" 
+       class="btn btn-success" 
+       style="background-color: #28a745;">
+        📄 Télécharger la facture PDF
+    </a>
+    <a href="/?page=mes_reservations" class="btn btn-primary">
+        📱 Voir mes réservations
+    </a>
+</div>
                 <div class="detail-row">
                     <span>ID de paiement PayPal :</span>
                     <span><?= htmlspecialchars(substr($_GET['payment_id'] ?? 'N/A', 0, 20)) ?>...</span>

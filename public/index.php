@@ -213,6 +213,19 @@ switch ($page) {
             : require_once __DIR__ . '/../app/views/pages/mon_compte.php';
         break;
 
+// Dans votre switch de routage
+case 'download_invoice':
+    checkRoles('user');
+    require_once __DIR__ . '/../app/controllers/InvoiceController.php';
+    (new InvoiceController())->downloadInvoice();
+    break;
+
+
+    case 'download_invoice':
+    checkRoles('user');
+    require_once __DIR__ . '/../app/controllers/InvoiceController.php';
+    (new InvoiceController())->downloadInvoice();
+    break;
     // --- Paiement (CORRIGÉ) ---
     case 'paiement':
         checkRoles('user');
