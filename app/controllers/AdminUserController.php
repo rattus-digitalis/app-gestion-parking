@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/../models/User.php';
 
+// Vérifier si la classe n'existe pas déjà
+if (!class_exists('AdminUserController')) {
+    
 class AdminUserController
 {
     public function listUsers()
@@ -95,8 +98,8 @@ class AdminUserController
             $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
             error_log("🔐 Mot de passe hashé");
             
-            // Créer l'utilisateur
-            $success = $userModel->createUser($lastName, $firstName, $email, $phone, $hashedPassword);
+            // Créer l'utilisateur - Noter le $role passé en paramètre
+            $success = $userModel->createUser($lastName, $firstName, $email, $phone, $hashedPassword, $role);
             error_log("Résultat création: " . ($success ? 'SUCCESS' : 'FAILURE'));
             
             if ($success) {
@@ -212,8 +215,6 @@ class AdminUserController
         }
     }
 
-    // ... autres méthodes existantes ...
-
     public function handlePost($postData)
     {
         $userModel = new User();
@@ -326,3 +327,5 @@ class AdminUserController
         exit;
     }
 }
+
+} // Fin du if (!class_exists('AdminUserController'))
