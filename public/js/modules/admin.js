@@ -32,7 +32,6 @@ async function deleteUser(userId, buttonElement) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                // ✅ ATTENTION : bien vérifier l'orthographe !
                 'X-Requested-With': 'XMLHttpRequest'
             },
             credentials: 'same-origin',
@@ -66,8 +65,8 @@ async function deleteUser(userId, buttonElement) {
                 }, 300);
             }
             
-            // Afficher le message de succès
-            notify(result.message || 'Utilisateur supprimé avec succès', 'success');
+            // Afficher le message de succès - using imported notify function
+            notify('success', result.message || 'Utilisateur supprimé avec succès');
             
         } else {
             throw new Error(result.error || 'Erreur inconnue du serveur');
@@ -80,69 +79,14 @@ async function deleteUser(userId, buttonElement) {
         buttonElement.disabled = false;
         buttonElement.innerHTML = originalContent || '🗑️';
         
-        // Afficher l'erreur à l'utilisateur
-        notify(`Erreur: ${error.message}`, 'error');
+        // Afficher l'erreur à l'utilisateur - using imported notify function
+        notify('error', `Erreur: ${error.message}`);
     }
 }
 
-// Fonction de notification améliorée
-function notify(message, type = 'info') {
-    console.log(`📢 Notification [${type.toUpperCase()}]:`, message);
-    
-    // Supprimer les anciennes notifications
-    const existingNotifications = document.querySelectorAll('.notification');
-    existingNotifications.forEach(notif => notif.remove());
-    
-    // Créer la nouvelle notification
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.textContent = message;
-    
-    // Styles CSS inline pour être sûr que ça marche
-    const styles = {
-        'success': { bg: '#28a745', color: '#fff' },
-        'error': { bg: '#dc3545', color: '#fff' },
-        'info': { bg: '#17a2b8', color: '#fff' },
-        'warning': { bg: '#ffc107', color: '#212529' }
-    };
-    
-    const style = styles[type] || styles.info;
-    
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 15px 25px;
-        border-radius: 8px;
-        background-color: ${style.bg};
-        color: ${style.color};
-        font-weight: 600;
-        font-size: 14px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        z-index: 9999;
-        opacity: 0;
-        transform: translateX(100%);
-        transition: all 0.3s ease;
-        max-width: 350px;
-        word-wrap: break-word;
-    `;
-    
-    document.body.appendChild(notification);
-    
-    // Animation d'entrée
-    requestAnimationFrame(() => {
-        notification.style.opacity = '1';
-        notification.style.transform = 'translateX(0)';
-    });
-    
-    // Auto-suppression après 4 secondes
-    setTimeout(() => {
-        notification.style.opacity = '0';
-        notification.style.transform = 'translateX(100%)';
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.remove();
-            }
-        }, 300);
-    }, 4000);
+// Export function for app.js
+export function initAdmin() {
+    console.log('✅ Module admin initialisé');
+    // The DOMContentLoaded event listener above will handle the initialization
+    // This function is just for compatibility with app.js import
 }

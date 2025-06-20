@@ -1,10 +1,8 @@
 // public/js/modules/register.js
-import { notify } from './utils/notify.js'; // Ensure this is the correct path and export
-import { notify } from './utils/notify.js';
+import { notify, success, error } from './utils/notify.js';
 
-
-// Example usage of notify
-notify('success', 'Inscription réussie');
+// Remove this line - it was just an example:
+// notify('success', 'Inscription réussie');
 
 /**
  * Configuration du module de registration
@@ -351,3 +349,10 @@ document.addEventListener('click', (event) => {
 
 // Export modulaire
 export { RegisterFormHandler, FormValidator, RegisterUtils };
+
+// Export function for app.js compatibility
+export function initRegister() {
+    console.log('✅ Module register initialisé via initRegister()');
+    // The DOMContentLoaded event listener already handles initialization
+    // This function is just for compatibility with app.js import
+}
