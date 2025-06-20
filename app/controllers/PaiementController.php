@@ -1,4 +1,6 @@
+
 <?php
+
 /**
  * Contrôleur de gestion des paiements PayPal
  */

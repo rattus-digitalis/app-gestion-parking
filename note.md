@@ -1,21 +1,4 @@
-🔥 PRIORITÉ 1 – Fonctionnement minimum viable (MVP)
-Ce bloc doit absolument être fonctionnel pour ta démo/soutenance :
 
-✅ Fonctionnalités critiques
-
-
-
- 👤 Corriger l’erreur 500 lors de la validation d'une réservation
-
- 👤 Empêcher les réservations dans le passé
-
- 🔁 Intégration backend + frontend du paiement PayPal
-
- 🔁 Upload des infos de paiement dans la BDD
-
- 🔁 Génération d’une facture PDF (même simple, statique)
-
- 🗓️ Notification de confirmation de réservation
 
  ⚙️ Page edit_parking avec :
 
@@ -25,7 +8,10 @@ Ce bloc doit absolument être fonctionnel pour ta démo/soutenance :
 
  Supprimer une place
 
+
+
  ⚙️ Dashboard admin : afficher réservations, paiements
+ 
 
  👤 Corriger le message "Bonjour utilisateur" → afficher prénom
 

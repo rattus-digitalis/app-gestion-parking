@@ -1,3 +1,9 @@
+<?php
+// Inclusion des templates de base
+include __DIR__ . '/../templates/head.php';
+include __DIR__ . '/../templates/nav.php';
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>

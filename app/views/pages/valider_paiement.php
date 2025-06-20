@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <?php include 'app/views/templates/head.php'; ?>
+   <?php include __DIR__ . '/../templates/head.php'; ?>
+
     <title>Paiement confirmé - Zenpark</title>
     <style>
         .confirmation-container {
@@ -112,7 +113,8 @@
     </style>
 </head>
 <body data-page="valider_paiement">
-    <?php include 'app/views/templates/nav.php'; ?>
+    <?php include __DIR__ . '/../templates/nav.php'; ?>
+
     
     <div class="confirmation-container">
         <?php if (isset($_GET['success']) && $_GET['success'] == '1'): ?>
