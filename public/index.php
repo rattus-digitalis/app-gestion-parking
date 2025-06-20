@@ -127,6 +127,37 @@ switch ($page) {
         require_once __DIR__ . '/../app/controllers/AdminParkingController.php';
         (new AdminParkingController())->listParkings();
         break;
+    
+    case 'edit_parking':
+    checkRoles('admin');
+    require_once __DIR__ . '/../app/controllers/AdminParkingController.php';
+    $controller = new AdminParkingController();
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $controller->updateParking($_POST);
+    } else {
+        $id = $_GET['id'] ?? null;
+        if (!is_numeric($id)) {
+            header('Location: /?page=admin_parkings');
+            exit;
+        }
+        $controller->editParkingForm((int)$id);
+    }
+    break;
+
+case 'add_parking':
+    checkRoles('admin'); // facultatif selon ton système
+    require_once __DIR__ . '/../app/controllers/AdminParkingController.php';
+    $controller = new AdminParkingController();
+    $controller->add();
+    break;
+
+
+
+case 'admin_delete_parking':
+    checkRoles('admin');
+    require_once __DIR__ . '/../app/controllers/AdminParkingController.php';
+    (new AdminParkingController())->deleteParking();
+    break;
 
     case 'reservations_list':
         checkRoles('admin');

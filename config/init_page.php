@@ -1,5 +1,10 @@
 <?php
-// CSS principal
+// Content Security Policy
+error_log("Sending CSP header");
+
+
+
+// Ensuite, ton code existant pour CSS :
 $mainCss = '/assets/css/style.css';
 $mainCssPath = $_SERVER['DOCUMENT_ROOT'] . $mainCss;
 $mainCssVersion = file_exists($mainCssPath) ? filemtime($mainCssPath) : '1.0';

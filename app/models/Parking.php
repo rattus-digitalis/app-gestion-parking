@@ -78,4 +78,23 @@ class Parking
     {
         return $this->getAllParkings();
     }
+
+    public function create(array $data): bool
+{
+    $sql = "INSERT INTO parking (numero_place, etage, type_place, statut, disponible_depuis, date_maj, actif, commentaire)
+            VALUES (:numero_place, :etage, :type_place, :statut, :disponible_depuis, NOW(), :actif, :commentaire)";
+    
+    $stmt = $this->pdo->prepare($sql);
+
+    return $stmt->execute([
+        'numero_place'     => $data['numero_place'],
+        'etage'            => $data['etage'],
+        'type_place'       => $data['type_place'],
+        'statut'           => $data['statut'] ?? 'libre',
+        'disponible_depuis'=> $data['disponible_depuis'] ?? date('Y-m-d H:i:s'),
+        'actif'            => $data['actif'] ?? 1,
+        'commentaire'      => $data['commentaire'] ?? null
+    ]);
+}
+
 }

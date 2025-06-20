@@ -1,4 +1,6 @@
 
+bug d'affichage http://localhost/?page=add_parking disparition en quelques segondes
+
 
  ⚙️ Page edit_parking avec :
 
@@ -13,6 +15,11 @@
  📚 Export .sql de la base
 
  📚 Rédiger README (présentation + installation)
+
+
+
+
+ 
 
 ⚙️ PRIORITÉ 2 – Administration et cohérence métier
 À faire ensuite pour compléter la logique de gestion :
