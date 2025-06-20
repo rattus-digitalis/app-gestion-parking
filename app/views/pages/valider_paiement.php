@@ -1,260 +1,248 @@
-<?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-require_once __DIR__ . '/../templates/head.php';
-require_once __DIR__ . '/../templates/nav.php';
-require_once __DIR__ . '/../../models/Reservation.php';
-require_once __DIR__ . '/../../models/Car.php';
-
-// Récupération et validation des paramètres
-$reservationId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$montant = filter_input(INPUT_GET, 'montant', FILTER_VALIDATE_FLOAT);
-
-// Validation des paramètres requis
-if (!$reservationId || !$montant || $montant <= 0) {
-    echo "<div class='container mt-4'>";
-    echo "<div class='alert alert-danger' role='alert'>";
-    echo "<h4 class='alert-heading'>Erreur de paiement</h4>";
-    echo "<p>Les informations de paiement sont manquantes ou invalides.</p>";
-    echo "<a href='/?page=mes_reservations' class='btn btn-primary'>Retour aux réservations</a>";
-    echo "</div></div>";
-    require_once __DIR__ . '/../templates/footer.php';
-    exit;
-}
-
-// Récupération des données de réservation
-$reservationModel = new Reservation();
-$reservation = $reservationModel->getReservationById($reservationId);
-
-if (!$reservation) {
-    echo "<div class='container mt-4'>";
-    echo "<div class='alert alert-danger' role='alert'>";
-    echo "<h4 class='alert-heading'>Réservation introuvable</h4>";
-    echo "<p>La réservation demandée n'existe pas ou n'est plus disponible.</p>";
-    echo "<a href='/?page=mes_reservations' class='btn btn-primary'>Retour aux réservations</a>";
-    echo "</div></div>";
-    require_once __DIR__ . '/../templates/footer.php';
-    exit;
-}
-
-// Récupération des informations du véhicule
-$carModel = new Car();
-$vehicule = null;
-if (!empty($reservation['car_id'])) {
-    $vehicule = $carModel->getById((int)$reservation['car_id']);
-}
-
-// Formatage sécurisé du montant
-$prix = number_format($montant, 2, ',', ' ');
-$prixJs = number_format($montant, 2, '.', ''); // Format pour JavaScript
-?>
-
-<main class="container payment-page mt-4" role="main">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <h1 class="text-center mb-4">
-                <i class="fas fa-credit-card"></i> Paiement sécurisé
-            </h1>
-
-            <!-- Résumé de la réservation -->
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h2 class="card-title mb-0"><i class="fas fa-clipboard-list"></i> Résumé de votre réservation</h2>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <?php include 'app/views/templates/head.php'; ?>
+    <title>Paiement confirmé - Zenpark</title>
+    <style>
+        .confirmation-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .success-icon {
+            font-size: 4rem;
+            color: #28a745;
+            margin-bottom: 1rem;
+        }
+        
+        .payment-details {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            text-align: left;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            padding: 0.25rem 0;
+        }
+        
+        .detail-row:last-child {
+            margin-bottom: 0;
+            border-top: 2px solid #dee2e6;
+            padding-top: 0.75rem;
+            font-weight: bold;
+        }
+        
+        .actions {
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            margin: 0.5rem;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        
+        .alert-danger {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #007bff;
+            animation: confetti-fall 3s linear infinite;
+        }
+        
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body data-page="valider_paiement">
+    <?php include 'app/views/templates/nav.php'; ?>
+    
+    <div class="confirmation-container">
+        <?php if (isset($_GET['success']) && $_GET['success'] == '1'): ?>
+            <!-- Paiement réussi -->
+            <div class="success-icon">🎉</div>
+            <h1>Paiement confirmé !</h1>
+            
+            <div class="alert alert-success">
+                <strong>✅ Félicitations !</strong> Votre paiement a été traité avec succès. Votre réservation est maintenant confirmée.
+            </div>
+            
+            <div class="payment-details">
+                <h3>📋 Détails de votre paiement</h3>
+                <div class="detail-row">
+                    <span>Numéro de réservation :</span>
+                    <span><strong>#<?= htmlspecialchars($_GET['reservation_id'] ?? 'N/A') ?></strong></span>
                 </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <p><strong>Place :</strong> <?= htmlspecialchars($reservation['numero_place'], ENT_QUOTES, 'UTF-8') ?></p>
-                            <p><strong>Étage :</strong> <?= htmlspecialchars($reservation['etage'], ENT_QUOTES, 'UTF-8') ?></p>
-                        </div>
-                        <div class="col-sm-6">
-                            <p><strong>Début :</strong> <?= date('d/m/Y à H:i', strtotime($reservation['date_start'])) ?></p>
-                            <p><strong>Fin :</strong> <?= date('d/m/Y à H:i', strtotime($reservation['date_end'])) ?></p>
-                        </div>
-                    </div>
-                    <p><strong>Type de véhicule :</strong> <?= htmlspecialchars($vehicule['type'] ?? 'Non précisé', ENT_QUOTES, 'UTF-8') ?></p>
-                    <hr>
-                    <div class="text-center">
-                        <h3 class="text-success">
-                            <strong>Montant à régler : <?= $prix ?> €</strong>
-                        </h3>
-                    </div>
+                <div class="detail-row">
+                    <span>ID de paiement PayPal :</span>
+                    <span><?= htmlspecialchars(substr($_GET['payment_id'] ?? 'N/A', 0, 20)) ?>...</span>
+                </div>
+                <div class="detail-row">
+                    <span>Date et heure :</span>
+                    <span><?= date('d/m/Y à H:i') ?></span>
+                </div>
+                <div class="detail-row">
+                    <span>Statut :</span>
+                    <span style="color: #28a745;"><strong>✅ PAYÉ</strong></span>
                 </div>
             </div>
-
-            <!-- Zone de paiement -->
-            <div class="card">
-                <div class="card-header bg-success text-white">
-                    <h3 class="card-title mb-0"><i class="fab fa-paypal"></i> Paiement PayPal</h3>
-                </div>
-                <div class="card-body">
-                    <div id="result-message" class="alert alert-info" role="alert">
-                        <i class="fas fa-info-circle"></i> Cliquez sur le bouton PayPal pour procéder au paiement sécurisé.
-                    </div>
-                    
-                    <div id="paypal-button-container" class="text-center"></div>
-                    
-                    <div class="mt-3 text-center">
-                        <small class="text-muted">
-                            <i class="fas fa-shield-alt"></i> Paiement 100% sécurisé avec PayPal
-                        </small>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Boutons d'action -->
-            <div class="text-center mt-4">
-                <a href="/?page=mes_reservations" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Retour aux réservations
+            
+            <div class="actions">
+                <a href="/?page=mes_reservations" class="btn btn-primary">
+                    📱 Voir mes réservations
+                </a>
+                <a href="/?page=dashboard_user" class="btn btn-secondary">
+                    🏠 Retour au tableau de bord
                 </a>
             </div>
-        </div>
+            
+        <?php elseif (isset($_GET['error'])): ?>
+            <!-- Erreur de paiement -->
+            <div class="success-icon" style="color: #dc3545;">❌</div>
+            <h1>Paiement échoué</h1>
+            
+            <div class="alert alert-danger">
+                <strong>⚠️ Oops !</strong> Une erreur est survenue lors du traitement de votre paiement. Aucun montant n'a été débité.
+            </div>
+            
+            <div class="payment-details">
+                <h3>🔍 Que faire maintenant ?</h3>
+                <ul style="text-align: left; line-height: 1.6;">
+                    <li>Vérifiez que vos informations de paiement sont correctes</li>
+                    <li>Assurez-vous que votre compte PayPal dispose de fonds suffisants</li>
+                    <li>Essayez avec une autre méthode de paiement</li>
+                    <li>Contactez notre support si le problème persiste</li>
+                </ul>
+            </div>
+            
+            <div class="actions">
+                <a href="/?page=paiement&id=<?= htmlspecialchars($_GET['reservation_id'] ?? '') ?>&montant=<?= htmlspecialchars($_GET['montant'] ?? '') ?>" class="btn btn-primary">
+                    🔄 Réessayer le paiement
+                </a>
+                <a href="/?page=mes_reservations" class="btn btn-secondary">
+                    📱 Mes réservations
+                </a>
+            </div>
+            
+        <?php else: ?>
+            <!-- Accès direct sans paramètres -->
+            <div class="success-icon" style="color: #ffc107;">⚠️</div>
+            <h1>Page de validation</h1>
+            
+            <div class="alert alert-danger">
+                <strong>Accès non autorisé.</strong> Cette page est accessible uniquement après un paiement.
+            </div>
+            
+            <div class="actions">
+                <a href="/?page=mes_reservations" class="btn btn-primary">
+                    📱 Mes réservations
+                </a>
+                <a href="/?page=dashboard_user" class="btn btn-secondary">
+                    🏠 Accueil
+                </a>
+            </div>
+        <?php endif; ?>
     </div>
-</main>
-
-<!-- SDK PayPal -->
-<script src="https://www.paypal.com/sdk/js?client-id=sb&currency=EUR&components=buttons&enable-funding=paypal,card"></script>
-
-<script>
-    // Variables globales sécurisées
-    const RESERVATION_ID = <?= json_encode($reservationId, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
-    const MONTANT = <?= json_encode($prixJs, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
-
-    // Fonction utilitaire pour afficher les messages
-    function showMessage(message, type = 'info') {
-        const resultMessage = document.getElementById('result-message');
-        if (!resultMessage) return;
-        
-        const iconMap = {
-            'info': 'fas fa-info-circle',
-            'success': 'fas fa-check-circle', 
-            'warning': 'fas fa-exclamation-triangle',
-            'error': 'fas fa-times-circle'
-        };
-        
-        const alertClass = {
-            'info': 'alert-info',
-            'success': 'alert-success',
-            'warning': 'alert-warning', 
-            'error': 'alert-danger'
-        };
-        
-        resultMessage.className = `alert ${alertClass[type] || 'alert-info'}`;
-        resultMessage.innerHTML = `<i class="${iconMap[type] || iconMap.info}"></i> ${message}`;
-        resultMessage.setAttribute('role', 'alert');
-    }
-
-    // Fonction pour effectuer des requêtes AJAX sécurisées
-    async function makeSecureRequest(url, data) {
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(data),
-                credentials: 'same-origin'
-            });
-
-            if (!response.ok) {
-                throw new Error(`Erreur HTTP: ${response.status} ${response.statusText}`);
+    
+    <script>
+        // Animation confetti pour les paiements réussis
+        <?php if (isset($_GET['success']) && $_GET['success'] == '1'): ?>
+        function createConfetti() {
+            const colors = ['#007bff', '#28a745', '#ffc107', '#dc3545', '#6f42c1'];
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 2 + 's';
+                    confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 5000);
+                }, i * 100);
             }
-
-            const result = await response.json();
-            
-            if (result.error) {
-                throw new Error(result.error);
-            }
-
-            return result;
-            
-        } catch (error) {
-            console.error('Erreur de requête:', error);
-            throw error;
         }
-    }
-
-    // Configuration et initialisation des boutons PayPal
-    document.addEventListener('DOMContentLoaded', function() {
-        // Vérification de la disponibilité de PayPal
-        if (typeof paypal === 'undefined') {
-            showMessage('❌ Erreur de chargement PayPal. Veuillez actualiser la page.', 'error');
-            return;
+        
+        // Déclencher l'animation confetti après un court délai
+        setTimeout(createConfetti, 500);
+        
+        // Notification de succès
+        if (typeof showNotification === 'function') {
+            showNotification('🎉 Paiement confirmé avec succès!', 'success');
         }
-
-        paypal.Buttons({
-            locale: 'fr_FR',
-            
-            style: {
-                color: 'blue',
-                shape: 'rect',
-                label: 'pay',
-                height: 50,
-                layout: 'vertical'
-            },
-
-            // Création de l'ordre PayPal
-            createOrder: async function(data, actions) {
-                showMessage('💳 Création de votre commande PayPal...', 'info');
-                
-                try {
-                    const result = await makeSecureRequest('/?action=creer_ordre_paypal', {
-                        reservation_id: RESERVATION_ID,
-                        amount: MONTANT
-                    });
-
-                    showMessage('✅ Redirection vers PayPal...', 'success');
-                    return result.order_id;
-                    
-                } catch (error) {
-                    showMessage(`❌ Erreur lors de la création de la commande: ${error.message}`, 'error');
-                    throw error;
-                }
-            },
-
-            // Validation du paiement
-            onApprove: async function(data, actions) {
-                showMessage('🔄 Validation du paiement en cours...', 'info');
-                
-                try {
-                    const result = await makeSecureRequest('/?action=capturer_paiement', {
-                        order_id: data.orderID,
-                        reservation_id: RESERVATION_ID
-                    });
-
-                    showMessage('🎉 Paiement réussi ! Redirection vers vos réservations...', 'success');
-                    
-                    // Redirection avec délai pour laisser le temps de lire le message
-                    setTimeout(function() {
-                        window.location.href = '/?page=mes_reservations&success=payment_completed';
-                    }, 2500);
-                    
-                } catch (error) {
-                    showMessage(`❌ Erreur lors de la validation du paiement: ${error.message}`, 'error');
-                }
-            },
-
-            // Annulation du paiement
-            onCancel: function(data) {
-                showMessage('⚠️ Paiement annulé. Vous pouvez réessayer quand vous le souhaitez.', 'warning');
-                console.info('Paiement annulé par l\'utilisateur:', data);
-            },
-
-            // Gestion des erreurs PayPal
-            onError: function(err) {
-                showMessage('❌ Une erreur PayPal est survenue. Veuillez réessayer ou contacter le support.', 'error');
-                console.error('Erreur PayPal:', err);
+        <?php endif; ?>
+        
+        // Auto-redirection pour les erreurs après 10 secondes
+        <?php if (isset($_GET['error'])): ?>
+        let countdown = 10;
+        const redirectTimer = setInterval(() => {
+            countdown--;
+            if (countdown <= 0) {
+                clearInterval(redirectTimer);
+                window.location.href = '/?page=mes_reservations';
             }
-
-        }).render('#paypal-button-container').catch(function(err) {
-            showMessage('❌ Impossible de charger le module de paiement PayPal.', 'error');
-            console.error('Erreur lors du rendu PayPal:', err);
-        });
-    });
-</script>
-
-<?php require_once __DIR__ . '/../templates/footer.php'; ?>
+        }, 1000);
+        <?php endif; ?>
+    </script>
+</body>
+</html>

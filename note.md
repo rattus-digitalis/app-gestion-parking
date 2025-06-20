@@ -2,11 +2,8 @@
 Ce bloc doit absolument être fonctionnel pour ta démo/soutenance :
 
 ✅ Fonctionnalités critiques
- 🔐 Corriger le bug à la création de compte
 
- 🔐 Ajouter vérif + notification si mot de passe insuffisant
 
- 🔐 Sécuriser l’affichage du mot de passe dans "Mon compte"
 
  👤 Corriger l’erreur 500 lors de la validation d'une réservation
 

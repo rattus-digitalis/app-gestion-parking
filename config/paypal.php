@@ -1,45 +1,62 @@
 <?php
-// Configuration PayPal pour Zenpark
+/**
+ * Configuration PayPal pour Zenpark
+ * Fichier simplifié sans erreurs
+ */
 
 // Mode sandbox (développement) ou live (production)
-define('PAYPAL_MODE', 'sandbox'); // Changez en 'live' pour la production
-
-// URLs des API PayPal
-define('PAYPAL_API_URL', PAYPAL_MODE === 'sandbox' 
-    ? 'https://api-m.sandbox.paypal.com' 
-    : 'https://api-m.paypal.com'
-);
-
-// Clés PayPal (à remplacer par vos vraies clés)
-if (PAYPAL_MODE === 'sandbox') {
-    // Clés de test PayPal Sandbox
-    define('PAYPAL_CLIENT_ID', 'votre_client_id_sandbox');
-    define('PAYPAL_CLIENT_SECRET', 'votre_client_secret_sandbox');
-} else {
-    // Clés de production PayPal Live
-    define('PAYPAL_CLIENT_ID', 'votre_client_id_live');
-    define('PAYPAL_CLIENT_SECRET', 'votre_client_secret_live');
+if (!defined('PAYPAL_MODE')) {
+    define('PAYPAL_MODE', 'sandbox');
 }
 
-// Configuration webhook (optionnel mais recommandé)
-define('PAYPAL_WEBHOOK_ID', 'votre_webhook_id');
+// URLs des API PayPal
+if (!defined('PAYPAL_API_URL')) {
+    define('PAYPAL_API_URL', PAYPAL_MODE === 'sandbox' 
+        ? 'https://api-m.sandbox.paypal.com' 
+        : 'https://api-m.paypal.com'
+    );
+}
+
+// Clés PayPal - REMPLACEZ par vos vraies clés
+if (PAYPAL_MODE === 'sandbox') {
+    // Clés de test PayPal Sandbox
+    if (!defined('PAYPAL_CLIENT_ID')) {
+        define('PAYPAL_CLIENT_ID', 'test_client_id_sandbox');
+    }
+    if (!defined('PAYPAL_CLIENT_SECRET')) {
+        define('PAYPAL_CLIENT_SECRET', 'test_client_secret_sandbox');
+    }
+} else {
+    // Clés de production PayPal Live
+    if (!defined('PAYPAL_CLIENT_ID')) {
+        define('PAYPAL_CLIENT_ID', 'your_live_client_id');
+    }
+    if (!defined('PAYPAL_CLIENT_SECRET')) {
+        define('PAYPAL_CLIENT_SECRET', 'your_live_client_secret');
+    }
+}
 
 // URL de base de votre site
 if (!defined('BASE_URL')) {
-    define('BASE_URL', 'http://localhost'); // Changez selon votre environnement
+    define('BASE_URL', 'http://localhost');
 }
 
 // Devise par défaut
-define('PAYPAL_CURRENCY', 'EUR');
+if (!defined('PAYPAL_CURRENCY')) {
+    define('PAYPAL_CURRENCY', 'EUR');
+}
 
 // Configuration des timeouts
-define('PAYPAL_TIMEOUT', 30); // secondes
+if (!defined('PAYPAL_TIMEOUT')) {
+    define('PAYPAL_TIMEOUT', 30);
+}
 
 // Messages d'erreur personnalisés
-define('PAYPAL_ERROR_MESSAGES', [
-    'INVALID_CLIENT' => 'Configuration PayPal invalide',
-    'INSUFFICIENT_FUNDS' => 'Fonds insuffisants sur le compte PayPal',
-    'PAYMENT_ALREADY_DONE' => 'Ce paiement a déjà été effectué',
-    'INVALID_PAYMENT_METHOD' => 'Méthode de paiement non autorisée'
-]);
-?>
+if (!defined('PAYPAL_ERROR_MESSAGES')) {
+    define('PAYPAL_ERROR_MESSAGES', serialize([
+        'INVALID_CLIENT' => 'Configuration PayPal invalide',
+        'INSUFFICIENT_FUNDS' => 'Fonds insuffisants sur le compte PayPal',
+        'PAYMENT_ALREADY_DONE' => 'Ce paiement a déjà été effectué',
+        'INVALID_PAYMENT_METHOD' => 'Méthode de paiement non autorisée'
+    ]));
+}

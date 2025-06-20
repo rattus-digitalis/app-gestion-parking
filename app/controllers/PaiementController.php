@@ -3,6 +3,9 @@
  * Contrôleur de gestion des paiements PayPal
  */
 
+// QUICK TEMPORARY FIX - Add this at the very top
+require_once __DIR__ . '/../../config/config.php';
+
 require_once __DIR__ . '/../models/Payment.php';
 require_once __DIR__ . '/../models/Reservation.php';
 
@@ -19,12 +22,45 @@ class PaiementController {
         $this->paymentModel = new Payment();
         $this->reservationModel = new Reservation();
         
-        // Configuration PayPal
-        $this->paypalClientId = $_ENV['PAYPAL_CLIENT_ID'] ?? 'sb'; // Remplacez par votre vraie clé
-        $this->paypalClientSecret = $_ENV['PAYPAL_CLIENT_SECRET'] ?? 'your_secret';
-        $this->paypalBaseUrl = $_ENV['PAYPAL_ENV'] === 'production' 
-            ? 'https://api.paypal.com' 
-            : 'https://api.sandbox.paypal.com';
+        // FIXED: Use the constants from your config instead of $_ENV
+        $this->paypalClientId = PAYPAL_CLIENT_ID; // Now uses the constant from paypal.php
+        $this->paypalClientSecret = PAYPAL_CLIENT_SECRET; // Now uses the constant from paypal.php
+        $this->paypalBaseUrl = PAYPAL_API_URL; // Now uses the constant from paypal.php
+    }
+    
+    /**
+     * Router principal pour les actions de paiement
+     */
+    public function handleRequest() {
+        $action = $_GET['action'] ?? 'default';
+        
+        switch ($action) {
+            case 'creer_ordre':
+                $this->creerOrdrePaypal();
+                break;
+            case 'capturer':
+                $this->capturerPaiement();
+                break;
+            default:
+                $this->afficherPagePaiement();
+                break;
+        }
+    }
+
+    /**
+     * Afficher la page de paiement
+     */
+    public function afficherPagePaiement() {
+        $reservationId = $_GET['id'] ?? null;
+        $montant = $_GET['montant'] ?? null;
+        
+        if (!$reservationId || !$montant) {
+            header('Location: /?page=mes_reservations&error=missing_params');
+            exit;
+        }
+        
+        // Inclure la vue de paiement
+        include __DIR__ . '/../views/pages/paiement.php';
     }
     
     /**

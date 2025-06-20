@@ -213,17 +213,12 @@ switch ($page) {
             : require_once __DIR__ . '/../app/views/pages/mon_compte.php';
         break;
 
-    // --- Paiement ---
+    // --- Paiement (CORRIGÉ) ---
     case 'paiement':
         checkRoles('user');
         require_once __DIR__ . '/../app/controllers/PaiementController.php';
-        $id = $_GET['id'] ?? null;
-        if (!is_numeric($id)) {
-            http_response_code(400);
-            echo "ID de réservation invalide.";
-            exit;
-        }
-        (new PaiementController())->payer((int)$id);
+        $controller = new PaiementController();
+        $controller->handleRequest();
         break;
 
     case 'valider_paiement':
