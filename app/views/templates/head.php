@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="fr" class="no-js">
 <head>
+    <!-- ✅ CSP - UNE SEULE FOIS ET AU BON ENDROIT -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self';">
+
     <!-- Métadonnées essentielles -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="format-detection" content="telephone=no">
     
-    <!-- ✅ CSP - UNE SEULE FOIS ET AU BON ENDROIT -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self';">
-
     <!-- Headers de sécurité HTML -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
@@ -47,7 +47,6 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="192x192" href="/assets/images/android-chrome-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="/assets/images/android-chrome-512x512.png">
-
 
     <!-- Couleur du thème (mobile) -->
     <meta name="theme-color" content="#6366f1">
@@ -213,7 +212,7 @@
     <link rel="dns-prefetch" href="//fonts.googleapis.com">
     <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
 
-    <!-- ✅ JS principal - COMMENTAIRE CORRIGÉ -->
+    <!-- ✅ JS principal -->
     <?php
     $mainJs = '/js/app.js';
     $mainJsPath = $_SERVER['DOCUMENT_ROOT'] . $mainJs;
@@ -226,3 +225,4 @@
     <?php endif; ?>
 
 </head>
+<body data-page="<?= htmlspecialchars($current_page ?? 'unknown') ?>">

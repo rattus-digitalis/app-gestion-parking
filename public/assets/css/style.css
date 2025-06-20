@@ -804,3 +804,119 @@ h3 {
     scroll-behavior: auto !important;
   }
 }
+
+/* ===== ANIMATIONS CORRIGÉES ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ✅ CORRECTION : Les éléments sont visibles par défaut */
+.fade-in {
+  /* Éléments visibles par défaut */
+  opacity: 1;
+  transform: translateY(0);
+  /* Animation appliquée seulement quand nécessaire */
+  animation: fadeIn 0.6s ease-out;
+}
+
+.slide-in {
+  /* Éléments visibles par défaut */
+  opacity: 1;
+  transform: translateX(0);
+  /* Animation appliquée seulement quand nécessaire */
+  animation: slideIn 0.6s ease-out;
+}
+
+/* ✅ Version alternative : Animation différée avec fallback */
+.fade-in-safe {
+  /* Visible immédiatement */
+  opacity: 1;
+  transform: translateY(0);
+  /* Animation seulement si supportée */
+  animation: fadeIn 0.6s ease-out;
+}
+
+.slide-in-safe {
+  /* Visible immédiatement */
+  opacity: 1;
+  transform: translateX(0);
+  /* Animation seulement si supportée */
+  animation: slideIn 0.6s ease-out;
+}
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ===== ANIMATIONS SÉCURISÉES POUR LES FORM-SECTIONS ===== */
+.form-section {
+  /* ✅ CORRECTION : Visible par défaut au lieu d'invisible */
+  opacity: 1;
+  transform: translateY(0);
+  margin-bottom: var(--spacing-2xl);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-color);
+  
+  /* Animation optionnelle qui ne bloque pas l'affichage */
+  transition: all var(--transition-normal);
+}
+
+.form-section:last-of-type {
+  border-bottom: none;
+}
+
+.form-section h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+/* ===== FALLBACK POUR RÉDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in,
+  .slide-in,
+  .fade-in-safe,
+  .slide-in-safe,
+  .form-section {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ===== FALLBACK SI JAVASCRIPT DÉSACTIVÉ ===== */
+.no-js .fade-in,
+.no-js .slide-in,
+.no-js .form-section {
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+}

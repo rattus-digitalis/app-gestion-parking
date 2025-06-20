@@ -6,7 +6,7 @@ require_once '../app/views/templates/nav.php';
 
 <div class="container fade-in">
     <div class="card">
-        <h1 class="section-title">Ajouter un nouveau parking</h1>
+        <h1 class="section-title">Ajouter une nouvelle place de parking</h1>
         
         <?php if (isset($errors) && !empty($errors)): ?>
             <div class="alert alert-danger">
@@ -24,130 +24,99 @@ require_once '../app/views/templates/nav.php';
             </div>
         <?php endif; ?>
 
-<form method="POST" action="/?page=create_parking" class="slide-in" id="addParkingForm">
-            <!-- Informations générales -->
+        <form method="POST" action="/?page=add_parking" class="slide-in" id="addParkingForm">
+            <!-- Informations de la place -->
             <div class="form-section">
                 <h3 style="color: var(--text-accent); margin-bottom: var(--spacing-lg); font-size: var(--font-size-xl);">
-                    📍 Informations générales
+                    🅿️ Informations de la place
                 </h3>
                 
-                <div class="form-group">
-                    <label for="nom" class="form-label">Nom du parking *</label>
-                    <input type="text" class="form-input" id="nom" name="nom" 
-                           value="<?= htmlspecialchars($_POST['nom'] ?? '') ?>" 
-                           placeholder="Ex: Parking Centre-Ville" required>
-                    <div class="form-error" id="nom-error"></div>
-                </div>
-
-                <div class="form-group">
-                    <label for="adresse" class="form-label">Adresse complète *</label>
-                    <textarea class="form-textarea" id="adresse" name="adresse" 
-                              rows="3" placeholder="Adresse complète du parking..." required><?= htmlspecialchars($_POST['adresse'] ?? '') ?></textarea>
-                    <div class="form-error" id="adresse-error"></div>
-                </div>
-
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-lg); margin-bottom: var(--spacing-lg);">
                     <div class="form-group">
-                        <label for="ville" class="form-label">Ville *</label>
-                        <input type="text" class="form-input" id="ville" name="ville" 
-                               value="<?= htmlspecialchars($_POST['ville'] ?? '') ?>" 
-                               placeholder="Ex: Paris" required>
-                        <div class="form-error" id="ville-error"></div>
+                        <label for="numero_place" class="form-label">Numéro de place *</label>
+                        <input type="text" class="form-input" id="numero_place" name="numero_place" 
+                               value="<?= htmlspecialchars($_POST['numero_place'] ?? '') ?>" 
+                               placeholder="Ex: A12, B05, 101" required>
+                        <div class="form-error" id="numero_place-error"></div>
+                        <small style="color: var(--text-muted); font-size: var(--font-size-sm);">
+                            💡 Identifiant unique de la place
+                        </small>
                     </div>
+                    
                     <div class="form-group">
-                        <label for="code_postal" class="form-label">Code postal *</label>
-                        <input type="text" class="form-input" id="code_postal" name="code_postal" 
-                               value="<?= htmlspecialchars($_POST['code_postal'] ?? '') ?>" 
-                               placeholder="Ex: 75001" pattern="[0-9]{5}" maxlength="5" required>
-                        <div class="form-error" id="code_postal-error"></div>
+                        <label for="etage" class="form-label">Étage/Niveau</label>
+                        <select class="form-select" id="etage" name="etage">
+                            <option value="0" <?= ($_POST['etage'] ?? '0') === '0' ? 'selected' : '' ?>>Rez-de-chaussée (0)</option>
+                            <option value="1" <?= ($_POST['etage'] ?? '') === '1' ? 'selected' : '' ?>>Étage 1</option>
+                            <option value="2" <?= ($_POST['etage'] ?? '') === '2' ? 'selected' : '' ?>>Étage 2</option>
+                            <option value="3" <?= ($_POST['etage'] ?? '') === '3' ? 'selected' : '' ?>>Étage 3</option>
+                            <option value="-1" <?= ($_POST['etage'] ?? '') === '-1' ? 'selected' : '' ?>>Sous-sol -1</option>
+                            <option value="-2" <?= ($_POST['etage'] ?? '') === '-2' ? 'selected' : '' ?>>Sous-sol -2</option>
+                            <option value="-3" <?= ($_POST['etage'] ?? '') === '-3' ? 'selected' : '' ?>>Sous-sol -3</option>
+                        </select>
+                        <div class="form-error" id="etage-error"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Capacité et disponibilité -->
+            <!-- Type et caractéristiques -->
             <div class="form-section">
                 <h3 style="color: var(--text-accent); margin-bottom: var(--spacing-lg); font-size: var(--font-size-xl);">
-                    🚗 Capacité et disponibilité
+                    🚗 Type et caractéristiques
                 </h3>
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-lg); margin-bottom: var(--spacing-lg);">
                     <div class="form-group">
-                        <label for="places_totales" class="form-label">Places totales *</label>
-                        <input type="number" class="form-input" id="places_totales" name="places_totales" 
-                               value="<?= htmlspecialchars($_POST['places_totales'] ?? '') ?>" 
-                               min="1" max="9999" placeholder="Ex: 150" required>
-                        <div class="form-error" id="places_totales-error"></div>
+                        <label for="type_place" class="form-label">Type de place *</label>
+                        <select class="form-select" id="type_place" name="type_place" required>
+                            <option value="">Sélectionnez un type</option>
+                            <option value="standard" <?= ($_POST['type_place'] ?? '') === 'standard' ? 'selected' : '' ?>>🚗 Standard</option>
+                            <option value="handicap" <?= ($_POST['type_place'] ?? '') === 'handicap' ? 'selected' : '' ?>>♿ Handicapé</option>
+                            <option value="electrique" <?= ($_POST['type_place'] ?? '') === 'electrique' ? 'selected' : '' ?>>⚡ Véhicule électrique</option>
+                            <option value="moto" <?= ($_POST['type_place'] ?? '') === 'moto' ? 'selected' : '' ?>>🏍️ Moto/Scooter</option>
+                        </select>
+                        <div class="form-error" id="type_place-error"></div>
                     </div>
+                    
                     <div class="form-group">
-                        <label for="places_disponibles" class="form-label">Places disponibles *</label>
-                        <input type="number" class="form-input" id="places_disponibles" name="places_disponibles" 
-                               value="<?= htmlspecialchars($_POST['places_disponibles'] ?? '') ?>" 
-                               min="0" placeholder="Ex: 120" required>
-                        <div class="form-error" id="places_disponibles-error"></div>
+                        <label for="statut" class="form-label">Statut initial</label>
+                        <select class="form-select" id="statut" name="statut">
+                            <option value="libre" <?= ($_POST['statut'] ?? 'libre') === 'libre' ? 'selected' : '' ?>>✅ Libre</option>
+                            <option value="occupe" <?= ($_POST['statut'] ?? '') === 'occupe' ? 'selected' : '' ?>>🚗 Occupée</option>
+                            <option value="reserve" <?= ($_POST['statut'] ?? '') === 'reserve' ? 'selected' : '' ?>>📅 Réservée</option>
+                            <option value="maintenance" <?= ($_POST['statut'] ?? '') === 'maintenance' ? 'selected' : '' ?>>🔧 En maintenance</option>
+                        </select>
+                        <div class="form-error" id="statut-error"></div>
                     </div>
                 </div>
 
-                <!-- Aperçu visuel de l'occupation -->
+                <!-- Aperçu visuel du statut -->
                 <div class="form-group">
-                    <label class="form-label">Aperçu de l'occupation</label>
-                    <div class="availability-card" style="margin: 0; opacity: 0.7;" id="preview-card">
-                        <div class="availability-info">
-                            <div class="availability-icon">🚗</div>
-                            <div class="availability-text">
-                                <span class="places-count" id="preview-count">0 / 0</span>
-                                <span class="occupation-rate">Places disponibles</span>
-                            </div>
+                    <label class="form-label">Aperçu du statut</label>
+                    <div class="status-preview-card" id="status-preview">
+                        <div class="status-icon" id="preview-icon">✅</div>
+                        <div class="status-text">
+                            <span class="status-label" id="preview-label">Place libre</span>
+                            <span class="status-description" id="preview-description">Disponible pour réservation</span>
                         </div>
-                        <div class="availability-indicator success" id="preview-indicator"></div>
-                    </div>
-                    <div class="occupation-bar">
-                        <div class="occupation-fill" id="preview-bar" style="width: 0%"></div>
+                        <div class="status-indicator" id="preview-indicator"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Tarification -->
+            <!-- Disponibilité -->
             <div class="form-section">
                 <h3 style="color: var(--text-accent); margin-bottom: var(--spacing-lg); font-size: var(--font-size-xl);">
-                    💰 Tarification
+                    📅 Disponibilité
                 </h3>
                 
                 <div class="form-group">
-                    <label for="tarif_horaire" class="form-label">Tarif horaire (€) *</label>
-                    <input type="number" class="form-input" id="tarif_horaire" name="tarif_horaire" 
-                           value="<?= htmlspecialchars($_POST['tarif_horaire'] ?? '') ?>" 
-                           step="0.01" min="0" max="999.99" placeholder="Ex: 2.50" required>
-                    <div class="form-error" id="tarif_horaire-error"></div>
+                    <label for="disponible_depuis" class="form-label">Disponible depuis</label>
+                    <input type="datetime-local" class="form-input" id="disponible_depuis" name="disponible_depuis" 
+                           value="<?= htmlspecialchars($_POST['disponible_depuis'] ?? date('Y-m-d\TH:i')) ?>">
+                    <div class="form-error" id="disponible_depuis-error"></div>
                     <small style="color: var(--text-muted); font-size: var(--font-size-sm);">
-                        💡 Tarif appliqué par heure de stationnement
-                    </small>
-                </div>
-
-                <!-- Calculateur de revenus estimés -->
-                <div class="stats-grid" style="margin-top: var(--spacing-lg);">
-                    <div class="stat-item">
-                        <span class="stat-number" id="revenue-day">0€</span>
-                        <span class="stat-label">Revenus/jour estimés</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="revenue-month">0€</span>
-                        <span class="stat-label">Revenus/mois estimés</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Description et options -->
-            <div class="form-section">
-                <h3 style="color: var(--text-accent); margin-bottom: var(--spacing-lg); font-size: var(--font-size-xl);">
-                    📝 Description et options
-                </h3>
-                
-                <div class="form-group">
-                    <label for="description" class="form-label">Description du parking</label>
-                    <textarea class="form-textarea" id="description" name="description" 
-                              rows="4" placeholder="Décrivez les spécificités de ce parking (accès, équipements, etc.)..."><?= htmlspecialchars($_POST['description'] ?? '') ?></textarea>
-                    <small style="color: var(--text-muted); font-size: var(--font-size-sm);">
-                        💡 Cette description sera visible par les utilisateurs
+                        💡 Date et heure à partir de laquelle cette place est disponible
                     </small>
                 </div>
 
@@ -155,9 +124,25 @@ require_once '../app/views/templates/nav.php';
                     <div style="display: flex; align-items: center; gap: var(--spacing-sm);">
                         <input type="checkbox" id="actif" name="actif" value="1" checked>
                         <label for="actif" class="form-label" style="margin: 0; cursor: pointer;">
-                            ✅ Parking actif (disponible pour les réservations)
+                            ✅ Place active (disponible pour les réservations)
                         </label>
                     </div>
+                </div>
+            </div>
+
+            <!-- Commentaires et notes -->
+            <div class="form-section">
+                <h3 style="color: var(--text-accent); margin-bottom: var(--spacing-lg); font-size: var(--font-size-xl);">
+                    📝 Informations complémentaires
+                </h3>
+                
+                <div class="form-group">
+                    <label for="commentaire" class="form-label">Commentaire/Notes</label>
+                    <textarea class="form-textarea" id="commentaire" name="commentaire" 
+                              rows="3" placeholder="Informations particulières sur cette place (taille, accès, équipements...)"><?= htmlspecialchars($_POST['commentaire'] ?? '') ?></textarea>
+                    <small style="color: var(--text-muted); font-size: var(--font-size-sm);">
+                        💡 Ces informations seront visibles pour la gestion interne
+                    </small>
                 </div>
             </div>
 
@@ -165,13 +150,13 @@ require_once '../app/views/templates/nav.php';
             <div class="reservation-actions" style="border-top: 1px solid var(--border-color); padding-top: var(--spacing-lg);">
                 <button type="submit" class="btn btn-primary" id="submit-btn">
                     <span>➕</span>
-                    Créer le parking
+                    Créer la place
                 </button>
                 <button type="reset" class="btn btn-outline" id="reset-btn">
                     <span>🔄</span>
                     Réinitialiser
                 </button>
-                <a href="/?page=parkings_list" class="btn btn-secondary">
+                <a href="/?page=admin_parkings" class="btn btn-secondary">
                     <span>↩️</span>
                     Retour à la liste
                 </a>
@@ -180,22 +165,22 @@ require_once '../app/views/templates/nav.php';
 
         <!-- Carte d'aide -->
         <div class="card" style="margin-top: var(--spacing-xl); background: var(--bg-tertiary);">
-            <h3 style="color: var(--text-accent); margin-bottom: var(--spacing-md);">💡 Conseils pour ajouter un parking</h3>
+            <h3 style="color: var(--text-accent); margin-bottom: var(--spacing-md);">💡 Conseils pour ajouter une place</h3>
             <div class="feature-grid">
                 <div class="feature-card" style="background: var(--bg-card); border: none;">
-                    <div class="feature-icon" style="color: var(--primary-color);">📍</div>
-                    <h4 style="margin: 0 0 var(--spacing-sm) 0;">Localisation précise</h4>
-                    <p style="margin: 0; font-size: var(--font-size-sm);">Indiquez une adresse complète pour faciliter la localisation</p>
+                    <div class="feature-icon" style="color: var(--primary-color);">🅿️</div>
+                    <h4 style="margin: 0 0 var(--spacing-sm) 0;">Numérotation claire</h4>
+                    <p style="margin: 0; font-size: var(--font-size-sm);">Utilisez un système de numérotation logique et visible</p>
                 </div>
                 <div class="feature-card" style="background: var(--bg-card); border: none;">
                     <div class="feature-icon" style="color: var(--success-color);">🚗</div>
-                    <h4 style="margin: 0 0 var(--spacing-sm) 0;">Capacité réaliste</h4>
-                    <p style="margin: 0; font-size: var(--font-size-sm);">Assurez-vous que le nombre de places correspond à la réalité</p>
+                    <h4 style="margin: 0 0 var(--spacing-sm) 0;">Type approprié</h4>
+                    <p style="margin: 0; font-size: var(--font-size-sm);">Choisissez le type qui correspond aux dimensions réelles</p>
                 </div>
                 <div class="feature-card" style="background: var(--bg-card); border: none;">
-                    <div class="feature-icon" style="color: var(--warning-color);">💰</div>
-                    <h4 style="margin: 0 0 var(--spacing-sm) 0;">Tarif compétitif</h4>
-                    <p style="margin: 0; font-size: var(--font-size-sm);">Analysez les prix du secteur pour fixer un tarif attractif</p>
+                    <div class="feature-icon" style="color: var(--warning-color);">📍</div>
+                    <h4 style="margin: 0 0 var(--spacing-sm) 0;">Localisation précise</h4>
+                    <p style="margin: 0; font-size: var(--font-size-sm);">Indiquez l'étage et la zone pour faciliter la recherche</p>
                 </div>
             </div>
         </div>
@@ -205,62 +190,54 @@ require_once '../app/views/templates/nav.php';
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('addParkingForm');
-    const placesTotales = document.getElementById('places_totales');
-    const placesDisponibles = document.getElementById('places_disponibles');
-    const tarifHoraire = document.getElementById('tarif_horaire');
-    const codePostal = document.getElementById('code_postal');
+    const numeroPlace = document.getElementById('numero_place');
+    const typePlace = document.getElementById('type_place');
+    const statut = document.getElementById('statut');
     
-    // Éléments d'aperçu
-    const previewCount = document.getElementById('preview-count');
-    const previewBar = document.getElementById('preview-bar');
+    // Éléments d'aperçu du statut
+    const previewIcon = document.getElementById('preview-icon');
+    const previewLabel = document.getElementById('preview-label');
+    const previewDescription = document.getElementById('preview-description');
     const previewIndicator = document.getElementById('preview-indicator');
-    const previewCard = document.getElementById('preview-card');
     
-    // Éléments de revenus
-    const revenueDay = document.getElementById('revenue-day');
-    const revenueMonth = document.getElementById('revenue-month');
-    
-    // Mise à jour de l'aperçu en temps réel
-    function updatePreview() {
-        const total = parseInt(placesTotales.value) || 0;
-        const disponibles = parseInt(placesDisponibles.value) || 0;
-        const occupees = total - disponibles;
-        const taux = total > 0 ? (occupees / total) * 100 : 0;
-        
-        // Mise à jour de l'affichage
-        previewCount.textContent = `${disponibles} / ${total}`;
-        previewBar.style.width = taux + '%';
-        
-        // Mise à jour de l'indicateur
-        previewIndicator.className = 'availability-indicator ' + (taux > 80 ? 'warning' : 'success');
-        
-        // Afficher/masquer la carte d'aperçu
-        if (total > 0) {
-            previewCard.style.opacity = '1';
-            previewCard.style.transform = 'scale(1)';
-        } else {
-            previewCard.style.opacity = '0.7';
-            previewCard.style.transform = 'scale(0.95)';
+    // Configuration des statuts (selon votre BDD)
+    const statusConfig = {
+        'libre': {
+            icon: '✅',
+            label: 'Place libre',
+            description: 'Disponible pour réservation',
+            class: 'success'
+        },
+        'occupe': {
+            icon: '🚗',
+            label: 'Place occupée',
+            description: 'Actuellement utilisée',
+            class: 'warning'
+        },
+        'reserve': {
+            icon: '📅',
+            label: 'Place réservée',
+            description: 'Réservation en cours',
+            class: 'info'
+        },
+        'maintenance': {
+            icon: '🔧',
+            label: 'En maintenance',
+            description: 'Temporairement indisponible',
+            class: 'warning'
         }
-        
-        updateRevenueEstimate();
-    }
+    };
     
-    // Calcul des revenus estimés
-    function updateRevenueEstimate() {
-        const total = parseInt(placesTotales.value) || 0;
-        const tarif = parseFloat(tarifHoraire.value) || 0;
+    // Mise à jour de l'aperçu du statut
+    function updateStatusPreview() {
+        const currentStatus = statut.value || 'libre';
+        const config = statusConfig[currentStatus];
         
-        if (total > 0 && tarif > 0) {
-            // Estimation basée sur un taux d'occupation moyen de 60% et 8h/jour
-            const revenueJour = Math.round(total * 0.6 * 8 * tarif);
-            const revenueMois = Math.round(revenueJour * 30);
-            
-            revenueDay.textContent = revenueJour + '€';
-            revenueMonth.textContent = revenueMois + '€';
-        } else {
-            revenueDay.textContent = '0€';
-            revenueMonth.textContent = '0€';
+        if (config) {
+            previewIcon.textContent = config.icon;
+            previewLabel.textContent = config.label;
+            previewDescription.textContent = config.description;
+            previewIndicator.className = `status-indicator ${config.class}`;
         }
     }
     
@@ -284,65 +261,47 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Fonctions de validation
     const validations = {
-        places_totales: (value) => {
-            const num = parseInt(value);
-            if (!value || num < 1) return { valid: false, message: 'Le nombre de places doit être au moins 1' };
-            if (num > 9999) return { valid: false, message: 'Le nombre de places ne peut pas dépasser 9999' };
+        numero_place: (value) => {
+            if (!value || value.trim().length < 1) {
+                return { valid: false, message: 'Le numéro de place est obligatoire' };
+            }
+            if (value.length > 10) {
+                return { valid: false, message: 'Le numéro ne peut pas dépasser 10 caractères' };
+            }
             return { valid: true };
         },
         
-        places_disponibles: (value) => {
-            const disponibles = parseInt(value);
-            const totales = parseInt(placesTotales.value) || 0;
-            if (!value || disponibles < 0) return { valid: false, message: 'Le nombre de places disponibles ne peut pas être négatif' };
-            if (disponibles > totales) return { valid: false, message: 'Les places disponibles ne peuvent pas dépasser les places totales' };
-            return { valid: true };
-        },
-        
-        code_postal: (value) => {
-            if (!value || !/^[0-9]{5}$/.test(value)) return { valid: false, message: 'Le code postal doit contenir exactement 5 chiffres' };
-            return { valid: true };
-        },
-        
-        tarif_horaire: (value) => {
-            const num = parseFloat(value);
-            if (!value || num < 0) return { valid: false, message: 'Le tarif doit être positif' };
-            if (num > 999.99) return { valid: false, message: 'Le tarif ne peut pas dépasser 999.99€' };
+        type_place: (value) => {
+            const validTypes = ['standard', 'handicap', 'electrique', 'moto'];
+            if (!value) {
+                return { valid: false, message: 'Le type de place est obligatoire' };
+            }
+            if (!validTypes.includes(value)) {
+                return { valid: false, message: 'Type de place invalide' };
+            }
             return { valid: true };
         }
     };
     
-    // Ajout des écouteurs d'événements
-    placesTotales.addEventListener('input', () => {
-        validateField(placesTotales, 'places_totales-error', validations.places_totales);
-        updatePreview();
+    // Écouteurs d'événements
+    statut.addEventListener('change', updateStatusPreview);
+    
+    numeroPlace.addEventListener('input', () => {
+        validateField(numeroPlace, 'numero_place-error', validations.numero_place);
     });
     
-    placesDisponibles.addEventListener('input', () => {
-        validateField(placesDisponibles, 'places_disponibles-error', validations.places_disponibles);
-        updatePreview();
+    typePlace.addEventListener('change', () => {
+        validateField(typePlace, 'type_place-error', validations.type_place);
     });
     
-    tarifHoraire.addEventListener('input', () => {
-        validateField(tarifHoraire, 'tarif_horaire-error', validations.tarif_horaire);
-        updateRevenueEstimate();
-    });
-    
-    codePostal.addEventListener('input', () => {
-        validateField(codePostal, 'code_postal-error', validations.code_postal);
-    });
-    
-    // Auto-remplissage intelligent
-    placesTotales.addEventListener('input', function() {
-        if (this.value && !placesDisponibles.value) {
-            // Remplir automatiquement avec 80% de la capacité
-            placesDisponibles.value = Math.floor(parseInt(this.value) * 0.8);
-            updatePreview();
-        }
+    // Auto-formatting du numéro de place
+    numeroPlace.addEventListener('input', function() {
+        // Convertir en majuscules et supprimer les caractères non autorisés
+        this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
     });
     
     // Animations sur les inputs
-    const inputs = document.querySelectorAll('.form-input, .form-textarea');
+    const inputs = document.querySelectorAll('.form-input, .form-select, .form-textarea');
     inputs.forEach(input => {
         input.addEventListener('focus', function() {
             this.style.transform = 'translateY(-1px)';
@@ -389,8 +348,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Bouton de réinitialisation
     document.getElementById('reset-btn').addEventListener('click', function() {
         setTimeout(() => {
-            updatePreview();
-            updateRevenueEstimate();
+            updateStatusPreview();
             
             // Réinitialiser les styles des champs
             inputs.forEach(input => {
@@ -405,28 +363,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 10);
     });
     
-    // Animation d'entrée pour les sections
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.animation = 'slideIn 0.6s ease-out';
-                observer.unobserve(entry.target);
-            }
-        });
-    });
-    
-    document.querySelectorAll('.form-section').forEach(section => {
-        observer.observe(section);
-    });
-    
     // Initialisation
-    updatePreview();
-    updateRevenueEstimate();
+    updateStatusPreview();
 });
 </script>
 
 <style>
-/* Styles spécifiques pour la page d'ajout */
+/* Styles spécifiques pour la page d'ajout de place */
 .form-section {
     margin-bottom: var(--spacing-2xl);
     padding-bottom: var(--spacing-lg);
@@ -443,20 +386,84 @@ document.addEventListener('DOMContentLoaded', function() {
     gap: var(--spacing-sm);
 }
 
-/* Animation pour les sections */
-.form-section {
-    opacity: 0;
-    transform: translateY(20px);
+/* Correction pour la visibilité */
+.container.fade-in,
+.form-section,
+#addParkingForm.slide-in {
+    opacity: 1 !important;
+    transform: none !important;
+    display: block !important;
+    visibility: visible !important;
 }
 
-/* Styles pour les statistiques de revenus */
-.stat-item {
+/* Aperçu du statut */
+.status-preview-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
     transition: all var(--transition-normal);
 }
 
-.stat-item:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+.status-icon {
+    font-size: 1.5rem;
+}
+
+.status-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    flex: 1;
+}
+
+.status-label {
+    font-weight: 600;
+    color: var(--text-accent);
+}
+
+.status-description {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+}
+
+.status-indicator {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    box-shadow: 0 0 8px currentColor;
+}
+
+.status-indicator.success {
+    background: var(--success-color);
+    color: var(--success-color);
+}
+
+.status-indicator.warning {
+    background: var(--warning-color);
+    color: var(--warning-color);
+}
+
+.status-indicator.info {
+    background: var(--info-color);
+    color: var(--info-color);
+}
+
+.status-indicator.danger {
+    background: var(--danger-color);
+    color: var(--danger-color);
+}
+
+/* Style pour les select */
+.form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
 }
 
 /* Responsive design */
@@ -530,13 +537,9 @@ input[type="checkbox"]:focus {
     transition: all var(--transition-fast);
 }
 
-/* Animation pour l'aperçu */
-#preview-card {
-    transition: all var(--transition-normal);
-}
-
 /* Amélioration de l'accessibilité */
 .form-input:focus,
+.form-select:focus,
 .form-textarea:focus {
     outline: 2px solid var(--primary-color);
     outline-offset: 2px;

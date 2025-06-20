@@ -73,28 +73,57 @@ class Parking
         return $result ?: null;
     }
 
-    // Alias attendu par ReservationController
-    public function getAll()
-    {
-        return $this->getAllParkings();
-    }
-
-    public function create(array $data): bool
+    /**
+ * Vérifie si une place avec ce numéro existe déjà
+ */
+public function placeExists(string $numeroPlace): bool 
 {
-    $sql = "INSERT INTO parking (numero_place, etage, type_place, statut, disponible_depuis, date_maj, actif, commentaire)
-            VALUES (:numero_place, :etage, :type_place, :statut, :disponible_depuis, NOW(), :actif, :commentaire)";
-    
-    $stmt = $this->pdo->prepare($sql);
+    try {
+        $stmt = $this->db->prepare("SELECT COUNT(*) FROM parking WHERE numero_place = ?");
+        $stmt->execute([$numeroPlace]);
+        return $stmt->fetchColumn() > 0;
+    } catch (Exception $e) {
+        error_log("Erreur lors de la vérification de l'existence de la place : " . $e->getMessage());
+        return false;
+    }
+}
 
-    return $stmt->execute([
-        'numero_place'     => $data['numero_place'],
-        'etage'            => $data['etage'],
-        'type_place'       => $data['type_place'],
-        'statut'           => $data['statut'] ?? 'libre',
-        'disponible_depuis'=> $data['disponible_depuis'] ?? date('Y-m-d H:i:s'),
-        'actif'            => $data['actif'] ?? 1,
-        'commentaire'      => $data['commentaire'] ?? null
-    ]);
+/**
+ * Crée une nouvelle place de parking
+ */
+public function create(array $data): bool
+{
+    try {
+        $sql = "INSERT INTO parking (
+            numero_place, 
+            etage, 
+            type_place, 
+            statut, 
+            disponible_depuis, 
+            actif, 
+            commentaire, 
+            derniere_reservation_id,
+            date_maj
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        
+        $stmt = $this->db->prepare($sql);
+        
+        return $stmt->execute([
+            $data['numero_place'],
+            $data['etage'],
+            $data['type_place'],
+            $data['statut'],
+            $data['disponible_depuis'],
+            $data['actif'],
+            $data['commentaire'],
+            $data['derniere_reservation_id'],
+            $data['date_maj']
+        ]);
+        
+    } catch (Exception $e) {
+        error_log("Erreur lors de la création de la place : " . $e->getMessage());
+        return false;
+    }
 }
 
 }

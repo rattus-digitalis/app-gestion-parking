@@ -141,7 +141,10 @@ class AdminParkingController
             } else {
                 $_SESSION['error'] = "Erreur lors de la mise à jour du parking.";
             }
-            
+            // Vérifier l'unicité
+if ($parkingModel->placeExists($numeroPlace)) {
+    $errors[] = "Ce numéro de place existe déjà.";
+}
             header("Location: /?page=edit_parking&id=" . urlencode($id));
             exit;
             
@@ -293,33 +296,91 @@ class AdminParkingController
     }
 
     
-    public function add()
+public function add()
 {
+    // ✅ Définir la page actuelle pour le template
+    $current_page = 'add_parking';
+    
     $parkingModel = new Parking();
+    $errors = [];
+    $success = null;
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $success = $parkingModel->create([
-            'numero_place' => $_POST['numero_place'],
-            'etage' => $_POST['etage'],
-            'type_place' => $_POST['type_place'],
-            'statut' => $_POST['statut'] ?? 'libre',
-            'disponible_depuis' => $_POST['disponible_depuis'] ?? date('Y-m-d H:i:s'),
-            'actif' => 1,
-            'commentaire' => $_POST['commentaire'] ?? null
-        ]);
-
-        if ($success) {
-            header('Location: /?page=admin_parkings&created=1');
-            exit;
-        } else {
-            $error = "Erreur lors de la création de la place.";
+        // Debug pour voir ce qui arrive
+        error_log("POST reçu dans add(): " . print_r($_POST, true));
+        
+        // Validation des données pour une PLACE de parking
+        if (empty($_POST['numero_place'])) {
+            $errors[] = "Le numéro de place est obligatoire.";
+        }
+        
+        if (empty($_POST['type_place'])) {
+            $errors[] = "Le type de place est obligatoire.";
+        }
+        
+        // Validation du type de place (selon votre BDD)
+        $typesValides = ['standard', 'handicap', 'electrique', 'moto'];
+        if (!empty($_POST['type_place']) && !in_array($_POST['type_place'], $typesValides)) {
+            $errors[] = "Type de place invalide.";
+        }
+        
+        // Validation du statut (selon votre BDD)
+        $statutsValides = ['libre', 'occupe', 'reserve', 'maintenance'];
+        $statut = $_POST['statut'] ?? 'libre';
+        if (!in_array($statut, $statutsValides)) {
+            $errors[] = "Statut invalide.";
+        }
+        
+        // Validation de l'étage (doit être un entier)
+        $etage = $_POST['etage'] ?? 0;
+        if (!is_numeric($etage)) {
+            $errors[] = "L'étage doit être un nombre.";
+        }
+        
+        // Validation du numéro de place (unicité et format)
+        if (!empty($_POST['numero_place'])) {
+            $numeroPlace = trim(strtoupper($_POST['numero_place']));
+            if (strlen($numeroPlace) > 10) {
+                $errors[] = "Le numéro de place ne peut pas dépasser 10 caractères.";
+            }
+        
+        }
+        
+        // Si aucune erreur, créer la place
+        if (empty($errors)) {
+            $placeData = [
+                'numero_place' => trim(strtoupper($_POST['numero_place'])),
+                'etage' => (int)($_POST['etage'] ?? 0),
+                'type_place' => $_POST['type_place'],
+                'statut' => $statut,
+                'disponible_depuis' => $_POST['disponible_depuis'] ?? date('Y-m-d H:i:s'),
+                'actif' => isset($_POST['actif']) ? 1 : 0,
+                'commentaire' => trim($_POST['commentaire'] ?? ''),
+                'derniere_reservation_id' => null,
+                'date_maj' => date('Y-m-d H:i:s')
+            ];
+            
+            try {
+                // Créer la place (utilise la méthode create du modèle)
+                $result = $parkingModel->create($placeData);
+                
+                if ($result) {
+                    $success = "Place de parking créée avec succès !";
+                    // Optionnel : rediriger vers la liste après 2 secondes
+                    // header('refresh:2;url=/?page=admin_parkings');
+                } else {
+                    $errors[] = "Erreur lors de la création de la place.";
+                }
+            } catch (Exception $e) {
+                error_log("Erreur création place: " . $e->getMessage());
+                $errors[] = "Erreur lors de la création de la place: " . $e->getMessage();
+            }
         }
     }
 
-    // Corrigé : on affiche uniquement add_parking.php
+    // Afficher le formulaire avec les erreurs/succès
     require_once __DIR__ . '/../views/admin/add_parking.php';
 }
-
 }
 
 
