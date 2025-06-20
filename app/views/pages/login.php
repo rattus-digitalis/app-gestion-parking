@@ -74,7 +74,7 @@ require_once __DIR__ . '/../templates/nav.php';
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary btn-login">
                             <span class="btn-text">Se connecter</span>
-                            <span class="btn-loading" aria-hidden="true">Connexion...</span>
+                
                         </button>
                     </div>
                 </form>

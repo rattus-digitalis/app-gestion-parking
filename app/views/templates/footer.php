@@ -70,6 +70,16 @@
         }
     });
 </script>
+<?php
+$mainJs = '/js/app.js';
+$mainJsPath = $_SERVER['DOCUMENT_ROOT'] . $mainJs;
+if (file_exists($mainJsPath)) :
+    $mainJsVersion = filemtime($mainJsPath);
+?>
+    <script type="module" src="<?= $mainJs ?>?v=<?= $mainJsVersion ?>"></script>
+<?php else: ?>
+    <!-- ⚠️ JS principal introuvable : <?= $mainJs ?> -->
+<?php endif; ?>
 
 </body>
 </html>

@@ -119,11 +119,9 @@
 
     <!-- Scripts critiques inline -->
     <script>
-        // Suppression de la classe no-js
         document.documentElement.classList.remove('no-js');
         document.documentElement.classList.add('js');
 
-        // Configuration globale de l'application
         window.parklyConfig = {
             apiUrl: <?= json_encode($_ENV['API_URL'] ?? '/api') ?>,
             debug: <?= json_encode(($_ENV['APP_ENV'] ?? 'production') === 'development') ?>,
@@ -135,7 +133,6 @@
             userRole: <?= json_encode($_SESSION['user']['role'] ?? null) ?>
         };
 
-        // Service Worker (uniquement en HTTPS)
         if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
             window.addEventListener('load', function() {
                 navigator.serviceWorker.register('/sw.js')
@@ -152,19 +149,16 @@
             });
         }
 
-        // Gestion d'erreurs globale
         window.addEventListener('error', function(e) {
             if (window.parklyConfig.debug) {
                 console.error('JavaScript Error:', e.error);
             }
         });
 
-        // Performance monitoring
         if ('performance' in window && 'mark' in window.performance) {
             window.performance.mark('head-end');
         }
 
-        // Détection des préférences utilisateur
         if (window.matchMedia) {
             const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
             const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -202,7 +196,6 @@
     }
     </script>
 
-    <!-- Schema spécifique à la page -->
     <?php if (isset($page_schema) && !empty($page_schema)): ?>
         <script type="application/ld+json"><?= $page_schema ?></script>
     <?php endif; ?>
@@ -212,11 +205,22 @@
     <link rel="dns-prefetch" href="//fonts.googleapis.com">
     <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
 
-    <!-- Security headers -->
+    <!-- Headers de sécurité HTML -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self';">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+
+    <!-- JS principal -->
+    <?php
+    $mainJs = '/js/app.js';
+    $mainJsPath = $_SERVER['DOCUMENT_ROOT'] . $mainJs;
+    if (file_exists($mainJsPath)) :
+        $mainJsVersion = filemtime($mainJsPath);
+    ?>
+        <script src="<?= $mainJs ?>?v=<?= $mainJsVersion ?>"></script>
+    <?php else: ?>
+        <!-- ⚠️ JS principal introuvable : <?= $mainJs ?> -->
+    <?php endif; ?>
 
 </head>
