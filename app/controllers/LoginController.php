@@ -10,45 +10,64 @@ class LoginController
 {
     public function login(array $data)
     {
-        $email = trim($data['email'] ?? '');
-        $password = trim($data['password'] ?? '');
-
-        if (empty($email) || empty($password)) {
-            echo "❌ Veuillez remplir tous les champs.";
-            return;
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
         }
 
-        $userModel = new User();
-        $user = $userModel->getUserByEmail($email);
+        try {
+            // Debug temporaire
+            error_log("POST login data: " . print_r($data, true));
 
-        if (!$user) {
-            echo "❌ Utilisateur introuvable.";
-            return;
+            $email = trim($data['email'] ?? '');
+            $password = trim($data['password'] ?? '');
+
+            if (empty($email) || empty($password)) {
+                echo "❌ Veuillez remplir tous les champs.";
+                return;
+            }
+
+            $userModel = new User();
+            $user = $userModel->getUserByEmail($email); // Ensure this method exists in your User model
+
+            if (!$user) {
+                echo "❌ Utilisateur introuvable.";
+                return;
+            }
+
+            // Vérification du mot de passe hashé
+            if (!password_verify($password, $user['password'])) {
+                echo "❌ Mot de passe incorrect.";
+                return;
+            }
+
+            $_SESSION['user'] = [
+                'id' => $user['id'],
+                'email' => $user['email'],
+                'role' => $user['role'],
+                'first_name' => $user['first_name'] ?? '',
+                'last_name' => $user['last_name'] ?? '',
+                'phone' => $user['phone'] ?? '',
+            ];
+
+            $userModel->setStatus($user['id'], 'online');
+
+            header('Location: /?page=dashboard');
+            exit;
+
+        } catch (Throwable $e) {
+            error_log("💥 ERREUR dans login(): " . $e->getMessage());
+            error_log($e->getTraceAsString());
+            http_response_code(500);
+            echo "Erreur serveur : " . $e->getMessage(); // For display in the browser
         }
-
-        // ✅ Vérification du mot de passe hashé
-        if (!password_verify($password, $user['password'])) {
-            echo "❌ Mot de passe incorrect.";
-            return;
-        }
-
-        $_SESSION['user'] = [
-            'id'         => $user['id'],
-            'email'      => $user['email'],
-            'role'       => $user['role'],
-            'first_name' => $user['first_name'] ?? '',
-            'last_name'  => $user['last_name'] ?? '',
-            'phone'      => $user['phone'] ?? '',
-        ];
-
-        $userModel->setStatus($user['id'], 'online');
-
-        header('Location: /?page=dashboard');
-        exit;
     }
 
     public function logout()
     {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
         if (isset($_SESSION['user'])) {
             $userModel = new User();
             $userModel->setStatus($_SESSION['user']['id'], 'offline');

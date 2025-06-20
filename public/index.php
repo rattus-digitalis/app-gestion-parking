@@ -1,25 +1,18 @@
 <?php
-// Affichage des erreurs
+// Affichage des erreurs (à désactiver en production)
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Démarrage de la session
+// Session
 session_start();
-require_once __DIR__ . '/../config/init_page.php';
 
-
-// Constantes, routes, initialisation de la page
+// Chargement de la config
 require_once __DIR__ . '/../config/constants.php';
 require_once __DIR__ . '/../config/routes.php';
-
-// Page actuelle
-$page = $_GET['page'] ?? 'home';
-
-// Init CSS/pages (auto-load des styles par page)
 require_once __DIR__ . '/../config/init_page.php';
 
-// Gestion globale des erreurs fatales
+// Gestion des erreurs fatales
 set_exception_handler(function ($e) {
     error_log($e);
     http_response_code(500);
@@ -27,7 +20,7 @@ set_exception_handler(function ($e) {
     exit;
 });
 
-// Vérifie les rôles autorisés pour une route
+// Vérifie le rôle de l'utilisateur
 function checkRoles(string ...$roles): void {
     if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], $roles, true)) {
         http_response_code(401);
@@ -36,21 +29,19 @@ function checkRoles(string ...$roles): void {
     }
 }
 
-// Routeur principal
+// Page demandée
+$page = $_GET['page'] ?? 'home';
+
+// Routeur
 switch ($page) {
-
+    // --- Pages publiques ---
     case 'home':
-        require_once __DIR__ . '/../app/views/pages/home.php';
-        break;
-
     case 'contact':
-        require_once __DIR__ . '/../app/views/pages/contact.php';
-        break;
-
     case 'cgu':
-        require_once __DIR__ . '/../app/views/pages/cgu.php';
+        require_once __DIR__ . "/../app/views/pages/{$page}.php";
         break;
 
+    // --- Authentification ---
     case 'login':
         require_once __DIR__ . '/../app/controllers/LoginController.php';
         $controller = new LoginController();
@@ -72,20 +63,14 @@ switch ($page) {
             : require_once __DIR__ . '/../app/views/pages/register.php';
         break;
 
+    // --- Dashboards ---
     case 'dashboard':
         if (!isset($_SESSION['user'])) {
             header('Location: /?page=login');
             exit;
         }
         $role = $_SESSION['user']['role'];
-        if ($role === 'admin') {
-            header('Location: /?page=dashboard_admin');
-        } elseif ($role === 'user') {
-            header('Location: /?page=dashboard_user');
-        } else {
-            http_response_code(401);
-            require_once __DIR__ . '/../app/views/errors/401.php';
-        }
+        header('Location: /?page=dashboard_' . $role);
         exit;
 
     case 'dashboard_user':
@@ -98,14 +83,11 @@ switch ($page) {
         require_once __DIR__ . '/../app/views/admin/dashboard_admin.php';
         break;
 
-    // --- ADMIN ---
+    // --- Admin : Utilisateurs ---
     case 'admin_users':
         checkRoles('admin');
         require_once __DIR__ . '/../app/controllers/AdminUserController.php';
-        $controller = new AdminUserController();
-        ($_SERVER['REQUEST_METHOD'] === 'POST')
-            ? $controller->handlePost($_POST)
-            : $controller->listUsers();
+        (new AdminUserController())->listUsers();
         break;
 
     case 'edit_user':
@@ -115,40 +97,31 @@ switch ($page) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $controller->updateUser($_POST);
         } else {
-            $userId = $_GET['id'] ?? null;
-            if (!is_numeric($userId)) {
+            $id = $_GET['id'] ?? null;
+            if (!is_numeric($id)) {
                 header('Location: /?page=admin_users');
                 exit;
             }
-            $controller->editUserForm((int)$userId);
+            $controller->editUserForm((int)$id);
         }
         break;
 
-        // Dans votre switch case existant
-case 'create_user':
-    checkRoles('admin');
-require_once __DIR__ . '/../app/controllers/AdminUserController.php';
-    $controller = new AdminUserController();
-    
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $controller->createUser($_POST);
-    } else {
-        $controller->createUserForm();
-    }
-    break;
-
-
     case 'create_user':
-    checkRoles('admin');
-    require_once __DIR__ . '/app/controllers/AdminUserController.php';
-    $controller = new AdminUserController();
-    
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $controller->createUser($_POST);
-    } else {
-        $controller->createUserForm();
-    }
-    break;
+        checkRoles('admin');
+        require_once __DIR__ . '/../app/controllers/AdminUserController.php';
+        $controller = new AdminUserController();
+        ($_SERVER['REQUEST_METHOD'] === 'POST')
+            ? $controller->createUser($_POST)
+            : $controller->createUserForm();
+        break;
+
+    case 'admin_delete_user':
+        checkRoles('admin');
+        require_once __DIR__ . '/../app/controllers/AdminUserController.php';
+        (new AdminUserController())->delete();
+        break;
+
+    // --- Admin : Parkings, Réservations, Tarifs ---
     case 'admin_parkings':
         checkRoles('admin');
         require_once __DIR__ . '/../app/controllers/AdminParkingController.php';
@@ -173,14 +146,16 @@ require_once __DIR__ . '/../app/controllers/AdminUserController.php';
         (new AdminReservationController())->deleteReservation();
         break;
 
-        case 'admin_delete_user':
-    checkRoles('admin');
-    require_once __DIR__ . '/../app/controllers/AdminUserController.php';
-    $controller = new AdminUserController();
-    $controller->delete();
-    break;
+    case 'admin_tarifs':
+        checkRoles('admin');
+        require_once __DIR__ . '/../app/controllers/AdminTarifController.php';
+        $controller = new AdminTarifController();
+        ($_SERVER['REQUEST_METHOD'] === 'POST')
+            ? $controller->update($_POST)
+            : $controller->show();
+        break;
 
-    // --- UTILISATEUR ---
+    // --- Utilisateur : Réservations ---
     case 'nouvelle_reservation':
         checkRoles('user');
         require_once __DIR__ . '/../app/controllers/ReservationController.php';
@@ -205,14 +180,13 @@ require_once __DIR__ . '/../app/controllers/AdminUserController.php';
     case 'modifier_reservation':
         checkRoles('user');
         require_once __DIR__ . '/../app/controllers/ReservationController.php';
-        $controller = new ReservationController();
         $id = $_GET['id'] ?? null;
         if (!is_numeric($id)) {
             http_response_code(400);
             echo "ID invalide.";
             exit;
         }
-        $controller->editForm((int)$id);
+        (new ReservationController())->editForm((int)$id);
         break;
 
     case 'update_reservation':
@@ -221,6 +195,7 @@ require_once __DIR__ . '/../app/controllers/AdminUserController.php';
         (new ReservationController())->update($_POST);
         break;
 
+    // --- Utilisateur : Voiture & Compte ---
     case 'ma_voiture':
         checkRoles('user');
         require_once __DIR__ . '/../app/controllers/CarController.php';
@@ -238,26 +213,17 @@ require_once __DIR__ . '/../app/controllers/AdminUserController.php';
             : require_once __DIR__ . '/../app/views/pages/mon_compte.php';
         break;
 
-    case 'admin_tarifs':
-        checkRoles('admin');
-        require_once __DIR__ . '/../app/controllers/AdminTarifController.php';
-        $controller = new AdminTarifController();
-        ($_SERVER['REQUEST_METHOD'] === 'POST')
-            ? $controller->update($_POST)
-            : $controller->show();
-        break;
-
+    // --- Paiement ---
     case 'paiement':
         checkRoles('user');
         require_once __DIR__ . '/../app/controllers/PaiementController.php';
-        $controller = new PaiementController();
         $id = $_GET['id'] ?? null;
         if (!is_numeric($id)) {
             http_response_code(400);
             echo "ID de réservation invalide.";
             exit;
         }
-        $controller->payer((int)$id);
+        (new PaiementController())->payer((int)$id);
         break;
 
     case 'valider_paiement':
@@ -265,7 +231,7 @@ require_once __DIR__ . '/../app/controllers/AdminUserController.php';
         require_once __DIR__ . '/../app/views/pages/valider_paiement.php';
         break;
 
-    // --- 404
+    // --- 404 ---
     default:
         http_response_code(404);
         require_once __DIR__ . '/../app/views/errors/404.php';

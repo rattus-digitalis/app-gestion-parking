@@ -7,7 +7,6 @@ class AdminUserController
     {
         $userModel = new User();
         $users = $userModel->getAllUsers();
-
         require_once __DIR__ . '/../views/admin/users_list.php';
     }
 
@@ -27,25 +26,24 @@ class AdminUserController
         // Activer le débogage temporairement
         ini_set('display_errors', 1);
         error_reporting(E_ALL);
-        
         error_log("=== AdminUserController::createUser() DÉBUT ===");
         error_log("POST data: " . print_r($postData, true));
-        
+
         try {
             // Validation des données requises
             $requiredFields = ['last_name', 'first_name', 'email', 'phone', 'password', 'role'];
             $missingFields = [];
-            
+
             foreach ($requiredFields as $field) {
                 if (!isset($postData[$field]) || trim($postData[$field]) === '') {
                     $missingFields[] = $field;
                 }
             }
-            
+
             if (!empty($missingFields)) {
                 $errorMessage = 'Champs manquants : ' . implode(', ', $missingFields);
                 error_log("❌ Validation échouée: " . $errorMessage);
-                
+
                 if ($this->isAjaxRequest()) {
                     $this->jsonError($errorMessage, 400);
                 } else {
@@ -53,7 +51,7 @@ class AdminUserController
                     exit;
                 }
             }
-            
+
             // Nettoyer et sécuriser les données
             $lastName = htmlspecialchars(trim($postData['last_name']));
             $firstName = htmlspecialchars(trim($postData['first_name']));
@@ -61,12 +59,12 @@ class AdminUserController
             $phone = $this->cleanPhoneNumber(trim($postData['phone']));
             $password = $postData['password'];
             $role = in_array($postData['role'], ['user', 'admin', 'moderator']) ? $postData['role'] : 'user';
-            
+
             // Validation de l'email
             if (!$email) {
                 $errorMessage = 'Adresse email invalide';
                 error_log("❌ Email invalide: " . $postData['email']);
-                
+
                 if ($this->isAjaxRequest()) {
                     $this->jsonError($errorMessage, 400);
                 } else {
@@ -74,15 +72,15 @@ class AdminUserController
                     exit;
                 }
             }
-            
+
             $userModel = new User();
-            
+
             // Vérifier si l'email existe déjà
             $existingUser = $userModel->getUserByEmail($email);
             if ($existingUser) {
                 $errorMessage = 'Un utilisateur avec cet email existe déjà';
                 error_log("❌ Email déjà existant: " . $email);
-                
+
                 if ($this->isAjaxRequest()) {
                     $this->jsonError($errorMessage, 409);
                 } else {
@@ -90,19 +88,19 @@ class AdminUserController
                     exit;
                 }
             }
-            
+
             // Hasher le mot de passe
             $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
             error_log("🔐 Mot de passe hashé");
-            
+
             // Créer l'utilisateur
-            $success = $userModel->createUser($lastName, $firstName, $email, $phone, $hashedPassword);
+            $success = $userModel->createUser($lastName, $firstName, $email, $phone, $hashedPassword, $role);
             error_log("Résultat création: " . ($success ? 'SUCCESS' : 'FAILURE'));
-            
+
             if ($success) {
                 $successMessage = "Utilisateur créé avec succès : $firstName $lastName";
                 error_log("✅ " . $successMessage);
-                
+
                 if ($this->isAjaxRequest()) {
                     $this->jsonSuccess([
                         'message' => $successMessage,
@@ -119,11 +117,10 @@ class AdminUserController
             } else {
                 throw new Exception('Échec de la création de l\'utilisateur');
             }
-            
         } catch (Exception $e) {
             error_log("💥 EXCEPTION dans createUser(): " . $e->getMessage());
             error_log("Stack trace: " . $e->getTraceAsString());
-            
+
             if ($this->isAjaxRequest()) {
                 $this->jsonError('Erreur interne du serveur: ' . $e->getMessage(), 500);
             } else {
@@ -131,7 +128,7 @@ class AdminUserController
                 exit;
             }
         }
-        
+
         error_log("=== AdminUserController::createUser() FIN ===");
     }
 
@@ -144,7 +141,7 @@ class AdminUserController
     {
         // Supprimer tous les caractères non numériques sauf le +
         $cleaned = preg_replace('/[^\d+]/', '', $phone);
-        
+
         // Gérer les différents formats français
         if (str_starts_with($cleaned, '+33')) {
             // Format international: +33123456789 → 0123456789
@@ -153,7 +150,7 @@ class AdminUserController
             // Format sans +: 33123456789 → 0123456789
             $cleaned = '0' . substr($cleaned, 2);
         }
-        
+
         // Vérifier que c'est un numéro français valide (10 chiffres commençant par 0)
         if (!preg_match('/^0[1-9]\d{8}$/', $cleaned)) {
             error_log("Numéro de téléphone invalide après nettoyage: " . $cleaned);
@@ -162,33 +159,32 @@ class AdminUserController
                 $cleaned = substr($cleaned, 0, 10);
             }
         }
-        
+
         return $cleaned;
     }
 
     public function delete()
     {
-        // Votre code de suppression existant...
+        // Your code de suppression existant...
         ini_set('display_errors', 1);
         ini_set('display_startup_errors', 1);
         error_reporting(E_ALL);
-        
         error_log("=== AdminUserController::delete() DÉBUT ===");
         error_log("REQUEST_METHOD: " . ($_SERVER['REQUEST_METHOD'] ?? 'undefined'));
         error_log("POST data: " . print_r($_POST, true));
         error_log("SESSION: " . print_r($_SESSION ?? [], true));
-        
+
         try {
             if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_user_id'])) {
                 error_log("✅ Validation POST OK");
-                
                 $userModel = new User();
                 $userId = (int) $_POST['delete_user_id'];
                 error_log("User ID à supprimer: " . $userId);
-                
+
                 // Vérifier que l'utilisateur ne se supprime pas lui-même
                 if (isset($_SESSION['user']['id']) && $_SESSION['user']['id'] == $userId) {
                     error_log("❌ Tentative d'auto-suppression détectée");
+
                     if ($this->isAjaxRequest()) {
                         $this->jsonError('Vous ne pouvez pas vous supprimer vous-même', 403);
                     } else {
@@ -200,10 +196,11 @@ class AdminUserController
                 error_log("🔄 Appel de deleteUserById...");
                 $success = $userModel->deleteUserById($userId);
                 error_log("Résultat deleteUserById: " . ($success ? 'SUCCESS' : 'FAILURE'));
-                
+
                 // Si c'est une requête AJAX, retourner du JSON
                 if ($this->isAjaxRequest()) {
                     error_log("📡 Requête AJAX détectée, envoi JSON...");
+
                     if ($success) {
                         $this->jsonSuccess(['message' => 'Utilisateur supprimé avec succès']);
                     } else {
@@ -211,17 +208,18 @@ class AdminUserController
                     }
                 } else {
                     error_log("🔄 Requête normale, redirection...");
+
                     if ($success) {
                         header('Location: /?page=admin_users&success=deleted');
                     } else {
                         header('Location: /?page=admin_users&error=delete_failed');
                     }
+
                     exit;
                 }
-                
             } else {
                 error_log("❌ Validation POST échouée");
-                
+
                 if ($this->isAjaxRequest()) {
                     $this->jsonError('Requête invalide - données manquantes', 400);
                 } else {
@@ -230,10 +228,9 @@ class AdminUserController
                     exit;
                 }
             }
-            
         } catch (Exception $e) {
             error_log("💥 EXCEPTION CAPTURÉE: " . $e->getMessage());
-            
+
             if ($this->isAjaxRequest()) {
                 $this->jsonError('Erreur interne du serveur: ' . $e->getMessage(), 500);
             } else {
@@ -242,8 +239,6 @@ class AdminUserController
             }
         }
     }
-
-    // ... autres méthodes existantes ...
 
     public function handlePost($postData)
     {
@@ -290,10 +285,10 @@ class AdminUserController
         $status = htmlspecialchars($postData['status'] ?? 'offline');
 
         $userModel = new User();
-        
+
         try {
             $success = $userModel->updateUser($id, $lastName, $firstName, $email, $phone, $role, $status);
-            
+
             if ($this->isAjaxRequest()) {
                 if ($success) {
                     $this->jsonSuccess(['message' => 'Utilisateur modifié avec succès']);
@@ -304,10 +299,9 @@ class AdminUserController
                 header('Location: /?page=admin_users' . ($success ? '&success=updated' : '&error=update_failed'));
                 exit;
             }
-            
         } catch (Exception $e) {
             error_log("Erreur modification utilisateur: " . $e->getMessage());
-            
+
             if ($this->isAjaxRequest()) {
                 $this->jsonError('Erreur interne du serveur', 500);
             } else {
@@ -322,8 +316,8 @@ class AdminUserController
      */
     private function isAjaxRequest(): bool
     {
-        $result = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && 
-                 strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+        $result = isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+                  strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
         error_log("isAjaxRequest: " . ($result ? 'TRUE' : 'FALSE'));
         return $result;
     }
@@ -355,5 +349,95 @@ class AdminUserController
             'success' => true
         ], $data));
         exit;
+    }
+}
+
+class User
+{
+    private PDO $pdo;
+
+    public function __construct()
+    {
+        try {
+            $this->pdo = new PDO(
+                'mysql:host=mysql;port=3306;dbname=parkly;charset=utf8',
+                'rattus',
+                'rattus'
+            );
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            die('Erreur de connexion : ' . $e->getMessage());
+        }
+    }
+
+    public function getAllUsers(): array
+    {
+        $stmt = $this->pdo->query("SELECT * FROM users");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getUserByEmail(string $email): ?array
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt->execute(['email' => $email]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $user ?: null;
+    }
+
+    public function getUserById(int $id): ?array
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE id = :id");
+        $stmt->execute(['id' => $id]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $user ?: null;
+    }
+
+    public function createUser(string $lastName, string $firstName, string $email, string $phone, string $password, string $role = 'user'): bool
+    {
+        $stmt = $this->pdo->prepare("
+            INSERT INTO users (last_name, first_name, email, phone, password, role, status)
+            VALUES (:last_name, :first_name, :email, :phone, :password, :role, 'offline')
+        ");
+        return $stmt->execute([
+            'last_name' => $lastName,
+            'first_name' => $firstName,
+            'email' => $email,
+            'phone' => $phone,
+            'password' => $password,
+            'role' => $role
+        ]);
+    }
+
+    public function updateUser(int $id, string $lastName, string $firstName, string $email, string $phone, string $role, string $status): bool
+    {
+        $stmt = $this->pdo->prepare("
+            UPDATE users
+            SET last_name = :last_name, first_name = :first_name, email = :email, phone = :phone, role = :role, status = :status
+            WHERE id = :id
+        ");
+        return $stmt->execute([
+            'id' => $id,
+            'last_name' => $lastName,
+            'first_name' => $firstName,
+            'email' => $email,
+            'phone' => $phone,
+            'role' => $role,
+            'status' => $status
+        ]);
+    }
+
+    public function deleteUserById(int $id): bool
+    {
+        $stmt = $this->pdo->prepare("DELETE FROM users WHERE id = :id");
+        return $stmt->execute(['id' => $id]);
+    }
+
+    public function setStatus(int $id, string $status): bool
+    {
+        $stmt = $this->pdo->prepare("UPDATE users SET status = :status WHERE id = :id");
+        return $stmt->execute([
+            'id' => $id,
+            'status' => $status
+        ]);
     }
 }

@@ -442,3 +442,7 @@ export default {
     notify,
     notifyCompat
 };
+
+export function notify(type, message) {
+  // Function implementation
+}
