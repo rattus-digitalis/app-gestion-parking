@@ -7,6 +7,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="format-detection" content="telephone=no">
     
+    <!-- ✅ CSP - UNE SEULE FOIS ET AU BON ENDROIT -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self';">
+    
+    <!-- Headers de sécurité HTML -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    
     <!-- Titre dynamique avec fallback -->
     <title><?= htmlspecialchars($title ?? 'Parkly - Gestion de parking en ligne') ?></title>
     
@@ -205,21 +213,16 @@
     <link rel="dns-prefetch" href="//fonts.googleapis.com">
     <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
 
-    <!-- Headers de sécurité HTML -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self';">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
-    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-<<!-- JS principal -->
-<?php
-$mainJs = '/js/app.js';
-$mainJsPath = $_SERVER['DOCUMENT_ROOT'] . $mainJs;
-if (file_exists($mainJsPath)) :
-    $mainJsVersion = filemtime($mainJsPath);
-?>
-    <script type="module" src="<?= $mainJs ?>?v=<?= $mainJsVersion ?>"></script>
-<?php else: ?>
-    <!-- ⚠️ JS principal introuvable : <?= $mainJs ?> -->
-<?php endif; ?>
+    <!-- ✅ JS principal - COMMENTAIRE CORRIGÉ -->
+    <?php
+    $mainJs = '/js/app.js';
+    $mainJsPath = $_SERVER['DOCUMENT_ROOT'] . $mainJs;
+    if (file_exists($mainJsPath)) :
+        $mainJsVersion = filemtime($mainJsPath);
+    ?>
+        <script type="module" src="<?= $mainJs ?>?v=<?= $mainJsVersion ?>"></script>
+    <?php else: ?>
+        <!-- ⚠️ JS principal introuvable : <?= $mainJs ?> -->
+    <?php endif; ?>
 
 </head>

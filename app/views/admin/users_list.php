@@ -63,15 +63,10 @@ $totalPages = ceil(count($users) / $itemsPerPage);
                                    class="btn btn-sm btn-warning"
                                    aria-label="Modifier l'utilisateur <?= htmlspecialchars($user['last_name']) ?>">✏️</a>
 
-                                <form method="POST"
-                                      action="/?page=admin_delete_user"
-                                      onsubmit="return confirm('Supprimer cet utilisateur ?');"
-                                      style="display:inline;">
-                                    <input type="hidden" name="delete_user_id" value="<?= htmlspecialchars($user['id']) ?>">
-                                    <button type="submit"
-                                            class="btn btn-sm btn-danger"
-                                            aria-label="Supprimer l'utilisateur <?= htmlspecialchars($user['last_name']) ?>">🗑️</button>
-                                </form>
+                                <button type="button"
+                                        class="btn btn-sm btn-danger delete-user-btn"
+                                        data-user-id="<?= htmlspecialchars($user['id']) ?>"
+                                        aria-label="Supprimer l'utilisateur <?= htmlspecialchars($user['last_name']) ?>">🗑️</button>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -99,5 +94,8 @@ $totalPages = ceil(count($users) / $itemsPerPage);
         <a href="/?page=dashboard_admin" class="btn btn-secondary">← Retour au tableau de bord</a>
     </footer>
 </main>
+
+<!-- ✅ Script admin (chargé une seule fois) -->
+<script type="module" src="/js/modules/admin.js?v=<?= filemtime($_SERVER['DOCUMENT_ROOT'] . '/js/modules/admin.js') ?>"></script>
 
 <?php require_once __DIR__ . '/../templates/footer.php'; ?>

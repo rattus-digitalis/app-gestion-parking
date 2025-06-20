@@ -116,12 +116,7 @@ $navigation_items = getNavigationItems($nav_items, $is_logged_in, $is_admin);
                             Bonjour, <strong><?= htmlspecialchars($user['prenom'] ?? $user['nom'] ?? 'Utilisateur') ?></strong>
                         </span>
                         <?php if ($is_admin): ?>
-                            <span class="user-badge user-badge--admin" title="Administrateur">
-                                <span class="badge-icon" data-icon="shield-check" aria-hidden="true"></span>
-                                Admin
-                            </span>
                         <?php else: ?>
-                            <span class="user-role">Utilisateur</span>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -303,6 +298,7 @@ $navigation_items = getNavigationItems($nav_items, $is_logged_in, $is_admin);
     background: rgba(239, 68, 68, 0.1);
     border-color: var(--danger-color);
 }
+
 
 .nav-icon {
     font-size: 1rem;

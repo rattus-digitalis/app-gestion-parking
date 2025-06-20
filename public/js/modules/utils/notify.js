@@ -380,6 +380,46 @@ export function handleApiResponse(response, successMessage = null) {
 }
 
 /**
+ * Fonction notify simple pour compatibilité (système flash message)
+ * @param {string} type - Type de notification
+ * @param {string} message - Message à afficher
+ */
+export function notify(type, message) {
+    // Utiliser le nouveau système au lieu du flash-message
+    switch (type.toLowerCase()) {
+        case 'success':
+            return success(message);
+        case 'error':
+            return error(message);
+        case 'warning':
+            return warning(message);
+        case 'info':
+        default:
+            return info(message);
+    }
+}
+
+/**
+ * Export de compatibilité pour l'ancien code
+ * @param {string} message - Message à afficher  
+ * @param {string} type - Type de notification
+ * @param {Object} options - Options supplémentaires
+ */
+export function notifyCompat(message, type = 'info', options = {}) {
+    switch (type.toLowerCase()) {
+        case 'success':
+            return success(message, 'Succès', options);
+        case 'error':
+            return error(message, 'Erreur', options);
+        case 'warning':
+            return warning(message, 'Attention', options);
+        case 'info':
+        default:
+            return info(message, 'Information', options);
+    }
+}
+
+/**
  * Notification pour les erreurs de validation de formulaire
  * @param {Object} errors - Objet des erreurs de validation
  */
@@ -398,5 +438,7 @@ export default {
     custom,
     clearAll,
     handleApiResponse,
-    showValidationErrors
+    showValidationErrors,
+    notify,
+    notifyCompat
 };

@@ -116,13 +116,6 @@ require_once __DIR__ . '/../templates/nav.php';
                                        aria-describedby="password-error password-help"
                                        minlength="8"
                                        maxlength="128">
-                                <button type="button" 
-                                        class="password-toggle" 
-                                        aria-label="Afficher le mot de passe"
-                                        tabindex="-1">
-                                    <span class="show-text">Afficher</span>
-                                    <span class="hide-text">Masquer</span>
-                                </button>
                             </div>
                             <div id="password-help" class="form-help">
                                 <div class="password-requirements">
@@ -172,17 +165,6 @@ require_once __DIR__ . '/../templates/nav.php';
                                 </a>  
                             </label>
                             <div id="terms-error" class="error-message" role="alert" aria-live="polite"></div>
-                        </div>
-
-                        <div class="form-group checkbox-group">
-                            <input type="checkbox" 
-                                   id="newsletter" 
-                                   name="newsletter" 
-                                   class="form-checkbox"
-                                   value="1">
-                            <label for="newsletter" class="checkbox-label">
-                                Je souhaite recevoir les actualités et offres par e-mail
-                            </label>
                         </div>
                     </fieldset>
 

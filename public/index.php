@@ -124,6 +124,31 @@ switch ($page) {
         }
         break;
 
+        // Dans votre switch case existant
+case 'create_user':
+    checkRoles('admin');
+require_once __DIR__ . '/../app/controllers/AdminUserController.php';
+    $controller = new AdminUserController();
+    
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $controller->createUser($_POST);
+    } else {
+        $controller->createUserForm();
+    }
+    break;
+
+
+    case 'create_user':
+    checkRoles('admin');
+    require_once __DIR__ . '/app/controllers/AdminUserController.php';
+    $controller = new AdminUserController();
+    
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $controller->createUser($_POST);
+    } else {
+        $controller->createUserForm();
+    }
+    break;
     case 'admin_parkings':
         checkRoles('admin');
         require_once __DIR__ . '/../app/controllers/AdminParkingController.php';
@@ -147,6 +172,13 @@ switch ($page) {
         require_once __DIR__ . '/../app/controllers/AdminReservationController.php';
         (new AdminReservationController())->deleteReservation();
         break;
+
+        case 'admin_delete_user':
+    checkRoles('admin');
+    require_once __DIR__ . '/../app/controllers/AdminUserController.php';
+    $controller = new AdminUserController();
+    $controller->delete();
+    break;
 
     // --- UTILISATEUR ---
     case 'nouvelle_reservation':
