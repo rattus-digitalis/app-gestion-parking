@@ -1,6 +1,8 @@
-import { post } from './utils/fetch.js';
-import { notify } from './utils/notify.js';
+import { success, error, warning, info } from './utils/notify.js';
 
+// Utilisation
+success('Connexion réussie !');
+error('Identifiants incorrects');
 export function initLogin() {
   const form = document.querySelector('#login-form');
   if (!form) return;

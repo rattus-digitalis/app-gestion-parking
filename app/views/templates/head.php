@@ -210,17 +210,16 @@
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-
-    <!-- JS principal -->
-    <?php
-    $mainJs = '/js/app.js';
-    $mainJsPath = $_SERVER['DOCUMENT_ROOT'] . $mainJs;
-    if (file_exists($mainJsPath)) :
-        $mainJsVersion = filemtime($mainJsPath);
-    ?>
-        <script src="<?= $mainJs ?>?v=<?= $mainJsVersion ?>"></script>
-    <?php else: ?>
-        <!-- ⚠️ JS principal introuvable : <?= $mainJs ?> -->
-    <?php endif; ?>
+<<!-- JS principal -->
+<?php
+$mainJs = '/js/app.js';
+$mainJsPath = $_SERVER['DOCUMENT_ROOT'] . $mainJs;
+if (file_exists($mainJsPath)) :
+    $mainJsVersion = filemtime($mainJsPath);
+?>
+    <script type="module" src="<?= $mainJs ?>?v=<?= $mainJsVersion ?>"></script>
+<?php else: ?>
+    <!-- ⚠️ JS principal introuvable : <?= $mainJs ?> -->
+<?php endif; ?>
 
 </head>

@@ -8,7 +8,7 @@ import { initRegister } from './modules/register.js';
 import { initDashboard } from './modules/dashboard.js';
 import { initReservation } from './modules/reservation.js';
 import { initAdmin } from './modules/admin.js';
-import { initPayPalButton } from './modules/paypal.js';
+import { initPayPalButton } from './modules/utils/paypal.js'; // Chemin corrigé
 
 class AppRouter {
   constructor() {
@@ -41,6 +41,7 @@ class AppRouter {
     this.modules.set('dashboard_user', () => this.safeInit(initDashboard, 'Module Dashboard'));
     this.modules.set('nouvelle_reservation', () => this.initReservationPage());
     this.modules.set('mes_reservations', () => this.initReservationPage());
+    this.modules.set('paiement', () => this.initPaymentPage()); // Ajout de la page paiement
     this.modules.set('admin', () => this.safeInit(initAdmin, 'Module Admin'));
   }
 
@@ -51,8 +52,12 @@ class AppRouter {
    */
   safeInit(initFunction, moduleName) {
     try {
-      initFunction();
-      console.log(`✅ ${moduleName} initialisé avec succès`);
+      if (typeof initFunction === 'function') {
+        initFunction();
+        console.log(`✅ ${moduleName} initialisé avec succès`);
+      } else {
+        console.warn(`⚠️ ${moduleName} n'est pas une fonction valide`);
+      }
     } catch (error) {
       console.error(`❌ Erreur lors de l'initialisation de ${moduleName}:`, error);
     }
@@ -67,13 +72,22 @@ class AppRouter {
   }
 
   /**
+   * Initialise spécifiquement la page de paiement
+   */
+  initPaymentPage() {
+    console.log('🎯 Initialisation de la page de paiement');
+    this.initPayPalIfPresent();
+  }
+
+  /**
    * Initialise PayPal si le conteneur est présent et valide
    */
   initPayPalIfPresent() {
     const paypalContainer = document.getElementById('paypal-button-container');
     
     if (!paypalContainer) {
-      return; // Pas de conteneur PayPal sur cette page
+      console.log('ℹ️ Aucun conteneur PayPal trouvé sur cette page');
+      return;
     }
 
     const montantStr = paypalContainer.dataset.montant;
@@ -110,7 +124,7 @@ class AppRouter {
       return null;
     }
     
-    return amount;
+    return Math.round(amount * 100) / 100; // Arrondir à 2 décimales
   }
 
   /**
@@ -140,11 +154,15 @@ class AppRouter {
 
 // Initialisation automatique quand le DOM est prêt
 document.addEventListener('DOMContentLoaded', () => {
-  const router = new AppRouter();
-  router.start();
-  
-  // Expose le router globalement pour debug/extensions
-  window.appRouter = router;
+  try {
+    const router = new AppRouter();
+    router.start();
+    
+    // Expose le router globalement pour debug/extensions
+    window.appRouter = router;
+  } catch (error) {
+    console.error('❌ Erreur critique lors de l\'initialisation de l\'application:', error);
+  }
 });
 
 // Export pour utilisation en module
