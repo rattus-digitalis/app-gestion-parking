@@ -22,6 +22,31 @@ class Parking
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getStatsTempsReel(): array
+{
+    // Total de places actives
+    $stmtTotal = $this->pdo->query("SELECT COUNT(*) FROM parking WHERE actif = 1");
+    $total = (int) $stmtTotal->fetchColumn();
+
+    // Places libres
+    $stmtLibres = $this->pdo->query("SELECT COUNT(*) FROM parking WHERE actif = 1 AND statut = 'libre'");
+    $libres = (int) $stmtLibres->fetchColumn();
+
+    // Occupées = total - libres
+    $occupees = max(0, $total - $libres);
+
+    // Taux d’occupation
+    $taux = $total > 0 ? round(($occupees / $total) * 100, 1) : 0;
+
+    return [
+        'places_libres' => $libres,
+        'places_occupees' => $occupees,
+        'places_total' => $total,
+        'taux_occupation' => $taux
+    ];
+}
+
+
     public function getByType(string $type): array
     {
         $sql = "SELECT * FROM parking

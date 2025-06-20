@@ -190,7 +190,7 @@ require_once __DIR__ . '/../templates/nav.php';
             <div class="mt-4">
                 <p class="text-secondary">
                     Vous disposez d'un accès complet aux fonctionnalités d'administration. 
-                    Gérez efficacement les utilisateurs, les places de parking et surveillez les performances du système.
+                
                 </p>
             </div>
         </div>
@@ -306,37 +306,7 @@ require_once __DIR__ . '/../templates/nav.php';
         </div>
     </aside>
 
-    <!-- ========================================
-         OUTILS D'ADMINISTRATION
-         ======================================== -->
-    <section class="mt-5">
-        <h2 class="section-title">Outils d'administration</h2>
-        
-        <div class="card" style="background: var(--bg-tertiary); border-color: var(--warning-color);">
-            <div class="text-center">
-                <h3 style="color: var(--warning-color);">⚠️ Zone d'administration avancée</h3>
-                <p class="text-secondary mb-4">
-                    Accès aux outils de maintenance et de configuration système.
-                    <strong>Utiliser avec précaution.</strong>
-                </p>
-                <div class="reservation-actions" style="justify-content: center;">
-                    <a href="/?page=admin_maintenance" class="btn btn-warning">
-                        🔧 Maintenance système
-                    </a>
-                    <a href="/?page=admin_backup" class="btn btn-info">
-                        💾 Gestion des sauvegardes
-                    </a>
-                    <a href="/?page=admin_logs" class="btn btn-secondary">
-                        📋 Consulter les logs
-                    </a>
-                    <a href="/?page=admin_config" class="btn btn-outline">
-                        ⚙️ Configuration système
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
+    
     <!-- ========================================
          MONITORING EN TEMPS RÉEL
          ======================================== -->

@@ -10,11 +10,6 @@
 
 
 
- ⚙️ Dashboard admin : afficher réservations, paiements
- 
-
- 👤 Corriger le message "Bonjour utilisateur" → afficher prénom
-
  📚 Export .sql de la base
 
  📚 Rédiger README (présentation + installation)

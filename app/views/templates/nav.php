@@ -93,7 +93,6 @@ $navigation_items = getNavigationItems($nav_items, $is_logged_in, $is_admin);
                     <span class="brand-icon" data-icon="parking-circle" aria-hidden="true"></span>
                 </div>
                 <span class="brand-text">Parkly</span>
-                <span class="brand-subtitle">Parking Management</span>
             </a>
         </div>
 
@@ -111,13 +110,19 @@ $navigation_items = getNavigationItems($nav_items, $is_logged_in, $is_admin);
                     <div class="user-avatar">
                         <span class="user-avatar-icon" data-icon="user" aria-hidden="true"></span>
                     </div>
-                    <div class="user-details">
+                     <div class="user-details">
+                        <?php
+              
+                     $displayName = 'Utilisateur';
+                     if (!empty($user['first_name'])) {
+                        $displayName = $user['first_name'];
+                     } elseif (!empty($user['last_name'])) {
+                        $displayName = $user['last_name'];
+                    }
+                        ?>
                         <span class="user-welcome">
-                            Bonjour, <strong><?= htmlspecialchars($user['prenom'] ?? $user['nom'] ?? 'Utilisateur') ?></strong>
+                            Bonjour<strong><?= htmlspecialchars($displayName) ?></strong>
                         </span>
-                        <?php if ($is_admin): ?>
-                        <?php else: ?>
-                        <?php endif; ?>
                     </div>
                 </div>
             </div>

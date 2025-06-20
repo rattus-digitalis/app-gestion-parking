@@ -84,27 +84,61 @@ require_once __DIR__ . '/../templates/nav.php';
                 Simplifiez la gestion de vos <strong>réservations</strong> de parking en ligne.
             </p>
         </header>
-
-        <!-- INFORMATIONS DE DISPONIBILITÉ -->
-        <div class="availability-card" role="status" aria-live="polite">
-            <div class="availability-info">
-                <span class="availability-icon" aria-hidden="true">🚗</span>
-                <div class="availability-text">
-                    <strong class="places-count"><?= formatPlacesLibres($places_libres) ?></strong>
-                    <?php if ($stats['total'] > 0): ?>
-                        <small class="occupation-rate">
-                            Taux d'occupation : <?= $taux_occupation ?>%
-                        </small>
-                    <?php endif; ?>
-                </div>
-            </div>
-            
-            <?php if ($places_libres > 0): ?>
-                <div class="availability-indicator success" aria-label="Disponibilité bonne"></div>
-            <?php elseif ($places_libres === 0): ?>
-                <div class="availability-indicator warning" aria-label="Parking complet"></div>
+<!-- INFORMATIONS DE DISPONIBILITÉ -->
+<div class="availability-card" role="status" aria-live="polite">
+    <div class="availability-info">
+        <span class="availability-icon" aria-hidden="true">🚗</span>
+        <div class="availability-text">
+            <strong class="places-count"><?= formatPlacesLibres($places_libres) ?></strong>
+            <?php if ($stats['total'] > 0): ?>
+                <small class="occupation-rate">
+                    Taux d'occupation : <?= $taux_occupation ?>%
+                </small>
             <?php endif; ?>
         </div>
+    </div>
+
+    <!-- Indicateur toujours présent -->
+    <div class="availability-indicator <?= $places_libres > 0 ? 'success' : 'warning' ?>"
+         aria-label="<?= $places_libres > 0 ? 'Disponibilité bonne' : 'Parking complet' ?>">
+    </div>
+</div>
+
+<!-- Script de mise à jour en temps réel -->
+<script>
+function updateParkingStats() {
+    fetch('/api/parking_status.php')
+        .then(response => response.json())
+        .then(data => {
+            // Mise à jour du texte
+            const placesText = `${data.places_libres} place${data.places_libres !== 1 ? 's' : ''} libre${data.places_libres !== 1 ? 's' : ''}`;
+            document.querySelector('.places-count').textContent = placesText;
+
+            document.querySelector('.occupation-rate').textContent = `Taux d'occupation : ${data.taux_occupation}%`;
+
+            // Mise à jour de l'indicateur visuel
+            const indicator = document.querySelector('.availability-indicator');
+            if (indicator) {
+                indicator.classList.remove('success', 'warning');
+                if (data.places_libres > 0) {
+                    indicator.classList.add('success');
+                    indicator.setAttribute('aria-label', 'Disponibilité bonne');
+                } else {
+                    indicator.classList.add('warning');
+                    indicator.setAttribute('aria-label', 'Parking complet');
+                }
+            }
+        })
+        .catch(console.error);
+}
+
+// Lancer dès chargement + toutes les 10 secondes
+document.addEventListener('DOMContentLoaded', () => {
+    updateParkingStats();
+    setInterval(updateParkingStats, 10000);
+});
+</script>
+
     <!-- FONCTIONNALITÉS -->
     <section class="features" aria-labelledby="features-title">
         <h2 id="features-title" class="section-title">Pourquoi choisir Parkly ?</h2>
@@ -158,13 +192,50 @@ require_once __DIR__ . '/../templates/nav.php';
             </div>
         </div>
         
-        <div class="occupation-bar" role="progressbar" 
-             aria-valuenow="<?= $taux_occupation ?>" 
-             aria-valuemin="0" 
-             aria-valuemax="100"
-             aria-label="Taux d'occupation du parking">
-            <div class="occupation-fill" style="width: <?= $taux_occupation ?>%"></div>
-        </div>
+        <!-- BARRE VISUELLE DU TAUX D'OCCUPATION -->
+<div class="occupation-bar" role="progressbar" 
+     aria-valuenow="<?= $taux_occupation ?>" 
+     aria-valuemin="0" 
+     aria-valuemax="100"
+     aria-label="Taux d'occupation du parking">
+    <div class="occupation-fill" style="width: <?= $taux_occupation ?>%"></div>
+</div>
+
+<script>
+function updateParkingStats() {
+    fetch('/api/parking_status.php')
+        .then(response => response.json())
+        .then(data => {
+            document.querySelector('.places-count').textContent =
+                `${data.places_libres} place${data.places_libres !== 1 ? 's' : ''} libre${data.places_libres !== 1 ? 's' : ''}`;
+
+            document.querySelector('.occupation-rate').textContent =
+                `Taux d'occupation : ${data.taux_occupation}%`;
+
+            const indicator = document.querySelector('.availability-indicator');
+            if (indicator) {
+                indicator.classList.remove('success', 'warning');
+                indicator.classList.add(data.places_libres > 0 ? 'success' : 'warning');
+                indicator.setAttribute('aria-label', data.places_libres > 0 ? 'Disponibilité bonne' : 'Parking complet');
+            }
+
+            const fill = document.querySelector('.occupation-fill');
+            const bar = document.querySelector('.occupation-bar');
+            if (fill && bar) {
+                fill.style.width = `${data.taux_occupation}%`;
+                bar.setAttribute('aria-valuenow', data.taux_occupation);
+            }
+        })
+        .catch(console.error);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    updateParkingStats();
+    setInterval(updateParkingStats, 10000);
+});
+</script>
+
+
     </section>
     <?php endif; ?>
 
@@ -190,7 +261,7 @@ require_once __DIR__ . '/../templates/nav.php';
     const REFRESH_INTERVAL = 30000; // 30 secondes
     
     function updateAvailability() {
-        fetch('/?page=api&action=availability')
+        fetch('/api/parking_status.php')
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
