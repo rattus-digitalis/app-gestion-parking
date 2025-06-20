@@ -10,6 +10,12 @@ require_once __DIR__ . '/../templates/nav.php';
         <p class="text-secondary">Sélectionnez votre place et définissez votre période de stationnement</p>
     </header>
 
+    <?php if (!empty($error)): ?>
+        <div class="alert alert-danger mb-4">
+            <?= htmlspecialchars($error) ?>
+        </div>
+    <?php endif; ?>
+
     <div class="card">
         <form method="POST" action="/?page=nouvelle_reservation" aria-labelledby="form-title" novalidate>
             <!-- Voiture -->
@@ -52,12 +58,13 @@ require_once __DIR__ . '/../templates/nav.php';
                         required 
                         aria-describedby="parking-help"
                         aria-invalid="false">
-                    <option value="" disabled selected>-- Sélectionnez une place de parking --</option>
+                    <option value="" disabled <?= empty($old_data['parking_id']) ? 'selected' : '' ?>>-- Sélectionnez une place de parking --</option>
                     <?php foreach ($parkingsByType as $type => $places): ?>
                         <?php if (!empty($places)): ?>
                             <optgroup label="<?= htmlspecialchars(ucfirst($type)) ?>">
                                 <?php foreach ($places as $place): ?>
-                                    <option value="<?= htmlspecialchars($place['id']) ?>">
+                                    <option value="<?= htmlspecialchars($place['id']) ?>" 
+                                            <?= isset($old_data['parking_id']) && $old_data['parking_id'] == $place['id'] ? 'selected' : '' ?>>
                                         Place <?= htmlspecialchars($place['numero_place']) ?> - Étage <?= htmlspecialchars($place['etage']) ?>
                                     </option>
                                 <?php endforeach; ?>
@@ -84,6 +91,7 @@ require_once __DIR__ . '/../templates/nav.php';
                                name="start_time" 
                                id="start_time" 
                                class="form-input"
+                               value="<?= htmlspecialchars($old_data['start_time'] ?? '') ?>"
                                required
                                aria-describedby="start-help"
                                aria-invalid="false">
@@ -101,6 +109,7 @@ require_once __DIR__ . '/../templates/nav.php';
                                name="end_time" 
                                id="end_time" 
                                class="form-input"
+                               value="<?= htmlspecialchars($old_data['end_time'] ?? '') ?>"
                                required
                                aria-describedby="end-help"
                                aria-invalid="false">
